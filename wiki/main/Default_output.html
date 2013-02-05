@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="fr">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Default output template</title>
+	<script type="text/javascript" src="../../vendor/jquery/jquery-1.8.3.js"></script>
+	<style type="text/css">
+		@import "../skins/bwiki/application.css";
+	</style>
+</head>
+<body>
+
+<!--BEGIN-->
+<div class="window modifiable trashable {@feature.lower}" id="/{@class}<!--id-->/{id}<!--id-->/{@feature}">
+	<!--<h2 class="window title">|{name}|</h2>-->
+
+	<div class="general buttons">
+		<!--general_buttons-->
+		<a class="button trashable {feature.lower} {?class}" href="{link}" target="{?target}">|{caption}|</a>
+		<!-- <a class="button back submit" href="" target="">|Back|</a>-->
+		<!--general_buttons-->
+	</div>
+
+	<!--@propertiesOutOfTabs?-->
+	<div class="fieldset">
+		<!--@propertiesOutOfTabs-->
+		<div class="field {getType.isMultiple}" id="{name}">
+			<!--<div class="label trashable left">|{display.ucfirst}|</div>-->
+			<div class="value">{value}</div>
+		</div>
+		<!--@propertiesOutOfTabs-->
+	</div>
+	<!--@propertiesOutOfTabs?-->
+
+</div>
+<!--END-->
+
+</body>
+</html>

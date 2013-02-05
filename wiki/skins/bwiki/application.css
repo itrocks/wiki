@@ -1,0 +1,102 @@
+body {
+	background-color: rgb(245, 245, 245);
+	height: 100%;
+}
+
+.application.center {
+	background-color: rgb(255, 255, 255);
+	padding: 1%;
+	border-width: 1px 1px medium;
+	border-style: inset;
+	border-image: none;
+	color: black;
+	line-height: 1.3;
+	width: 78%;
+}
+
+.application.top {
+	width: 99%;
+	margin-top: -1px;
+	margin-right: 10px;
+	margin-bottom: 20px;
+	width: 200px;
+}
+
+.menu {
+	width: 18%;
+	border-width: 1px 1px medium;
+	border-style: inset;
+	background-color: rgb(255, 255, 255);
+	color: black;
+}
+
+.left {
+	float: left;
+}
+
+.right {
+	float: right;
+}
+
+a {
+	color: #8b0000;
+}
+
+hr {
+	border: 0px none;
+	color: Black;
+	background-color: Black;
+	height: 1px;
+	width: 100%;
+	float: right;
+}
+
+.value {
+	padding: 20px;
+}
+
+ul {
+	margin:1%;
+	padding:1%;
+	padding-left: 3%;
+	list-style-type: none;
+}
+
+table {
+	border-width:1px;
+	border-style:solid;
+	border-color:rgb(100, 100, 100);
+}
+td {
+	border-width:1px;
+	border-style:solid;
+	border-color:rgb(235, 235, 235);
+}
+
+.bappli.logo {
+	background: url("img/bappli_logo.png") 20px 5px no-repeat white;
+	border: 1px solid #9ab3b7;
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+	box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, .2);
+	color: transparent;
+	display: block;
+	height: 46px;
+}
+
+div#name.field {
+	color: rgb(66, 66, 75);
+	font-size: 22px;
+}
+
+.button.duplicate {
+	display:none;
+}
+
+.displayable {
+	display:none;
+}
+
+.breadcrumb .entry:before {
+	content: ' / ';
+}
