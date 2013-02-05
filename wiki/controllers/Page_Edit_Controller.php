@@ -11,12 +11,11 @@ class Page_Edit_Controller extends Default_Edit_Controller
 	//----------------------------------------------------------------------------- getGeneralButtons
 	protected function getGeneralButtons($object)
 	{
-		$array = parent::getGeneralButtons($object);
 		$destination = "#main";
 		if($object->name == "Menu")
 			$destination = "#menu";
 		$array[] = new Button(
-			array("Write",  View::link($object, "write"),  "write",  array(Color::of("green"), "#messages", ".submit")),
+			array("Write",  View::link($object, "write"),  "write",  array("#messages", ".submit")),
 			"Back", str_replace(" ", "_", $object->name), "back", array(".submit", $destination)
 		);
 		return $array;
