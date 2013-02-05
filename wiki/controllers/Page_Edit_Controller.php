@@ -14,11 +14,10 @@ class Page_Edit_Controller extends Default_Edit_Controller
 		$destination = "#main";
 		if($object->name == "Menu")
 			$destination = "#menu";
-		$array[] = new Button(
-			array("Write",  View::link($object, "write"),  "write",  array("#messages", ".submit")),
-			"Back", str_replace(" ", "_", $object->name), "back", array(".submit", $destination)
-		);
-		return $array;
+		return Button::newCollection(array(
+			array("Write",  View::link($object, "write"),  "write",  array(".submit", "#messages")),
+			array("Back", str_replace(" ", "_", $object->name), "back", array(".submit", $destination))
+		));
 	}
 
 	//----------------------------------------------------------------------------- getViewParameters

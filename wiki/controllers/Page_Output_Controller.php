@@ -1,6 +1,5 @@
 <?php
 namespace SAF\Wiki;
-use SAF\Framework\Controller_Parameters;
 use SAF\Framework\Button;
 use SAF\Framework\View;
 use SAF\Framework\Default_Output_Controller;
@@ -14,7 +13,7 @@ class Page_Output_Controller extends Default_Output_Controller
 		if($object->name == "Menu")
 			$destination = "#menu";
 		return Button::newCollection(array(
-			array("Edit", View::link($object, "edit"), "edit", array($destination))
+			array("Edit", View::link($object, "edit"), "edit", array(".submit", $destination))
 		));
 	}
 }

@@ -12,25 +12,21 @@
 
 <!--BEGIN-->
 <div class="window modifiable trashable {@feature.lower}" id="/{@class}<!--id-->/{id}<!--id-->/{@feature}">
-	<!--<h2 class="window title">|{name}|</h2>-->
 
 	<div class="general buttons">
 		<!--general_buttons-->
 		<a class="button trashable {feature.lower} {?class}" href="{link}" target="{?target}">|{caption}|</a>
-		<!-- <a class="button back submit" href="" target="">|Back|</a>-->
 		<!--general_buttons-->
 	</div>
 
-	<!--@propertiesOutOfTabs?-->
 	<div class="fieldset">
-		<!--@propertiesOutOfTabs-->
+		<!--@properties-->
 		<div class="field {getType.isMultiple}" id="{name}">
 			<!--<div class="label trashable left">|{display.ucfirst}|</div>-->
 			<div class="value">{value}</div>
 		</div>
-		<!--@propertiesOutOfTabs-->
+		<!--@properties-->
 	</div>
-	<!--@propertiesOutOfTabs?-->
 
 </div>
 <!--END-->
