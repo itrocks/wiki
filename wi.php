@@ -12,6 +12,9 @@ $CONFIG["wiki"] = array(
 		'SAF\Framework\User'   => 'SAF\Wiki\Wiki_User'
 	),
 	"Menu" => array(
+		"Principal" => array(
+			"/Accueil" => "Page d'accueil"
+		),
 		"Disconnect" => array(
 			"/User/login" => "Se connecter",
 			"/User/register" => "S'enregistrer"
