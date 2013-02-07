@@ -8,13 +8,6 @@ use SAF\Framework\Default_Controller;
 class Wiki_User_Disconnect_Controller implements Feature_Controller
 {
 
-	/**
-	 * Remove current user from script and session
-	 *
-	 * Called each time a user disconnects
-	 *
-	 * @param $user User
-	 */
 	private function disconnect(
 		/** @noinspection PhpUnusedParameterInspection needed for plugins or overriding */
 		Wiki_User $user
