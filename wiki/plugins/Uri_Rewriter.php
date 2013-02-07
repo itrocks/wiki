@@ -16,6 +16,7 @@ class Uri_Rewriter implements Plugin
 	 */
 	public static function beforeMainControllerRunController(AopJoinpoint $joinpoint)
 	{
+		$listIgnore = array("Menu","User","Page");
 
 		$lien = $joinpoint->getArguments()[0];
 		$short_class = "Page";
@@ -28,13 +29,14 @@ class Uri_Rewriter implements Plugin
 				$str[1] = "new";
 				Uri_Rewriter::putInArguments($str, $joinpoint);
 			}
-			else if($str && count($str) > 0
+			else if($str && count($str) > 0 && self::notIgnored($str[0], $listIgnore)
 				&& !($str && count($str) > 1 && ($str[1] == "write" || is_numeric($str[1])))){
 				$class = Namespaces::fullClassName($short_class);
 				if(@class_exists($class)){
 					$object = new $class();
 					$name = $str[0];
-					$object->name = str_replace("_", " ", $name);
+					$name = ucfirst(strtolower(rtrim(ltrim(str_replace("_", " ", $name)))));
+					$object->name = $name;
 					$result = Dao::searchOne($object, $class);
 					if($result){
 						$str[0] = $short_class;
@@ -46,9 +48,9 @@ class Uri_Rewriter implements Plugin
 							// Permet de passer le nom de la page voulue par les gets
 							$gets = Uri_Rewriter::returnGets($lien);
 						  if($gets){
-								$str[] = "&name=" . $name;
+								$str[] = "&name=" . str_replace(" ", "_", $name);
 							} else {
-							  $str[] = "?name=" . $name;
+							  $str[] = "?name=" . str_replace(" ", "_", $name);
 						  }*/
 					}
 					Uri_Rewriter::putInArguments($str, $joinpoint);
@@ -99,4 +101,11 @@ class Uri_Rewriter implements Plugin
 		$joinpoint->setArguments($tab);
 	}
 
+	private static function notIgnored($itemTest, $listIgnore){
+		foreach($listIgnore as $itemIgnored){
+			if($itemIgnored == $itemTest)
+				return false;
+		}
+		return true;
+	}
 }

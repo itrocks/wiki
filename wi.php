@@ -9,11 +9,15 @@ $CONFIG["wiki"] = array(
 		"databases" => "wiki"
 	),
 	"Object_Builder" => array(
+		'SAF\Framework\User'   => 'SAF\Wiki\Wiki_User'
 	),
 	"Menu" => array(
-		"wiki" => array(
-			"/Accueil" => "Page d'accueil",
-			"/pages" => "Liste des pages"
+		"Disconnect" => array(
+			"/User/login" => "Se connecter",
+			"/User/register" => "S'enregistrer"
+		),
+		"Connect" => array(
+			"/User/disconnect" => "Se déconnecter"
 		)
 	),
 	"View" => array(
@@ -22,7 +26,9 @@ $CONFIG["wiki"] = array(
 	"Plugins" => array(
 		"normal" => array(
 			"Uri_Rewriter",
-			"Wiki"
+			"Object_Builder",
+			"Wiki",
+			"Modification_Reserved_Connected"
 		)
 	)
 );

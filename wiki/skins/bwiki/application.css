@@ -6,16 +6,17 @@ body {
 .application.center {
 	background-color: rgb(255, 255, 255);
 	padding: 1%;
+	margin-left: auto;
+	margin-right: auto;
 	border-width: 1px 1px medium;
 	border-style: inset;
 	border-image: none;
 	color: black;
 	line-height: 1.3;
-	width: 78%;
+	width: 90%;
 }
 
 .application.top {
-	width: 99%;
 	margin-top: -1px;
 	margin-right: 10px;
 	margin-bottom: 20px;
@@ -23,11 +24,14 @@ body {
 }
 
 .menu {
-	width: 18%;
-	border-width: 1px 1px medium;
-	border-style: inset;
-	background-color: rgb(255, 255, 255);
-	color: black;
+	background-color: rgb(200, 200, 200);
+	border-width: 1px 0px;
+	border-color: rgb(151, 151, 102);
+	border-style: solid;
+	text-align: right;
+	padding-right: 6px;
+	font-size: 75%;
+	color: white;
 }
 
 .left {
@@ -40,15 +44,6 @@ body {
 
 a {
 	color: #8b0000;
-}
-
-hr {
-	border: 0px none;
-	color: Black;
-	background-color: Black;
-	height: 1px;
-	width: 100%;
-	float: right;
 }
 
 .value {
@@ -89,8 +84,8 @@ div#name.field {
 	font-size: 22px;
 }
 
-.button.duplicate {
-	display:none;
+.button.delete {
+	float: right;
 }
 
 .displayable {

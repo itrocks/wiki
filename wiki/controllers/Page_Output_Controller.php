@@ -10,10 +10,10 @@ class Page_Output_Controller extends Default_Output_Controller
 	protected function getGeneralButtons($object)
 	{
 		$destination = "#main";
-		if($object->name == "Menu")
-			$destination = "#menu";
+		/*if($object->name == "Menu")
+			$destination = "#menu";*/
 		return Button::newCollection(array(
-			array("Edit", View::link($object, "edit"), "edit", array(".submit", $destination))
+			array("Modifier", View::link($object, "edit"), "edit", array(".submit", $destination))
 		));
 	}
 }

@@ -1,16 +1,18 @@
 $(window).load(function() {
 	$(window).resize(function() {
-		var $body_margins = parseInt($("body").css("margin-top"))
-			+ parseInt($("body").css("margin-bottom"))
-			+ parseInt($("body").css("padding-top"))
-			+ parseInt($("body").css("padding-bottom"));
+		var $body = $("body");
+		var $body_margins = parseInt($body.css("margin-top"))
+			+ parseInt($body.css("margin-bottom"))
+			+ parseInt($body.css("padding-top"))
+			+ parseInt($body.css("padding-bottom"));
 		var $windows = $(window).height() - $body_margins;
 		var $center = $(".application.center");
-		var $top = $(".application.top").height()
-			+ parseInt($(".application.top").css("margin-top"))
-			+ parseInt($(".application.top").css("margin-bottom"))
-			+ parseInt($(".application.top").css("padding-top"))
-			+ parseInt($(".application.top").css("padding-bottom"));
+		var $application_top = $(".application.top");
+		var $top = $application_top.height()
+			+ parseInt($application_top.css("margin-top"))
+			+ parseInt($application_top.css("margin-bottom"))
+			+ parseInt($application_top.css("padding-top"))
+			+ parseInt($application_top.css("padding-bottom"));
 		var $content = parseInt($center.css("margin-top"))
 			+ parseInt($center.css("margin-bottom"))
 			+ parseInt($center.css("padding-top"))
@@ -24,7 +26,7 @@ $(window).load(function() {
 				+ parseInt($(this).css("padding-bottom"));
 			$content += parseInt($(this).css("border-left-width")) * 2;
 		});
-		$("body").height(($windows > $content ? $windows : $content));
+		$body.height(($windows > $content ? $windows : $content));
 	});
 	$(window).resize();
 
@@ -32,6 +34,9 @@ $(window).load(function() {
 	{
 		var $this = $(this);
 		this.xtarget({ url_append: "as_widget=1" });
+		// messages is draggable
+		this.in("#messages").draggable();
+
 		// modifiable objects
 		this.in(".modifiable .value").dblclick(function()
 		{
@@ -61,14 +66,13 @@ $(window).load(function() {
 		});
 
 		// tab controls
-		$this.find(".tabber").tabber();
+		this.in(".tabber").tabber();
 
 		// window objects brought to front
-		$this.find("div.window").mousedown(function()
+		this.in("div.window").mousedown(function()
 		{
 			$(this).css("z-index", ++zindex_counter);
 		});
-
 	});
 
 });
