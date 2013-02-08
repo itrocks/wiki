@@ -13,6 +13,7 @@ class Page_Output_Controller extends Default_Output_Controller
 		/*if($object->name == "Menu")
 			$destination = "#menu";*/
 		return Button::newCollection(array(
+			array("Nouvelle page", "new", "new"),
 			array("Modifier", View::link($object, "edit"), "edit", array(".submit", $destination))
 		));
 	}

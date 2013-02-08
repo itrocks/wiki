@@ -4,6 +4,7 @@ use SAF\Framework\Controller_Parameters;
 use SAF\Framework\Default_New_Controller;
 use SAF\Framework\View;
 use SAF\Framework\Button;
+use SAF\Framework\Color;
 
 class Page_New_Controller extends Default_New_Controller
 {
@@ -14,8 +15,7 @@ class Page_New_Controller extends Default_New_Controller
 		/*		if($object->name == "Menu")
 					$destination = "#menu";*/
 		return Button::newCollection(array(
-				array("Enregistrer",  View::link($object, "write"),  "write",  array(".submit", "#messages")),
-				array("Annuler", str_replace(" ", "_", $object->name), "back", array(".submit", $destination))
+				array("Enregistrer",  View::link($object, "write"),  "write",  array(Color::of("green"), ".submit", "#messages"))
 			));
 	}
 

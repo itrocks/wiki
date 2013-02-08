@@ -18,7 +18,7 @@ class Page_Edit_Controller extends Default_Edit_Controller
 		return Button::newCollection(array(
 			array("Enregistrer",  View::link($object, "write"),  "write",  array(Color::of("green"), ".submit", "#messages")),
 			array("Annuler", str_replace(" ", "_", $object->name), "back", array(".submit", $destination)),
-			array("Supprimer", str_replace(" ", "_", $object->name), "delete", array(".submit", $destination))
+			array("Supprimer", View::link($object, "delete"), "delete", array(".submit", $destination))
 		));
 	}
 

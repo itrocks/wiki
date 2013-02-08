@@ -31,7 +31,8 @@ $CONFIG["wiki"] = array(
 			"Uri_Rewriter",
 			"Object_Builder",
 			"Wiki",
-			"Modification_Reserved_Connected"
+			"Modification_Reserved_Connected",
+			"Register_Email"
 		)
 	)
 );

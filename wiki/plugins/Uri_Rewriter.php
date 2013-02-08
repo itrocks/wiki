@@ -21,7 +21,7 @@ class Uri_Rewriter implements Plugin
 		$lien = $joinpoint->getArguments()[0];
 		$short_class = "Page";
 		if($lien){
-			$str = Uri_Rewriter::uriToArray($lien);
+			$str = self::uriToArray($lien);
 			if(!$str || $str && count($str) > 0
 				&& ($str[0] == "new" || $str[0] == "New")
 				|| ($str && count($str) < 1)){
