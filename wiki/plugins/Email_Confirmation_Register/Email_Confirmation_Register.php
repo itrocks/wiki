@@ -21,20 +21,20 @@ class Email_Confirmation_Register implements Plugin
 		$user->login = $form["login"];
 		$user = Dao::searchOne($user);
 		if($user){
-			$key = self::generateActivationKey();
+			$key = self::generateKey();
 			$link = self::generateActivationLink($key);
 			$email_confirm = Search_Object::newInstance("Email_Confirmation");
 			$email_confirm->user = $user;
 			$email_confirm->link = $key;
 			Dao::write($email_confirm);
-			$name_application = end($GLOBALS["CONFIG"])["app"];
-			$email_from = self::getEmailFrom($name_application);
-			$headers  = self::getHeaders($name_application, $email_from);
-			$parameters = self::getViewParameters($user->login, $form["password"], $name_application, $link);
+			$application_name = end($GLOBALS["CONFIG"])["app"];
+			$email_from = self::getEmailFrom($application_name);
+			$headers  = self::getHeaders($application_name, $email_from);
+			$parameters = self::getViewParameters($user->login, $form["password"], $application_name, $link);
 			$files = array();
 			$class_name = "Email_Confirmation";
 			$feature_name = "content";
-			$subject = "[" . $name_application . "] " . "Confirm your subscribe";
+			$subject = "[" . $application_name . "] " . "Confirm your subscribe";
 			ini_set("sendmail_from", $email_from);
 			mail($user->email, $subject,
 				(new Html_Email_View())->run($parameters, $form, $files, $class_name, $feature_name), $headers);
@@ -70,40 +70,40 @@ class Email_Confirmation_Register implements Plugin
 	}
 
 	//------------------------------------------------------------------------------------ getHeaders
-	private static function getHeaders($name_application, $email_from){
+	private static function getHeaders($application_name, $email_from){
 		$headers  = 'MIME-Version: 1.0' . "\r\n";
 		$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-		$headers .= 'From: ' . $name_application . ' <' . $email_from . '>' . "\r\n";
+		$headers .= 'From: ' . $application_name . ' <' . $email_from . '>' . "\r\n";
 		return $headers;
 	}
 
 	//----------------------------------------------------------------------------- getViewParameters
-	private static function getViewParameters($login, $password, $name_application, $link){
+	private static function getViewParameters($login, $password, $application_name, $link){
 		$parameters = array();
 		$parameters["login"] = $login;
 		$parameters["password"] = $password;
-		$parameters["site_name"] = $name_application;
+		$parameters["site_name"] = $application_name;
 		$parameters["link"] = $link;
 		return $parameters;
 	}
 
 	//------------------------------------------------------------------------- generateActivationKey
-	private static function generateActivationKey(){
+	private static function generateKey(){
 		$key = md5(uniqid(rand(), true));
 		return $key;
 	}
 
 	//------------------------------------------------------------------------ generateActivationLink
-	private static function generateActivationLink($activationKey){
+	private static function generateActivationLink($key){
 		$link = $_SERVER["HTTP_HOST"]
 			. explode("User", $_SERVER["REQUEST_URI"])[0]
-			. "User/confirmEmail?action=" . $activationKey;
+			. "User/confirmEmail?action=" . $key;
 		return $link;
 	}
 
 	//---------------------------------------------------------------------------------- getEmailFrom
-	private static function getEmailFrom($name_application){
-		$email_from = $name_application;
+	private static function getEmailFrom($application_name){
+		$email_from = $application_name;
 		$email_from .= self::$MAIL_DOMAIN_FROM;
 		return $email_from;
 	}
