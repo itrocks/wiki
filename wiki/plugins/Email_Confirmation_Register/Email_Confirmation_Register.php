@@ -70,7 +70,8 @@ class Email_Confirmation_Register implements Plugin
 	}
 
 	//------------------------------------------------------------------------------------ getHeaders
-	private static function getHeaders($application_name, $email_from){
+	private static function getHeaders($application_name, $email_from)
+	{
 		$headers  = 'MIME-Version: 1.0' . "\r\n";
 		$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 		$headers .= 'From: ' . $application_name . ' <' . $email_from . '>' . "\r\n";
@@ -78,23 +79,26 @@ class Email_Confirmation_Register implements Plugin
 	}
 
 	//----------------------------------------------------------------------------- getViewParameters
-	private static function getViewParameters($login, $password, $application_name, $link){
+	private static function getViewParameters($login, $password, $application_name, $link)
+	{
 		$parameters = array();
-		$parameters["login"] = $login;
-		$parameters["password"] = $password;
-		$parameters["site_name"] = $application_name;
-		$parameters["link"] = $link;
+		$parameters["login"]      = $login;
+		$parameters["password"]   = $password;
+		$parameters["site_name"]  = $application_name;
+		$parameters["link"]       = $link;
 		return $parameters;
 	}
 
 	//------------------------------------------------------------------------- generateActivationKey
-	private static function generateKey(){
+	private static function generateKey()
+	{
 		$key = md5(uniqid(rand(), true));
 		return $key;
 	}
 
 	//------------------------------------------------------------------------ generateActivationLink
-	private static function generateActivationLink($key){
+	private static function generateActivationLink($key)
+	{
 		$link = $_SERVER["HTTP_HOST"]
 			. explode("User", $_SERVER["REQUEST_URI"])[0]
 			. "User/confirmEmail?action=" . $key;
@@ -102,7 +106,8 @@ class Email_Confirmation_Register implements Plugin
 	}
 
 	//---------------------------------------------------------------------------------- getEmailFrom
-	private static function getEmailFrom($application_name){
+	private static function getEmailFrom($application_name)
+	{
 		$email_from = $application_name;
 		$email_from .= self::$MAIL_DOMAIN_FROM;
 		return $email_from;

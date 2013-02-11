@@ -6,7 +6,7 @@ use SAF\Framework\Namespaces;
 use SAF\Framework\Names;
 use SAF\Framework\View;
 
-// TODO : This class would can be delete when the template return the view
+// TODO : This class would can be delete when the default template return the view
 class Html_Email_View implements IView
 {
 
