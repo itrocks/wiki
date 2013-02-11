@@ -32,7 +32,8 @@ $CONFIG["wiki"] = array(
 			"Object_Builder",
 			"Wiki",
 			"Modification_Reserved_Connected",
-			"Register_Email"
+			"Register_Email",
+			"Email_Confirmation_Register"
 		)
 	)
 );
