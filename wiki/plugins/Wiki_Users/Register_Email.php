@@ -3,6 +3,7 @@ namespace SAF\Wiki;
 use \AopJoinpoint;
 use SAF\Framework\AOP;
 use SAF\Framework\Plugin;
+use SAF\Framework\Input;
 
 class Register_Email implements Plugin
 {
@@ -25,7 +26,7 @@ class Register_Email implements Plugin
 	//------------------------------------------------------ afterUserAuthenticationGetRegisterInputs
 	public static function afterUserAuthenticationGetRegisterInputs(AopJoinpoint $joinpoint){
 		$listInputs = $joinpoint->getReturnedValue();
-		$listInputs[] = array("name" => "email", "type" => "text", "isMultiple" => "false");
+		$listInputs[] = new Input("email", "Email address", "text");
 		$joinpoint->setReturnedValue($listInputs);
 	}
 
