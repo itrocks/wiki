@@ -10,7 +10,7 @@ class Page_Write_Controller extends Default_Write_Controller
 	public function run(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
 		$form["name"] = ucfirst(strtolower(rtrim(ltrim(str_replace("_", " ", $form["name"])))));
-		parent::run($parameters, $form, $files, $class_name);
+		return parent::run($parameters, $form, $files, $class_name);
 	}
 
 }

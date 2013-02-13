@@ -16,12 +16,12 @@ class Default_Confirm_Email_Controller implements Feature_Controller
 		$email_confirm->link = $key;
 		$email_confirm = Dao::searchOne($email_confirm);
 		if(Dao::delete($email_confirm)){
-			(new Default_Controller())->run(
+			return (new Default_Controller())->run(
 				$parameters, $form, $files, "User", "emailConfirmed"
 			);
 		}
 		else {
-			(new Default_Controller())->run(
+			return (new Default_Controller())->run(
 				$parameters, $form, $files, "User", "emailNotConfirmed"
 			);
 		}

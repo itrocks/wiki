@@ -5,6 +5,7 @@ use SAF\Framework\AOP;
 use SAF\Framework\Plugin;
 use SAF\Framework\Dao;
 use SAF\Framework\Search_Object;
+use SAF\Framework\View;
 
 class Email_Confirmation_Register implements Plugin
 {
@@ -37,7 +38,7 @@ class Email_Confirmation_Register implements Plugin
 			$subject = "[" . $application_name . "] " . "Confirm your subscribe";
 			ini_set("sendmail_from", $email_from);
 			mail($user->email, $subject,
-				(new Html_Email_View())->run($parameters, $form, $files, $class_name, $feature_name), $headers);
+				View::run($parameters, $form, $files, $class_name, $feature_name), $headers);
 		}
 	}
 
