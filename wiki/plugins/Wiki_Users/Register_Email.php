@@ -25,9 +25,9 @@ class Register_Email implements Plugin
 	}
 	//------------------------------------------------------ afterUserAuthenticationGetRegisterInputs
 	public static function afterUserAuthenticationGetRegisterInputs(AopJoinpoint $joinpoint){
-		$listInputs = $joinpoint->getReturnedValue();
-		$listInputs[] = new Input("email", "Email address", "text");
-		$joinpoint->setReturnedValue($listInputs);
+		$list_inputs = $joinpoint->getReturnedValue();
+		$list_inputs[] = new Input("email", "Email address", "text");
+		$joinpoint->setReturnedValue($list_inputs);
 	}
 
 	//------------------------------------------ afterUserAuthenticationControlRegisterFormParameters
