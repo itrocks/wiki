@@ -23,7 +23,7 @@ class Menu_Output_Controller implements Feature_Controller
 		} else {
 			self::deleteBlock($parameters, "Connect");
 		}
-		View::run($parameters, $form, $files, "Menu", "output");
+		return View::run($parameters, $form, $files, "Menu", "output");
 	}
 
 	private function deleteBlock($parameters, $delete_item){
