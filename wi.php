@@ -35,7 +35,8 @@ $CONFIG["wiki"] = array(
 			"Anti_Bot",
 			"Register_Email",
 			"Email_Confirmation_Register",
-			"Stay_Connected_Register"
+			"Stay_Connected_Register",
+			"Parse_Wiki_Link_Register"
 		)
 	)
 );
