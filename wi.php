@@ -36,7 +36,8 @@ $CONFIG["wiki"] = array(
 			"Register_Email",
 			"Email_Confirmation_Register",
 			"Stay_Connected",
-			"Parse_Wiki_Link"
+			"Parse_Wiki_Link",
+			"Change_Name_Page_Refactor"
 		)
 	)
 );
