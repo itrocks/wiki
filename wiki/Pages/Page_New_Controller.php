@@ -15,7 +15,8 @@ class Page_New_Controller extends Default_New_Controller
 		/*		if($object->name == "Menu")
 					$destination = "#menu";*/
 		return Button::newCollection(array(
-				array("Enregistrer",  View::link($object, "write"),  "write",  array(Color::of("green"), ".submit", "#messages"))
+				array("Enregistrer",  View::link($object, "write"),  "write",  array(Color::of("green"), ".submit", "#messages")),
+				array("Annuler", str_replace(" ", "_", $object->name), "back", array(Color::of("green"), ".submit", $destination))
 			));
 	}
 

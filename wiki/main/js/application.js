@@ -32,7 +32,6 @@ $(window).load(function() {
 
 	$("body").build(function()
 	{
-		var $this = $(this);
 		this.xtarget({ url_append: "as_widget=1" });
 		// messages is draggable
 		this.in("#messages").draggable();
