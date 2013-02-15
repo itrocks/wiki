@@ -4,7 +4,7 @@ use \AopJoinpoint;
 use SAF\Framework\AOP;
 use SAF\Framework\Plugin;
 
-class Parse_Wiki_Link_Register implements Plugin
+class Parse_Wiki_Link implements Plugin
 {
 	//-------------------------------------------------------------------------------------- register
 	public static function register()

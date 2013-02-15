@@ -9,7 +9,7 @@ use SAF\Framework\Session;
 use SAF\Framework\Search_Object;
 use \SAF\Framework\User_Authentication;
 
-class Stay_Connected_Register implements Plugin
+class Stay_Connected implements Plugin
 {
 	//------------------------------------------------------------ afterUserAuthenticateControllerRun
 	/**
