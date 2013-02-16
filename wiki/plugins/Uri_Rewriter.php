@@ -1,14 +1,37 @@
 <?php
 namespace SAF\Wiki;
-use \AopJoinpoint;
-use SAF\Framework\AOP;
-use SAF\Framework\Plugin;
+use AopJoinpoint;
+use SAF\Framework\Aop;
+use SAF\Framework\Builder;
 use SAF\Framework\Dao;
+use SAF\Framework\Plugin;
 use SAF\Framework\Reflection_Class;
-use SAF\Framework\Namespaces;
 
 class Uri_Rewriter implements Plugin
 {
+
+	//------------------------------------------------------------------------------------ arrayToUri
+	/**
+	 * @param $array string[]
+	 * @return string
+	 */
+	private static function arrayToUri($array)
+	{
+		$uri = "";
+		$isGets = false;
+		foreach ($array as $element) {
+			if (strstr($element, "?") == true) {
+				$isGets = true;
+			}
+			if ($isGets) {
+				$uri .= $element;
+			}
+			else {
+				$uri .= "/" . $element;
+			}
+		}
+		return $uri;
+	}
 
 	//------------------------------------------------------------- beforeMainControllerRunController
 	/**
@@ -16,42 +39,45 @@ class Uri_Rewriter implements Plugin
 	 */
 	public static function beforeMainControllerRunController(AopJoinpoint $joinpoint)
 	{
-		$listIgnore = array("Menu","User","Page");
-
-		$lien = $joinpoint->getArguments()[0];
-		$short_class = "Page";
-		if($lien){
-			$str = self::uriToArray($lien);
-			if(!$str || $str && count($str) > 0
-				&& ($str[0] == "new" || $str[0] == "New")
-				|| ($str && count($str) < 1)){
-				$str[0] = $short_class;
+		$list_ignore = array("Menu", "User", "Page");
+		$link = $joinpoint->getArguments()[0];
+		$class_name = 'SAF\Wiki\Page';
+		if ($link) {
+			$str = self::uriToArray($link);
+			if (
+				!$str
+				|| ($str && (count($str) > 0) && (($str[0] == "new") || ($str[0] == "New")))
+				|| ($str && (count($str) < 1))
+			) {
+				$str[0] = $class_name;
 				$str[1] = "new";
 				Uri_Rewriter::putInArguments($str, $joinpoint);
 			}
-			else if($str && count($str) > 0 && self::notIgnored($str[0], $listIgnore)
-				&& !($str && count($str) > 1 && ($str[1] == "write" || is_numeric($str[1])))){
-				$class = Namespaces::fullClassName($short_class);
-				if(@class_exists($class)){
-					$object = new $class();
+			elseif (
+				$str && (count($str) > 0) && self::notIgnored($str[0], $list_ignore)
+				&& !($str && (count($str) > 1) && (($str[1] == "write") || is_numeric($str[1])))
+			) {
+				if (@class_exists($class_name)) {
+					$object = Builder::create($class_name);
 					$name = $str[0];
-					$name = ucfirst(strtolower(rtrim(ltrim(str_replace("_", " ", $name)))));
+					$name = ucfirst(strtolower(trim(str_replace("_", " ", $name))));
 					$object->name = $name;
-					$result = Dao::searchOne($object, $class);
-					if($result){
-						$str[0] = $short_class;
+					$result = Dao::searchOne($object, $class_name);
+					if ($result) {
+						$str[0] = $class_name;
 						$str[1] = Dao::getObjectIdentifier($result);
-					} else {
-							$str[0] = $short_class;
-							$str[1] = "new";
-							/*
-							// Permet de passer le nom de la page voulue par les gets
-							$gets = Uri_Rewriter::returnGets($lien);
-						  if($gets){
-								$str[] = "&name=" . str_replace(" ", "_", $name);
-							} else {
-							  $str[] = "?name=" . str_replace(" ", "_", $name);
-						  }*/
+					}
+					else {
+						$str[0] = $class_name;
+						$str[1] = "new";
+						/*
+						// Permet de passer le nom de la page voulue par les gets
+						$gets = Uri_Rewriter::returnGets($link);
+					  if($gets){
+							$str[] = "&name=" . str_replace(" ", "_", $name);
+						} else {
+						  $str[] = "?name=" . str_replace(" ", "_", $name);
+					  }*/
 					}
 					Uri_Rewriter::putInArguments($str, $joinpoint);
 				}
@@ -59,53 +85,66 @@ class Uri_Rewriter implements Plugin
 		}
 	}
 
+	//------------------------------------------------------------------------------------ notIgnored
+	/**
+	 * @param $item_test   string
+	 * @param $list_ignore string[]
+	 * @return boolean
+	 */
+	private static function notIgnored($item_test, $list_ignore)
+	{
+		foreach ($list_ignore as $item_ignored) {
+			if ($item_ignored == $item_test) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	//-------------------------------------------------------------------------------- putInArguments
+	/**
+	 * @param $str       string[]
+	 * @param $joinpoint AopJoinpoint
+	 */
+	private static function putInArguments($str, AopJoinpoint $joinpoint)
+	{
+		$tab = $joinpoint->getArguments();
+		$tab[0] = self::arrayToUri($str);
+		$joinpoint->setArguments($tab);
+	}
+
 	//-------------------------------------------------------------------------------------- register
 	public static function register()
 	{
 		Aop::add("before",
-			"SAF\\Framework\\Main_Controller->runController()",
+			'SAF\Framework\Main_Controller->runController()',
 			array(__CLASS__, "beforeMainControllerRunController")
 		);
 	}
 
+	//------------------------------------------------------------------------------------ returnGets
+	/**
+	 * @param $link string
+	 * @return string
+	 */
+	private static function returnGets($link)
+	{
+		return strstr($link, "?");
+	}
+
+	//------------------------------------------------------------------------------------ uriToArray
+	/**
+	 * @param $uri string
+	 * @return string[]
+	 */
 	private static function uriToArray($uri)
 	{
 		$uri = explode("/", str_replace(",", "/", $uri));
 		array_shift($uri);
-		if (end($uri) === "") array_pop($uri);
-		return $uri;
-	}
-
-	private static function arrayToUri($array)
-	{
-		$uri = "";
-		$isGets = false;
-		foreach($array as $element){
-			if(strstr($element, "?") == true)
-				$isGets = true;
-			if($isGets)
-				$uri .= $element;
-			else
-				$uri .= "/" . $element;
+		if (end($uri) === "") {
+			array_pop($uri);
 		}
 		return $uri;
 	}
 
-	private static function returnGets($lien){
-		return strstr($lien, "?");
-	}
-
-	private static function putInArguments($str, AopJoinpoint $joinpoint){
-		$tab = $joinpoint->getArguments();
-		$tab[0] = Uri_Rewriter::arrayToUri($str);
-		$joinpoint->setArguments($tab);
-	}
-
-	private static function notIgnored($itemTest, $listIgnore){
-		foreach($listIgnore as $itemIgnored){
-			if($itemIgnored == $itemTest)
-				return false;
-		}
-		return true;
-	}
 }

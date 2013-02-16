@@ -1,15 +1,20 @@
 <?php
 namespace SAF\Wiki;
-use \AopJoinpoint;
-use SAF\Framework\AOP;
-use SAF\Framework\Plugin;
+use AopJoinpoint;
+use SAF\Framework\Aop;
 use SAF\Framework\Dao;
+use SAF\Framework\Plugin;
 use SAF\Framework\Search_Object;
 use SAF\Framework\View;
 
 class Email_Confirmation_Register implements Plugin
 {
-	private static $MAIL_DOMAIN_FROM = '@noreply.fr';
+
+	//----------------------------------------------------------------------------- $mail_domain_from
+	/**
+	 * @var string
+	 */
+	private static $mail_domain_from = '@noreply.fr';
 
 	//--------------------------------------------------------------- afterUserAuthenticationRegister
 	/**
@@ -17,28 +22,32 @@ class Email_Confirmation_Register implements Plugin
 	 */
 	public static function afterUserAuthenticationRegister(AopJoinpoint $joinpoint)
 	{
-		$user = Search_Object::newInstance("User");
+		$user = Search_Object::newInstance('SAF\Framework\User');
 		$form = $joinpoint->getArguments()[0];
 		$user->login = $form["login"];
 		$user = Dao::searchOne($user);
-		if($user){
+		if ($user) {
 			$key = self::generateKey();
 			$link = self::generateActivationLink($key);
-			$email_confirm = Search_Object::newInstance("Email_Confirmation");
+			$email_confirm = Search_Object::newInstance('SAF\Wiki\Email_Confirmation');
 			$email_confirm->user = $user;
 			$email_confirm->link = $key;
 			Dao::write($email_confirm);
 			$application_name = end($GLOBALS["CONFIG"])["app"];
 			$email_from = self::getEmailFrom($application_name);
-			$headers  = self::getHeaders($application_name, $email_from);
-			$parameters = self::getViewParameters($user->login, $form["password"], $application_name, $link);
+			$headers = self::getHeaders($application_name, $email_from);
+			$parameters = self::getViewParameters(
+				$user->login, $form["password"], $application_name, $link
+			);
 			$files = array();
-			$class_name = "Email_Confirmation";
+			$class_name = 'SAF\Wiki\Email_Confirmation';
 			$feature_name = "content";
 			$subject = "[" . $application_name . "] " . "Confirm your subscribe";
 			ini_set("sendmail_from", $email_from);
-			mail($user->email, $subject,
-				View::run($parameters, $form, $files, $class_name, $feature_name), $headers);
+			mail(
+				$user->email, $subject,
+				View::run($parameters, $form, $files, $class_name, $feature_name), $headers
+			);
 		}
 	}
 
@@ -46,11 +55,11 @@ class Email_Confirmation_Register implements Plugin
 	public static function register()
 	{
 		Aop::add("after",
-			"SAF\\Framework\\User_Authentication->register()",
+			'SAF\Framework\User_Authentication->register()',
 			array(__CLASS__, "afterUserAuthenticationRegister")
 		);
 		Aop::add("after",
-			"SAF\\Framework\\User_Authentication->login()",
+			'SAF\Framework\User_Authentication->login()',
 			array(__CLASS__, "afterUserAuthenticationLogin")
 		);
 	}
@@ -62,10 +71,10 @@ class Email_Confirmation_Register implements Plugin
 	public static function afterUserAuthenticationLogin(AopJoinpoint $joinpoint)
 	{
 		$user = $joinpoint->getReturnedValue();
-		$email_confirm = Search_Object::newInstance("Email_Confirmation");
+		$email_confirm = Search_Object::newInstance('SAF\Wiki\Email_Confirmation');
 		$email_confirm->user = $user;
 		$is_not_validate = Dao::search($email_confirm);
-		if($is_not_validate){
+		if ($is_not_validate) {
 			$joinpoint->setReturnedValue(null);
 		}
 	}
@@ -110,7 +119,7 @@ class Email_Confirmation_Register implements Plugin
 	private static function getEmailFrom($application_name)
 	{
 		$email_from = $application_name;
-		$email_from .= self::$MAIL_DOMAIN_FROM;
+		$email_from .= self::$mail_domain_from;
 		return $email_from;
 	}
 }

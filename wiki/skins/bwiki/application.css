@@ -79,7 +79,7 @@ div#name.field {
 }
 
 .displayable {
-	display:none;
+	display: none;
 }
 
 .breadcrumb .entry:before {
@@ -87,9 +87,9 @@ div#name.field {
 }
 
 .Connect{
-	float:right;
+	float: right;
 }
 
 .Disconnect{
-	float:right;
+	float: right;
 }

@@ -1,20 +1,24 @@
 <?php
 namespace SAF\Wiki;
 use SAF\Framework\Button;
-use SAF\Framework\View;
 use SAF\Framework\Default_Output_Controller;
+use SAF\Framework\View;
 
 class Page_Output_Controller extends Default_Output_Controller
 {
 
+	//----------------------------------------------------------------------------- getGeneralButtons
+	/**
+	 * @param $object object|string object or class name
+	 * @return Button[]
+	 */
 	protected function getGeneralButtons($object)
 	{
 		$destination = "#main";
-		/*if($object->name == "Menu")
-			$destination = "#menu";*/
 		return Button::newCollection(array(
-			array("Nouvelle page", "new", "new"),
-			array("Modifier", View::link($object, "edit"), "edit", array(".submit", $destination))
+			array("New page", "new", "new"),
+			array("Edit", View::link($object, "edit"), "edit", array(".submit", $destination))
 		));
 	}
+
 }

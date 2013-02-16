@@ -1,8 +1,9 @@
 <?php
 namespace SAF\Wiki;
 use AopJoinpoint;
+use SAF\Framework\Aop;
 use SAF\Framework\Plugin;
-use SAF\Framework\AOP;
+use SAF\Framework\Session;
 
 abstract class Wiki_Users_Loader implements Plugin
 {
@@ -11,11 +12,11 @@ abstract class Wiki_Users_Loader implements Plugin
 	public static function register()
 	{
 		Aop::add("after",
-			"SAF\\Framework\\User_Authenticate_Controller->authenticate()",
+			'SAF\Framework\User_Authenticate_Controller->authenticate()',
 			array(__CLASS__, "onUserAuthenticate")
 		);
 		Aop::add("after",
-			"SAF\\Framework\\User_Authenticate_Controller->disconnect()",
+			'SAF\Framework\User_Authenticate_Controller->disconnect()',
 			array(__CLASS__, "onUserDisconnect")
 		);
 	}
@@ -28,8 +29,8 @@ abstract class Wiki_Users_Loader implements Plugin
 	{
 		$arguments = $joinpoint->getArguments();
 		if (isset($arguments)) {
-
-			Session::current()->set(Wiki_User::current(self::loadUser($arguments[0])));
+			// TODO this code does not work !?!
+			//Session::current()->set(Wiki_User::current(self::loadUser($arguments[0])));
 		}
 	}
 
@@ -38,4 +39,5 @@ abstract class Wiki_Users_Loader implements Plugin
 	{
 
 	}
+
 }

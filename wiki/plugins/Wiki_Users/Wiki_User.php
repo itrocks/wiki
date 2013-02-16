@@ -4,6 +4,8 @@ use SAF\Framework\User;
 
 class Wiki_User extends User
 {
+
+	//---------------------------------------------------------------------------------------- $email
 	/**
 	 * @var string
 	 */
@@ -11,7 +13,6 @@ class Wiki_User extends User
 
 	//--------------------------------------------------------------------------------------- current
 	/**
-	 * @see \SAF\Framework\User::current($set_current)
 	 * @param $user Wiki_User
 	 * @return Wiki_User
 	 */

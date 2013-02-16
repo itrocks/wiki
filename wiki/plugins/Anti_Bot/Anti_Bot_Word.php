@@ -5,11 +5,17 @@ use SAF\Framework\Current;
 class Anti_Bot_Word
 {
 	use Current { current as private pCurrent; }
+
+	//----------------------------------------------------------------------------------------- $word
 	/**
 	 * @var string
 	 */
 	var $word;
 
+	//----------------------------------------------------------------------------------- __construct
+	/**
+	 * @param $word string
+	 */
 	function __construct($word)
 	{
 		$this->word = $word;
@@ -24,4 +30,5 @@ class Anti_Bot_Word
 	{
 		return self::pCurrent($set_current);
 	}
+
 }

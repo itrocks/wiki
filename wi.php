@@ -1,43 +1,43 @@
 <?php
+
 //--------------------------------------------------------------------------------------- wiki
 $CONFIG["wiki"] = array(
 	"app" => "Wiki",
 	"extends" => "framework",
-	"Dao" => array(
+	'SAF\Framework\Dao' => array(
 		"user"     => "wiki",
 		"password" => "cd93Rjfz4",
-		"databases" => "wiki"
+		"database" => "wiki"
 	),
-	"Object_Builder" => array(
-		'SAF\Framework\User'   => 'SAF\Wiki\Wiki_User'
+	'SAF\Framework\Builder' => array(
+		'SAF\Framework\User' => 'SAF\Wiki\Wiki_User'
 	),
-	"Menu" => array(
+	'SAF\Framework\Menu' => array(
 		"Principal" => array(
-			"/Accueil" => "Page d'accueil"
+			"/Accueil" => "Home"
 		),
 		"Disconnect" => array(
-			"/User/login" => "Se connecter",
-			"/User/register" => "S'enregistrer"
+			"/User/login" => "Log in",
+			"/User/register" => "Sign in"
 		),
 		"Connect" => array(
-			"/User/disconnect" => "Se déconnecter"
+			"/User/disconnect" => "Log out"
 		)
 	),
-	"View" => array(
+	'SAF\Framework\View' => array(
 		"css" => "bwiki"
 	),
-	"Plugins" => array(
+	'SAF\Framework\Plugins' => array(
 		"normal" => array(
-			"Uri_Rewriter",
-			"Object_Builder",
-			"Wiki",
-			"Modification_Reserved_Connected",
-			"Anti_Bot",
-			"Register_Email",
-			"Email_Confirmation_Register",
-			"Stay_Connected",
-			"Parse_Wiki_Link",
-			"Change_Name_Page_Refactor"
+			'SAF\Framework\Wiki',
+			'SAF\Wiki\Uri_Rewriter',
+			'SAF\Wiki\Modification_Reserved_Connected',
+			'SAF\Wiki\Anti_Bot',
+			'SAF\Wiki\Register_Email',
+			'SAF\Wiki\Email_Confirmation_Register',
+			'SAF\Wiki\Stay_Connected',
+			'SAF\Wiki\Parse_Wiki_Link',
+			'SAF\Wiki\Change_Name_Page_Refactor'
 		)
 	)
 );

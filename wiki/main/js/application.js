@@ -1,5 +1,6 @@
 $(window).load(function() {
 	$(window).resize(function() {
+
 		var $body = $("body");
 		var $body_margins = parseInt($body.css("margin-top"))
 			+ parseInt($body.css("margin-bottom"))

@@ -1,18 +1,19 @@
 <?php
-
 namespace SAF\Wiki;
-use SAF\Framework\User;
 
 class Email_Confirmation
 {
+
+	//----------------------------------------------------------------------------------------- $link
 	/**
 	 * @var string
 	 */
 	public $link;
 
+	//----------------------------------------------------------------------------------------- $user
 	/**
 	 * @getter Aop::getObject
-	 * @var User
+	 * @var \SAF\Framework\User
 	 */
 	public $user;
 
