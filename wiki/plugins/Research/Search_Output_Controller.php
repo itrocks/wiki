@@ -11,8 +11,8 @@ class Search_Output_Controller extends Output_Controller
 	{
 		$parameters = parent::getViewParameters($parameters, $class_name);
 		$parameters["previous_search"] = "";
-		if(isset($form["search"])){
-			$parameters["previous_search"] = $form["search"];
+		if(Search::current()){
+			$parameters["previous_search"] = Search::current()->search;
 		}
 		return View::run($parameters, $form, $files, $class_name, "output");
 	}
