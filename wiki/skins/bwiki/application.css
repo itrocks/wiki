@@ -6,14 +6,14 @@ body {
 .application.center {
 	background-color: rgb(255, 255, 255);
 	padding: 1%;
-	margin-left: auto;
-	margin-right: auto;
+	margin-right: 5%;
 	border-width: 1px 1px medium;
 	border-style: inset;
 	border-image: none;
 	color: black;
+	float: right;
 	line-height: 1.3;
-	width: 90%;
+	width: 73%;
 }
 
 .application.top {
@@ -29,6 +29,7 @@ body {
 	border-color: rgb(151, 151, 102);
 	border-style: solid;
 	padding-right: 6px;
+	height: 15px;
 	font-size: 75%;
 	color: white;
 }
@@ -92,4 +93,20 @@ div#name.field {
 
 .Disconnect{
 	float: right;
+}
+
+.clear{
+	clear: both;
+}
+
+.menu_left{
+	background-color: rgb(255, 255, 255);
+	padding: 1%;
+	float: left;
+	border-width: 1px 1px medium;
+	border-style: inset;
+	border-image: none;
+	color: black;
+	line-height: 1.3;
+	width: 15%;
 }

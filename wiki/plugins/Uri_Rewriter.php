@@ -39,47 +39,57 @@ class Uri_Rewriter implements Plugin
 	 */
 	public static function beforeMainControllerRunController(AopJoinpoint $joinpoint)
 	{
-		$list_ignore = array("Menu", "User", "Page");
+		$list_ignore = array("Menu", "User", "Page", "Search", "Content");
+		$list_orders = array("edit", "output", "new", "delete", "included");
 		$link = $joinpoint->getArguments()[0];
 		$class_name = 'SAF\Wiki\Page';
 		if ($link) {
 			$str = self::uriToArray($link);
-			if (
-				!$str
-				|| ($str && (count($str) > 0) && (($str[0] == "new") || ($str[0] == "New")))
-				|| ($str && (count($str) < 1))
-			) {
-				$str[0] = $class_name;
-				$str[1] = "new";
-				Uri_Rewriter::putInArguments($str, $joinpoint);
-			}
-			elseif (
-				$str && (count($str) > 0) && self::notIgnored($str[0], $list_ignore)
-				&& !($str && (count($str) > 1) && (($str[1] == "write") || is_numeric($str[1])))
-			) {
-				if (@class_exists($class_name)) {
-					$object = Builder::create($class_name);
-					$name = $str[0];
-					$name = ucfirst(strtolower(trim(str_replace("_", " ", $name))));
-					$object->name = $name;
-					$result = Dao::searchOne($object, $class_name);
-					if ($result) {
-						$str[0] = $class_name;
-						$str[1] = Dao::getObjectIdentifier($result);
-					}
-					else {
-						$str[0] = $class_name;
-						$str[1] = "new";
-						/*
-						// Permet de passer le nom de la page voulue par les gets
-						$gets = Uri_Rewriter::returnGets($link);
-					  if($gets){
-							$str[] = "&name=" . str_replace(" ", "_", $name);
-						} else {
-						  $str[] = "?name=" . str_replace(" ", "_", $name);
-					  }*/
-					}
+			if(self::notIgnored($str[0], $list_ignore)){
+				if (
+					!$str
+					|| ($str && (count($str) > 0) && (($str[0] == "new")
+					|| ($str[0] == "New")))
+					|| ($str && (count($str) < 1))
+				) {
+					$str[0] = $class_name;
+					$str[1] = "new";
 					Uri_Rewriter::putInArguments($str, $joinpoint);
+				}
+				elseif (
+					$str && (count($str) > 0)
+					&& !($str && (count($str) > 1)
+					&& (($str[1] == "write") || is_numeric($str[1])))
+				) {
+					if (@class_exists($class_name)) {
+						$object = Builder::create($class_name);
+						$name = $str[0];
+						$name = ucfirst(strtolower(trim(str_replace("_", " ", $name))));
+						$object->name = $name;
+						$result = Dao::searchOne($object, $class_name);
+						if ($result) {
+							$order = "output";
+							if(isset($str[1]) && self::isOrder($str[1], $list_orders)){
+								$order = strtolower($str[1]);
+							}
+							$str[0] = $class_name;
+							$str[1] = Dao::getObjectIdentifier($result);
+							$str[2] = $order;
+						}
+						else {
+							$str[0] = $class_name;
+							$str[1] = "new";
+							/*
+							// Permet de passer le nom de la page voulue par les gets
+							$gets = Uri_Rewriter::returnGets($link);
+						  if($gets){
+								$str[] = "&name=" . str_replace(" ", "_", $name);
+							} else {
+							  $str[] = "?name=" . str_replace(" ", "_", $name);
+						  }*/
+						}
+						Uri_Rewriter::putInArguments($str, $joinpoint);
+					}
 				}
 			}
 		}
@@ -99,6 +109,22 @@ class Uri_Rewriter implements Plugin
 			}
 		}
 		return true;
+	}
+
+	//--------------------------------------------------------------------------------------- isOrder
+	/**
+	 * @param $item_test string
+	 * @param $list_order string
+	 * @return bool
+	 */
+	private static function isOrder($item_test, $list_order)
+	{
+		foreach ($list_order as $item_order) {
+			if (strtolower($item_order) == strtolower($item_test)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	//-------------------------------------------------------------------------------- putInArguments

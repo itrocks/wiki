@@ -50,7 +50,7 @@ $(window).load(function() {
 					error: function() { alert("error opening form, please retry"); },
 					success: function(data, status, xhr)
 					{
-						var $target = $(xhr.target);
+						var $target = $("#main");
 						$target.html(data);
 						$target.children().build();
 						var input = $target.find("[name='" + xhr.focus + "']");

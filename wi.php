@@ -13,9 +13,6 @@ $CONFIG["wiki"] = array(
 		'SAF\Framework\User' => 'SAF\Wiki\Wiki_User'
 	),
 	'SAF\Framework\Menu' => array(
-		"Principal" => array(
-			"/Accueil" => "Home"
-		),
 		"Disconnect" => array(
 			"/User/login" => "Log in",
 			"/User/register" => "Sign in"
@@ -37,7 +34,8 @@ $CONFIG["wiki"] = array(
 			'SAF\Wiki\Email_Confirmation_Register',
 			'SAF\Wiki\Stay_Connected',
 			'SAF\Wiki\Parse_Wiki_Link',
-			'SAF\Wiki\Change_Name_Page_Refactor'
+			'SAF\Wiki\Change_Name_Page_Refactor',
+			'SAF\Wiki\Page_Default_View_Change'
 		)
 	)
 );

@@ -11,24 +11,29 @@
 <body>
 
 <!--BEGIN-->
-<div class="window modifiable trashable {@feature.lower}" id="/{@class.short}<!--id-->/{id}<!--id-->/{@feature}">
-
-	<div class="general buttons">
-		<!--general_buttons-->
-		<a class="button trashable {feature.lower} {?class.short}" href="{link}" target="{?target}">|{caption}|</a>
-		<!--general_buttons-->
-	</div>
-
-	<div class="fieldset">
-		<!--@properties-->
-		<div class="field {getType.isMultiple}" id="{name}">
-			<div class="value">{value}</div>
-		</div>
-		<!--@properties-->
-	</div>
-
+<div id="menu" class="application menu output">
+	<!--general_buttons-->
+	<a class="button trashable {feature.lower} {?class.short}" href="{link}" target="{?target}">|{caption}|</a>
+	<!--general_buttons-->
+	{/Menu/output}
 </div>
-<hr/>
+
+<div id="menu_left" class="application menu_left output">
+	{/Menu_left/included}
+</div>
+<div class="application center">
+	<div class="window modifiable trashable {@feature.lower}" id="/{@class.short}<!--id-->/{id}<!--id-->/{@feature}">
+
+		<div class="fieldset">
+			<!--@properties-->
+			<div class="field {getType.isMultiple}" id="{name}">
+				<div class="value">{value}</div>
+			</div>
+			<!--@properties-->
+		</div>
+		<hr/>
+	</div>
+</div>
 <!--END-->
 
 </body>
