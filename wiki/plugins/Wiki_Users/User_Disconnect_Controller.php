@@ -5,7 +5,7 @@ use SAF\Framework\Default_Controller;
 use SAF\Framework\Feature_Controller;
 use SAF\Framework\User_Authentication;
 
-class Wiki_User_Disconnect_Controller implements Feature_Controller
+class User_Disconnect_Controller implements Feature_Controller
 {
 
 	//------------------------------------------------------------------------------------------- run
