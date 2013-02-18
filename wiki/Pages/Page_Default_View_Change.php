@@ -14,7 +14,8 @@ class Page_Default_View_Change implements Plugin
 	/**
 	 * @param $joinpoint AopJoinpoint
 	 */
-	public static function aroundHtmlTemplateParseContainer(AopJoinpoint $joinpoint){
+	public static function aroundHtmlTemplateParseContainer(AopJoinpoint $joinpoint)
+	{
 		$object = $joinpoint->getObject();
 		if($object->getParameter("SAF\\Wiki\\Page")){
 			$main_view = Html_Configuration::$main_template;

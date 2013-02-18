@@ -2,7 +2,6 @@
 namespace SAF\Wiki;
 use SAF\Framework\Controller_Parameters;
 use SAF\Framework\Default_New_Controller;
-use SAF\Framework\Namespaces;
 use SAF\Framework\View;
 use SAF\Framework\Button;
 use SAF\Framework\Color;
