@@ -47,18 +47,20 @@ class Stay_Connected implements Plugin
 		$user = $joinpoint->getArguments()[0];
 		$user_name_title = self::generateNameCookie("user_name");
 		$content_title = self::generateNameCookie($user->login);
-		$hash = $_COOKIE[$content_title];
-		$connection_cookie = Search_Object::newInstance('SAF\Wiki\Connection_Cookie');
-		$connection_cookie->user = $user;
-		$connection_cookie->hash = $hash;
-		$connection_cookie = Dao::searchOne($connection_cookie);
-		Dao::delete($connection_cookie);
-		$path = self::getPath();
-		$expire = time() - 3600;
-		setcookie($user_name_title, false, $expire, $path);
-		setcookie($content_title, false, $expire, $path);
-		unset($_COOKIE[$user_name_title]);
-		unset($_COOKIE[$content_title]);
+		if(isset($_COOKIE[$content_title])){
+			$hash = $_COOKIE[$content_title];
+			$connection_cookie = Search_Object::newInstance('SAF\Wiki\Connection_Cookie');
+			$connection_cookie->user = $user;
+			$connection_cookie->hash = $hash;
+			$connection_cookie = Dao::searchOne($connection_cookie);
+			Dao::delete($connection_cookie);
+			$path = self::getPath();
+			$expire = time() - 3600;
+			setcookie($user_name_title, false, $expire, $path);
+			setcookie($content_title, false, $expire, $path);
+			unset($_COOKIE[$user_name_title]);
+			unset($_COOKIE[$content_title]);
+		}
 	}
 
 	//--------------------------------------------------------- afterUserAuthenticationGetLoginInputs
