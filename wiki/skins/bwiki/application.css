@@ -110,3 +110,7 @@ div#name.field {
 	line-height: 1.3;
 	width: 15%;
 }
+
+.search_field {
+	border: 0;
+}

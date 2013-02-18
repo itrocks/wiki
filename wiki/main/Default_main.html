@@ -38,14 +38,21 @@
 </head>
 <body>
 
-	<div class="application top">
+	<div class="application top left">
 		<a class="bappli logo" href="http://www.bappli.com" target="_blank" title="www.bappli.com">
 			B-Wiki
 		</a>
 		<div class="left" id="messages"></div>
 	</div>
+	<div id="search" class="right">
+		{/Search/output}
+	</div>
+	<div class="clear"/>
 	<div id="menu" class="application menu output">
 			{/Menu/output}
+	</div>
+	<div id="menu_left" class="application menu_left output">
+		{/Menu_left/included}
 	</div>
 	<div id="main" class="application center">
 				{@content}
