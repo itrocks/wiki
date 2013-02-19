@@ -33,6 +33,7 @@ class Anti_Bot implements Plugin
 
 	//------------------------------------------ afterUserAuthenticationControlRegisterFormParameters
 	/**
+	 * Control if the word in forms results is the same as the current session anti bot word.
 	 * @param AopJoinpoint $joinpoint
 	 */
 	public static function afterUserAuthenticationControlRegisterFormParameters(AopJoinpoint $joinpoint)
@@ -49,6 +50,7 @@ class Anti_Bot implements Plugin
 
 	//------------------------------------------------------ afterUserAuthenticationGetRegisterInputs
 	/**
+	 * Find the control word, generate the test and add input.
 	 * @param AopJoinpoint $joinpoint
 	 */
 	public static function afterUserAuthenticationGetRegisterInputs(AopJoinpoint $joinpoint)
@@ -71,13 +73,13 @@ class Anti_Bot implements Plugin
 
 	//------------------------------------------------------------------------------------ choosePage
 	/**
-	 * @param $table_page   string
-	 * @param $content_name string
-	 * @return string
+	 * Choose a random page in the bdd.
+	 * @param $class        string The class corresponding to the table in database.
+	 * @param $content_name string The field's name where take content.
+	 * @return Page The chosen page.
 	 */
-	private static function choosePage($table_page, $content_name)
+	private static function choosePage($class, $content_name)
 	{
-		$class = $table_page;
 		$list_pages = Dao::readAll($class);
 		$possible_pages = array();
 		foreach ($list_pages as $page) {
@@ -92,8 +94,12 @@ class Anti_Bot implements Plugin
 
 	//------------------------------------------------------------------------------------ chooseWord
 	/**
-	 * @param $tab string
-	 * @return mixed[]
+	 * Chose a word in an array.
+	 * @param $tab string[] An array of words.
+	 * @return mixed[] Returns all attributes necessary of this word :
+	 * "col" for the column number,
+	 * "row" for the row number,
+	 * "word" for the word choose.
 	 */
 	private static function chooseWord($tab)
 	{
@@ -105,24 +111,26 @@ class Anti_Bot implements Plugin
 
 	//----------------------------------------------------------------------- explodeRowInArrayToWord
 	/**
-	 * @param $text_explode string
-	 * @return array
+	 * Explode an array corresponding of rows in an array of array, corresponding of rows and columns,
+	 * the columns separate the words.
+	 * @param $text_rows string[] The array to explode.
+	 * @return string[][] An array of array, represent rows and words.
 	 */
-	private static function explodeRowsInArrayToWord($text_explode)
+	private static function explodeRowsInArrayToWord($text_rows)
 	{
 		$main_delimiter = " ";
 		$delimiters = array(
 			"." => ". ", ":" => ": ", "," => ", ", "(" => " (", ") ", "  " => " ",
 			"[" => " [", "]" => "] "
 		);
-		$text_explode = str_replace("  ", " ", $text_explode);
-		foreach ($delimiters as $delimiter => $newDelimiter) {
-			$text_explode = str_replace($delimiter, $newDelimiter, $text_explode);
+		$text_rows = str_replace("  ", " ", $text_rows);
+		foreach ($delimiters as $delimiter => $new_delimiter) {
+			$text_rows = str_replace($delimiter, $new_delimiter, $text_rows);
 		}
-		$text_explode = explodeStringInArrayToDoubleArray($main_delimiter, $text_explode);
+		$text_rows = explodeStringInArrayToDoubleArray($main_delimiter, $text_rows);
 		$text_clean = array();
 		$key_row = 0;
-		foreach ($text_explode as $row) {
+		foreach ($text_rows as $row) {
 			$row_clean = array();
 			$key_col = 0;
 			foreach ($row as $col) {
@@ -141,8 +149,9 @@ class Anti_Bot implements Plugin
 
 	//----------------------------------------------------------------------------------- generateTab
 	/**
-	 * @param $text string
-	 * @return array
+	 * Parse a text in parameter to an array of array, to represent rows and columns.
+	 * @param $text string The string to parse.
+	 * @return string[][] An array of array.
 	 */
 	private static function generateTab($text)
 	{
@@ -178,8 +187,9 @@ class Anti_Bot implements Plugin
 
 	//-------------------------------------------------------------------------- generateTextSelected
 	/**
-	 * @param $tab array
-	 * @return array
+	 * Transform the tab result to be used in views parameters.
+	 * @param $tab string[][]
+	 * @return string[][]
 	 */
 	private static function generateTextSelected($tab)
 	{
@@ -218,8 +228,9 @@ class Anti_Bot implements Plugin
 
 	//----------------------------------------------------------------------------- numberToCharacter
 	/**
+	 * Get the character corresponding of the number put in parameters.
 	 * @param $number integer
-	 * @return string[]
+	 * @return string The character.
 	 */
 	private static function numberToCharacter($number)
 	{

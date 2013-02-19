@@ -31,6 +31,7 @@ class Change_Name_Page_Refactor implements Plugin
 
 	//--------------------------------------------------------------- beforeDefaultWriteControllerRun
 	/**
+	 * Change all references of a link of this page with the new name.
 	 * @param $joinpoint AopJoinpoint
 	 */
 	public static function beforeDefaultWriteControllerRun(AopJoinpoint $joinpoint)
@@ -61,9 +62,10 @@ class Change_Name_Page_Refactor implements Plugin
 
 	//---------------------------------------------------------------------------- generateReferences
 	/**
+	 * Generate a tab of the references.
 	 * @param $old_name string
 	 * @param $new_name string
-	 * @return array
+	 * @return array List references possible.
 	 */
 	protected static function generateReferences($old_name, $new_name)
 	{
