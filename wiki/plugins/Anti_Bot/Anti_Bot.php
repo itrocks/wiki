@@ -114,7 +114,7 @@ class Anti_Bot implements Plugin
 	 * Explode an array corresponding of rows in an array of array, corresponding of rows and columns,
 	 * the columns separate the words.
 	 * @param $text_rows string[] The array to explode.
-	 * @return string[][] An array of array, represent rows and words.
+	 * @return array An array of array, represent rows and words.
 	 */
 	private static function explodeRowsInArrayToWord($text_rows)
 	{
@@ -151,7 +151,7 @@ class Anti_Bot implements Plugin
 	/**
 	 * Parse a text in parameter to an array of array, to represent rows and columns.
 	 * @param $text string The string to parse.
-	 * @return string[][] An array of array.
+	 * @return array An array of array.
 	 */
 	private static function generateTab($text)
 	{
@@ -188,8 +188,8 @@ class Anti_Bot implements Plugin
 	//-------------------------------------------------------------------------- generateTextSelected
 	/**
 	 * Transform the tab result to be used in views parameters.
-	 * @param $tab string[][]
-	 * @return string[][]
+	 * @param $tab array
+	 * @return array
 	 */
 	private static function generateTextSelected($tab)
 	{
@@ -203,7 +203,7 @@ class Anti_Bot implements Plugin
 			$text[] = array("row_number" => $row_number + 1, "cols" => $cols);
 			$row_number++;
 		}
-		return $text;
+		return array(array($text));
 	}
 
 	//----------------------------------------------------------------------------- getViewParameters
