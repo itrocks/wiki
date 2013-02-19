@@ -53,7 +53,7 @@ class Search_List_Controller extends List_Controller
 			Search::current($search);
 			return View::run($parameters, $form, $files, $class_name, "result");
 		} else {
-			return (new Search_Output_Controller)->run($parameters, $form, $files, $class_name);
+			return (new Search_Output_Controller())->run($parameters, $form, $files, $class_name);
 		}
 	}
 
@@ -85,7 +85,7 @@ class Search_List_Controller extends List_Controller
 	//------------------------------------------------------------------------- approximateNameSearch
 	/**
 	 * Search if a name contain this search word.
-	 * @param $search string
+	 * @param $search string The search word.
 	 * @return array
 	 */
 	private function approximateNameSearch($search)
@@ -115,7 +115,7 @@ class Search_List_Controller extends List_Controller
 	//--------------------------------------------------------------------------------- contentSearch
 	/**
 	 * Search in the content.
-	 * @param $search string
+	 * @param $search string The search word.
 	 * @return array
 	 */
 	private function contentSearch($search)
