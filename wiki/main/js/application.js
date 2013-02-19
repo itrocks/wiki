@@ -1,6 +1,5 @@
 $(window).load(function() {
 	$(window).resize(function() {
-
 		var $body = $("body");
 		var $body_margins = parseInt($body.css("margin-top"))
 			+ parseInt($body.css("margin-bottom"))
@@ -28,6 +27,20 @@ $(window).load(function() {
 			$content += parseInt($(this).css("border-left-width")) * 2;
 		});
 		$body.height(($windows > $content ? $windows : $content));
+		$(".left #menu").width($body.width());
+		var $left = $(".left");
+		var $left_size = $left.width()
+			+ parseInt($left.css("margin-left"))
+			+ parseInt($left.css("margin-right"))
+			+ parseInt($left.css("padding-left"))
+			+ parseInt($left.css("padding-right"));
+		var $application_center = $(".application.center");
+		var $width_center = $body.width() - $left_size
+			- parseInt($application_center.css("margin-left"))
+			- parseInt($application_center.css("margin-right"))
+			- parseInt($application_center.css("padding-left"))
+			- parseInt($application_center.css("padding-right"));
+		$application_center.width(($width_center > 200 ? $width_center : 200));
 	});
 	$(window).resize();
 

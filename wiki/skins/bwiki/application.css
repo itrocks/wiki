@@ -4,16 +4,20 @@ body {
 }
 
 .application.center {
+	float: left;
+	margin-left: 20px;
+	width: auto;
+}
+
+.window{
 	background-color: rgb(255, 255, 255);
-	padding: 1%;
-	margin-right: 5%;
+	padding: 5px;
+	margin-top: 20px;
 	border-width: 1px 1px medium;
 	border-style: inset;
 	border-image: none;
 	color: black;
-	float: right;
 	line-height: 1.3;
-	width: 73%;
 }
 
 .application.top {
@@ -75,10 +79,6 @@ div#name.field {
 	font-size: 22px;
 }
 
-.button.delete {
-	float: right;
-}
-
 .displayable {
 	display: none;
 }
@@ -87,30 +87,36 @@ div#name.field {
 	content: ' / ';
 }
 
-.Connect{
-	float: right;
-}
-
-.Disconnect{
-	float: right;
-}
-
 .clear{
 	clear: both;
 }
 
-.menu_left{
+.menu_left .window{
 	background-color: rgb(255, 255, 255);
-	padding: 1%;
-	float: left;
 	border-width: 1px 1px medium;
 	border-style: inset;
 	border-image: none;
 	color: black;
 	line-height: 1.3;
-	width: 15%;
+	width: 100%;
+	float: left;
 }
 
 .search_field {
 	border: 0;
+}
+
+.absolute {
+	position: absolute;
+	z-index:1;
+}
+
+.menu_add {
+	position: relative;
+	z-index:3;
+	margin-bottom: -17px;
+}
+
+.left #menu {
+	width: 98%;
 }

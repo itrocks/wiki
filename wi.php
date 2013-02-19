@@ -35,7 +35,6 @@ $CONFIG["wiki"] = array(
 			'SAF\Wiki\Stay_Connected',
 			'SAF\Wiki\Parse_Wiki_Link',
 			'SAF\Wiki\Change_Name_Page_Refactor',
-			'SAF\Wiki\Page_Default_View_Change',
 			'SAF\Wiki\Links_Recognition'
 		)
 	)
