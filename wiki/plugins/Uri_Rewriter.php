@@ -45,7 +45,7 @@ class Uri_Rewriter implements Plugin
 		$class_name = 'SAF\Wiki\Page';
 		if ($link) {
 			$str = self::uriToArray($link);
-			if(self::notIgnored($str[0], $list_ignore)){
+			if ($str && self::notIgnored($str[0], $list_ignore)) {
 				if (
 					!$str
 					|| ($str && (count($str) > 0) && (($str[0] == "new")
@@ -114,7 +114,7 @@ class Uri_Rewriter implements Plugin
 	//--------------------------------------------------------------------------------------- isOrder
 	/**
 	 * @param $item_test string
-	 * @param $list_order string
+	 * @param $list_order string[]
 	 * @return bool
 	 */
 	private static function isOrder($item_test, $list_order)
