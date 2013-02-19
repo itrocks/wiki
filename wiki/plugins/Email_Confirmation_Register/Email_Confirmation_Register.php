@@ -7,6 +7,11 @@ use SAF\Framework\Plugin;
 use SAF\Framework\Search_Object;
 use SAF\Framework\View;
 
+/**
+ * Use the mail() function of PHP
+ * By default, the mail function need the sendmail package.
+ * Please install this package or redefine the mail function of php to use this plugin.
+ */
 class Email_Confirmation_Register implements Plugin
 {
 
@@ -18,6 +23,7 @@ class Email_Confirmation_Register implements Plugin
 
 	//--------------------------------------------------------------- afterUserAuthenticationRegister
 	/**
+	 * Generate a mail content, an activation key, save the key in databases, and send the email.
 	 * @param $joinpoint AopJoinpoint
 	 */
 	public static function afterUserAuthenticationRegister(AopJoinpoint $joinpoint)
@@ -66,6 +72,7 @@ class Email_Confirmation_Register implements Plugin
 
 	//------------------------------------------------------------------ afterUserAuthenticationLogin
 	/**
+	 * Disable login function if the mail has not be validate by the link.
 	 * @param $joinpoint AopJoinpoint
 	 */
 	public static function afterUserAuthenticationLogin(AopJoinpoint $joinpoint)
@@ -80,6 +87,12 @@ class Email_Confirmation_Register implements Plugin
 	}
 
 	//------------------------------------------------------------------------------------ getHeaders
+	/**
+	 * Return header generated for a mail.
+	 * @param $application_name string The name of the application.
+	 * @param $email_from string The email address from.
+	 * @return string Return the header in string format.
+	 */
 	private static function getHeaders($application_name, $email_from)
 	{
 		$headers  = 'MIME-Version: 1.0' . "\r\n";
@@ -89,6 +102,14 @@ class Email_Confirmation_Register implements Plugin
 	}
 
 	//----------------------------------------------------------------------------- getViewParameters
+	/**
+	 * Generate the view parameters
+	 * @param $login string The login of the user
+	 * @param $password string The password of the user
+	 * @param $application_name string The name of the application
+	 * @param $link string The activation link.
+	 * @return array A list of parameters.
+	 */
 	private static function getViewParameters($login, $password, $application_name, $link)
 	{
 		$parameters = array();
@@ -100,6 +121,10 @@ class Email_Confirmation_Register implements Plugin
 	}
 
 	//------------------------------------------------------------------------- generateActivationKey
+	/**
+	 * Generate an unique key.
+	 * @return string A key.
+	 */
 	private static function generateKey()
 	{
 		$key = md5(uniqid(rand(), true));
@@ -107,6 +132,11 @@ class Email_Confirmation_Register implements Plugin
 	}
 
 	//------------------------------------------------------------------------ generateActivationLink
+	/**
+	 * Build an activation link with a key put in parameters.
+	 * @param $key string The key to use in activation link.
+	 * @return string The activation link.
+	 */
 	private static function generateActivationLink($key)
 	{
 		$link = $_SERVER["HTTP_HOST"]
@@ -116,6 +146,11 @@ class Email_Confirmation_Register implements Plugin
 	}
 
 	//---------------------------------------------------------------------------------- getEmailFrom
+	/**
+	 * Generate an email address type to send a mail.
+	 * @param $application_name string The name of the application
+	 * @return string An email address type.
+	 */
 	private static function getEmailFrom($application_name)
 	{
 		$email_from = $application_name;
