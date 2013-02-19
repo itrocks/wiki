@@ -7,11 +7,15 @@ use SAF\Framework\Plugin;
 use SAF\Framework\Reflection_Class;
 use SAF\Framework\User;
 
+/**
+ * This plugin delete all control of the output object if user is not connected.
+ */
 class Modification_Reserved_Connected implements Plugin
 {
 
 	//-------------------------------------------------------- afterOutputControllerGetGeneralButtons
 	/**
+	 * Remove all control buttons of outputs if the user is not connected.
 	 * @param $joinpoint AopJoinpoint
 	 */
 	public static function afterOutputControllerGetGeneralButtons(AopJoinpoint $joinpoint)
@@ -27,6 +31,7 @@ class Modification_Reserved_Connected implements Plugin
 
 	//--------------------------------------------------- afterDefaultEditControllerGetViewParameters
 	/**
+	 * Redirect the default edit in the output template if the user is not connected.
 	 * @param $joinpoint AopJoinpoint
 	 */
 	public static function afterDefaultEditControllerGetViewParameters(AopJoinpoint $joinpoint)

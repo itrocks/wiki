@@ -64,6 +64,7 @@ class Links_Recognition implements Plugin
 				$offset_tag_tmp = $tag_end_pos + 1;
 				$old_tag_end_pos = $tag_end_pos;
 			}
+			$offset_tag = $tag_begin_pos + 1;
 			if($can_replace){
 				$text = substr_replace($text, $replace, $pos, strlen($search));
 				$offset = $pos + strlen($replace);
@@ -71,7 +72,6 @@ class Links_Recognition implements Plugin
 			else {
 				$offset = $pos + strlen($search);
 			}
-			$offset_tag = $tag_begin_pos + 1;
 		}
 		return $text;
 	}
