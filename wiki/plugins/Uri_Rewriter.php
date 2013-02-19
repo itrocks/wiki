@@ -64,7 +64,7 @@ class Uri_Rewriter implements Plugin
 					if (@class_exists($class_name)) {
 						$object = Builder::create($class_name);
 						$name = $str[0];
-						$name = ucfirst(strtolower(trim(str_replace("_", " ", $name))));
+						$name = trim(str_replace("_", " ", $name));
 						$object->name = $name;
 						$result = Dao::searchOne($object, $class_name);
 						if ($result) {
