@@ -40,7 +40,8 @@ class Search_List_Controller extends List_Controller
 	 */
 	public function run(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
-		$search_value = $form["search"];
+		if(isset($form["search"]))
+			$search_value = $form["search"];
 		if(isset($search_value) && $search_value != ""){
 			$parameters = parent::getViewParameters($parameters, $class_name);
 			$search_type = array();
