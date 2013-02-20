@@ -49,7 +49,7 @@ class Links_Recognition implements Plugin
 	{
 		$offset = 0;
 		$offset_tag = 0;
-		while(($pos = strpos($text, $search, $offset)) !== false){
+		while(($pos = stripos($text, $search, $offset)) !== false){
 			$tag_begin_pos = 0;
 			$tag_end_pos = 0;
 			$old_tag_end_pos = -1;
@@ -57,8 +57,11 @@ class Links_Recognition implements Plugin
 			$can_replace = true;
 			while($tag_end_pos < $pos && $tag_end_pos !== false && $tag_end_pos != $old_tag_end_pos){
 				$old_tag_end_pos = $tag_end_pos;
-				$tag_begin_pos = strpos($text, $tag_begin, $offset_tag_tmp);
-				$tag_end_pos = strpos($text, $tag_end, $tag_begin_pos);
+				$tag_begin_pos_tmp = stripos($text, $tag_begin, $offset_tag_tmp);
+				if($tag_begin_pos_tmp === false)
+					break;
+				$tag_begin_pos = $tag_begin_pos_tmp;
+				$tag_end_pos = stripos($text, $tag_end, $tag_begin_pos);
 				if($tag_begin_pos < $pos && $tag_end_pos > $pos){
 					$can_replace = false;
 				}
