@@ -46,9 +46,14 @@ class Fix_Link_Url implements Plugin
 	 */
 	static function formatUrl($matches)
 	{
-		return "href=\"http://" . $_SERVER["HTTP_HOST"]
-			. str_replace(".php", "", $_SERVER["SCRIPT_NAME"])
-			. "/". $matches[1] . "\"";
+		if(filter_var($matches[1], FILTER_VALIDATE_URL)) {
+			return "href=\"" . $matches[1] .  "\"";
+		}
+		else {
+			return "href=\"http://" . $_SERVER["HTTP_HOST"]
+				. str_replace(".php", "", $_SERVER["SCRIPT_NAME"])
+				. "/". $matches[1] . "\"";
+		}
 	}
 
 	//-------------------------------------------------------------------------------------- register
