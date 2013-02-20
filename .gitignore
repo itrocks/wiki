@@ -5,7 +5,5 @@
 /.project
 /framework
 /phpdoc
-/tests
 /index.php
 /config.php
-/ut.php
