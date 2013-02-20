@@ -56,15 +56,15 @@ class Links_Recognition implements Plugin
 			$offset_tag_tmp = $offset_tag;
 			$can_replace = true;
 			while($tag_end_pos < $pos && $tag_end_pos !== false && $tag_end_pos != $old_tag_end_pos){
+				$old_tag_end_pos = $tag_end_pos;
 				$tag_begin_pos = strpos($text, $tag_begin, $offset_tag_tmp);
 				$tag_end_pos = strpos($text, $tag_end, $tag_begin_pos);
 				if($tag_begin_pos < $pos && $tag_end_pos > $pos){
 					$can_replace = false;
 				}
 				$offset_tag_tmp = $tag_end_pos + 1;
-				$old_tag_end_pos = $tag_end_pos;
 			}
-			$offset_tag = $tag_begin_pos + 1;
+			$offset_tag = $tag_begin_pos;
 			if($can_replace){
 				$text = substr_replace($text, $replace, $pos, strlen($search));
 				$offset = $pos + strlen($replace);
