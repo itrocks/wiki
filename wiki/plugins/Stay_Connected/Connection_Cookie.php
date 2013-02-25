@@ -18,6 +18,7 @@ class Connection_Cookie
 
 	//----------------------------------------------------------------------------------------- $user
 	/**
+	 * @link Object
 	 * @var \SAF\Framework\User
 	 */
 	public $user;

@@ -12,7 +12,7 @@ class Email_Confirmation
 
 	//----------------------------------------------------------------------------------------- $user
 	/**
-	 * @getter Aop::getObject
+	 * @link Object
 	 * @var \SAF\Framework\User
 	 */
 	public $user;

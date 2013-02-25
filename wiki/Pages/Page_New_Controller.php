@@ -35,9 +35,9 @@ class Page_New_Controller extends Default_New_Controller
 	 * @param $class_name string
 	 * @return mixed[]
 	 */
-	protected function getViewParameters(Controller_Parameters $parameters, $class_name)
+	protected function getViewParameters(Controller_Parameters $parameters, $form, $class_name)
 	{
-		$parameters = parent::getViewParameters($parameters, $class_name);
+		$parameters = parent::getViewParameters($parameters, $form, $class_name);
 		// TODO : pass the name of the new page by the $GETS when possible
 		if (!empty($_SERVER["PATH_INFO"]) && ($_SERVER["PATH_INFO"] != "new")) {
 			if ($parameters) {

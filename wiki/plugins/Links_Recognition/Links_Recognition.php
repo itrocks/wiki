@@ -29,6 +29,7 @@ class Links_Recognition implements Plugin
 	//----------------------------------------------------------------------- replaceIfNotBetweenTags
 	/**
 	 * Replace a string in a text by an other string if this string is not between tags given in parameters.
+	 * This method is not case sensitive.
 	 * @param $text string The subject where search.
 	 * @param $search string The searched value.
 	 * @param $replace string The replace value.

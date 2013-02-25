@@ -7,6 +7,7 @@ use SAF\Framework\Dao;
 
 class Search_List_Controller extends List_Controller
 {
+
 	//------------------------------------------------------------------------------ $page_class_name
 	/**
 	 * The class name of the objects in which the search should be performed.
@@ -43,7 +44,7 @@ class Search_List_Controller extends List_Controller
 		if(isset($form["search"]))
 			$search_value = $form["search"];
 		if(isset($search_value) && $search_value != ""){
-			$parameters = parent::getViewParameters($parameters, $class_name);
+			$parameters = parent::getViewParameters($parameters, $form, $class_name);
 			$search_type = array();
 			$search_type[] = $this->exactlyNameSearch($search_value);
 			$search_type[] = $this->approximateNameSearch($search_value);
@@ -143,4 +144,5 @@ class Search_List_Controller extends List_Controller
 		}
 		return array("title" => "Content search", "content" => $content);
 	}
+
 }

@@ -7,14 +7,17 @@ use SAF\Framework\View;
 class Search_Output_Controller extends Output_Controller
 {
 
+	//------------------------------------------------------------------------------------------- run
 	public function run(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
-		$parameters = self::getViewParameters($parameters, $class_name);
+		$parameters = self::getViewParameters($parameters, $form, $class_name);
 		return View::run($parameters, $form, $files, $class_name, "output");
 	}
 
-	public function getViewParameters(Controller_Parameters $parameters, $class_name){
-		$parameters = parent::getViewParameters($parameters, $class_name);
+	//----------------------------------------------------------------------------- getViewParameters
+	public function getViewParameters(Controller_Parameters $parameters, $form, $class_name)
+	{
+		$parameters = parent::getViewParameters($parameters, $form, $class_name);
 		$parameters["previous_search"] = "";
 		$parameters["action_url"] = "http://" . $_SERVER["HTTP_HOST"]
 			. str_replace(".php", "", $_SERVER["SCRIPT_NAME"])
@@ -24,4 +27,5 @@ class Search_Output_Controller extends Output_Controller
 		}
 		return $parameters;
 	}
+
 }
