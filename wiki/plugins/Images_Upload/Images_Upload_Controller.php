@@ -16,8 +16,8 @@ class Images_Upload_Controller implements Feature_Controller
 	//---------------------------------------------------------------------------------------- upload
 	public function upload(Controller_Parameters $parameters, $form, $files)
 	{
-		if(isset($_FILES['image'])){
-			$image = $_FILES['image'];
+		if(isset($files['image'])){
+			$image = $files['image'];
 			if (
 				isset($image['tmp_name'])
 				&&($image['error'] == UPLOAD_ERR_OK)

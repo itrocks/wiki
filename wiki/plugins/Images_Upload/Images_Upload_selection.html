@@ -14,16 +14,12 @@
 		<p>{message}</p>
 		<form id="images_upload_form" enctype='multipart/form-data' method="POST" action="/Images_Upload/upload">
 			<input type="file" name="image" multiple>
-			<input type="submit" value="|Upload|"/>
+			<a class="button submit" target="#popup" href="/Images_Upload/upload">|Upload|</a>
 		</form>
 		<h3>|{title}|</h3>
-		<tr>
-			<!--images-->
-			<td>
-				<img src="{link}">
-			</td>
-			<!--images-->
-		</tr>
+		<!--images-->
+			<img src="{link}">
+		<!--images-->
 	</div>
 </div>
 <!--END-->
