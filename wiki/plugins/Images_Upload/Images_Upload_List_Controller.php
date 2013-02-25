@@ -46,7 +46,10 @@ class Images_Upload_List_Controller extends List_Controller
 		$folder = opendir(\Images_Upload_Utils::$images_repository);
 		for($i=0; $f = readdir($folder); $i++){
 			if(in_array(preg_replace("#(.+)\.(.+)#", "$2", $f), $ext)){
-				$listImages[$i] = array("link" => "../../" . \Images_Upload_Utils::$images_repository . $f);
+				$listImages[$i] = array(
+					"link" => "../../" . \Images_Upload_Utils::$images_repository . $f,
+					"name" => $f
+				);
 			}
 		}
 		closedir($folder);
