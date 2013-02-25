@@ -58,6 +58,11 @@ class Images_Upload_Controller implements Feature_Controller
 	}
 
 	//--------------------------------------------------------------------------------------- isImage
+	/**
+	 * Test if this image is an image permitted
+	 * @param $image array Image to test
+	 * @return bool True if it's a permitted image, false else.
+	 */
 	public function isImage($image)
 	{
 		$extension = $image["type"];
@@ -69,6 +74,11 @@ class Images_Upload_Controller implements Feature_Controller
 	}
 
 	//--------------------------------------------------------------------------------- codeToMessage
+	/**
+	 * Return a text which explain a code error.
+	 * @param $code int The code error to explain.
+	 * @return string The text which explain the code.
+	 */
 	private function codeToMessage($code)
 	{
 		switch ($code) {
