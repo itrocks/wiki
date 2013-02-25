@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+<head>
+	<title>|Image selection|</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<script type="text/javascript" src="/images_upload.js"></script>
+</head>
+<body>
+
+<!--BEGIN-->
+<div id="images_upload_window">
+	<div class="window images_upload">
+		<button name="close" class="close right">X</button>
+		<p>{message}</p>
+		<form id="images_upload_form" enctype='multipart/form-data' method="POST" action="/Images_Upload/upload">
+			<input type="file" name="image" multiple>
+			<input type="submit" value="|Upload|"/>
+		</form>
+		<h3>|{title}|</h3>
+		<tr>
+			<!--images-->
+			<td>
+				<img src="{link}">
+			</td>
+			<!--images-->
+		</tr>
+	</div>
+</div>
+<!--END-->
+
+</body>
+</html>

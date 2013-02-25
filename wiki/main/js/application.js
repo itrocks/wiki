@@ -49,6 +49,8 @@ $(window).load(function() {
 		this.xtarget({ url_append: "as_widget=1" });
 		// messages is draggable
 		this.in("#messages").draggable();
+		// popup is draggable
+		this.in(".popup").draggable();
 
 		// modifiable objects
 		this.in(".modifiable .value").dblclick(function()

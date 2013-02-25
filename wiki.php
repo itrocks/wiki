@@ -33,10 +33,12 @@ $CONFIG["wiki"] = array(
 			'SAF\Wiki\Register_Email',
 			'SAF\Wiki\Email_Confirmation_Register',
 			'SAF\Wiki\Stay_Connected',
+			'SAF\Wiki\Image_Wiki_Link_Parse',
 			'SAF\Wiki\Parse_Wiki_Link',
 			'SAF\Wiki\Change_Name_Page_Refactor',
 			'SAF\Wiki\Fix_Link_Url',
-			'SAF\Wiki\Links_Recognition'
+			'SAF\Wiki\Links_Recognition',
+			'SAF\Wiki\Images_Upload'
 		)
 	)
 );

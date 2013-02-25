@@ -120,3 +120,8 @@ div#name.field {
 .left #menu {
 	width: 98%;
 }
+
+.popup{
+	position: absolute;
+	z-index: 42;
+}
