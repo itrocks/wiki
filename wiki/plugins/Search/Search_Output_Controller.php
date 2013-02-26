@@ -8,6 +8,14 @@ class Search_Output_Controller extends Output_Controller
 {
 
 	//------------------------------------------------------------------------------------------- run
+	/**
+	 * Print the search panel view.
+	 * @param $parameters Controller_Parameters
+	 * @param $form       array
+	 * @param $files      array
+	 * @param $class_name string
+	 * @return mixed
+	 */
 	public function run(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
 		$parameters = self::getViewParameters($parameters, $form, $class_name);

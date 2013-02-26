@@ -11,8 +11,8 @@ class Wiki_User_Disconnect_Controller implements Feature_Controller
 	//------------------------------------------------------------------------------------------- run
 	/**
 	 * @param $parameters Controller_Parameters
-	 * @param $form array
-	 * @param $files array
+	 * @param $form       array
+	 * @param $files      array
 	 * @return mixed
 	 */
 	public function run(Controller_Parameters $parameters, $form, $files)

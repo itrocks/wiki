@@ -129,9 +129,10 @@ class Stay_Connected implements Plugin
 
 	//------------------------------------------------------------------------- generateContentCookie
 	/**
-	 * @param $user_name  string
-	 * @param $random_var string
-	 * @return string
+	 * Generate a content cookie width a key depending of local context.
+	 * @param $user_name  string The login of the user.
+	 * @param $random_var string A random value.
+	 * @return string The content of the cookie.
 	 */
 	public static function generateContentCookie($user_name, $random_var)
 	{
@@ -154,7 +155,8 @@ class Stay_Connected implements Plugin
 
 	//---------------------------------------------------------------------------- generateNameCookie
 	/**
-	 * @param $name string
+	 * Give a name of a cookie attached to this project.
+	 * @param $name string Name of the cookie.
 	 * @return string
 	 */
 	public static function generateNameCookie($name)
@@ -165,6 +167,7 @@ class Stay_Connected implements Plugin
 
 	//----------------------------------------------------------------------------- generateRandomVar
 	/**
+	 * Return a random var.
 	 * @return string
 	 */
 	private static function generateRandomVar()
@@ -206,6 +209,7 @@ class Stay_Connected implements Plugin
 
 	//----------------------------------------------------------------------------- registerHashInDao
 	/**
+	 * Add a generate hash in databases with dao's object.
 	 * @param $user        \SAF\Framework\User
 	 * @param $content_key string
 	 * @param $random_var  string

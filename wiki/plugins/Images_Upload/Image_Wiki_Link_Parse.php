@@ -31,7 +31,7 @@ class Image_Wiki_Link_Parse implements Plugin
 		$callback = function($matches) {
 			return self::formatLink($matches);
 		};
-		$list_extension_regex = join("|", \Images_Upload_Utils::$list_extension_accepted);
+		$list_extension_regex = join("|", Images_Upload_Utils::$list_extension_accepted);
 		$text = preg_replace_callback("#\[(.+)\.(" . $list_extension_regex . ")\]#", $callback, $text);
 		return $text;
 	}
