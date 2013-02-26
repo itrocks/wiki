@@ -39,15 +39,19 @@ class Images_Upload_List_Controller extends List_Controller
 	}
 
 	//------------------------------------------------------------------------------------- getImages
+	/**
+	 * List all images accepted in this plugin, and return their link.
+	 * @return array A list of image link sorted by name.
+	 */
 	public function getImages()
 	{
-		$ext = \Images_Upload_Utils::$list_extension_accepted;
+		$ext = Images_Upload_Utils::$list_extension_accepted;
 		$listImages = Array();
-		$folder = opendir(\Images_Upload_Utils::$images_repository);
+		$folder = opendir(Images_Upload_Utils::$images_repository);
 		for($i=0; $f = readdir($folder); $i++){
 			if(in_array(preg_replace("#(.+)\.(.+)#", "$2", $f), $ext)){
 				$listImages[$i] = array(
-					"link" => "../../" . \Images_Upload_Utils::$images_repository . $f,
+					"link" => "../../" . Images_Upload_Utils::$images_repository . $f,
 					"name" => $f
 				);
 			}

@@ -90,7 +90,7 @@ class Email_Confirmation_Register implements Plugin
 	/**
 	 * Return header generated for a mail.
 	 * @param $application_name string The name of the application.
-	 * @param $email_from string The email address from.
+	 * @param $email_from       string The email address from.
 	 * @return string Return the header in string format.
 	 */
 	private static function getHeaders($application_name, $email_from)
@@ -104,10 +104,10 @@ class Email_Confirmation_Register implements Plugin
 	//----------------------------------------------------------------------------- getViewParameters
 	/**
 	 * Generate the view parameters
-	 * @param $login string The login of the user
-	 * @param $password string The password of the user
+	 * @param $login            string The login of the user
+	 * @param $password         string The password of the user
 	 * @param $application_name string The name of the application
-	 * @param $link string The activation link.
+	 * @param $link             string The activation link.
 	 * @return array A list of parameters.
 	 */
 	private static function getViewParameters($login, $password, $application_name, $link)

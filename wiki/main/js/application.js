@@ -1,24 +1,24 @@
 $(window).load(function() {
 	$(window).resize(function() {
 		var $body = $("body");
+		var $application_center = $(".application.center");
+		var $application_top = $(".application.top");
 		var $body_margins = parseInt($body.css("margin-top"))
 			+ parseInt($body.css("margin-bottom"))
 			+ parseInt($body.css("padding-top"))
 			+ parseInt($body.css("padding-bottom"));
 		var $windows = $(window).height() - $body_margins;
-		var $center = $(".application.center");
-		var $application_top = $(".application.top");
 		var $top = $application_top.height()
 			+ parseInt($application_top.css("margin-top"))
 			+ parseInt($application_top.css("margin-bottom"))
 			+ parseInt($application_top.css("padding-top"))
 			+ parseInt($application_top.css("padding-bottom"));
-		var $content = parseInt($center.css("margin-top"))
-			+ parseInt($center.css("margin-bottom"))
-			+ parseInt($center.css("padding-top"))
-			+ parseInt($center.css("padding-bottom"))
+		var $content = parseInt($application_center.css("margin-top"))
+			+ parseInt($application_center.css("margin-bottom"))
+			+ parseInt($application_center.css("padding-top"))
+			+ parseInt($application_center.css("padding-bottom"))
 			+ $top;
-		$center.children().each(function() {
+		$application_center.children().each(function() {
 			$content += $(this).height();
 			$content += parseInt($(this).css("margin-top"))
 				+ parseInt($(this).css("margin-bottom"))
@@ -34,7 +34,7 @@ $(window).load(function() {
 			+ parseInt($left.css("margin-right"))
 			+ parseInt($left.css("padding-left"))
 			+ parseInt($left.css("padding-right"));
-		var $application_center = $(".application.center");
+
 		var $width_center = $body.width() - $left_size
 			- parseInt($application_center.css("margin-left"))
 			- parseInt($application_center.css("margin-right"))

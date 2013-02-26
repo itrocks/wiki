@@ -13,8 +13,8 @@ class Default_Confirm_Email_Controller implements Feature_Controller
 	/**
 	 * Confirm the activation when user click on activation link.
 	 * @param $parameters Controller_Parameters
-	 * @param $form array
-	 * @param $files array
+	 * @param $form       array
+	 * @param $files      array
 	 * @return mixed
 	 */
 	public function run(Controller_Parameters $parameters, $form, $files)

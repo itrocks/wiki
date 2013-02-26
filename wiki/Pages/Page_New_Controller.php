@@ -32,6 +32,7 @@ class Page_New_Controller extends Default_New_Controller
 	//----------------------------------------------------------------------------- getViewParameters
 	/**
 	 * @param $parameters Controller_Parameters
+	 * @param $form       array
 	 * @param $class_name string
 	 * @return mixed[]
 	 */

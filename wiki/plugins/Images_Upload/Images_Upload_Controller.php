@@ -14,6 +14,13 @@ class Images_Upload_Controller implements Feature_Controller
 	}
 
 	//---------------------------------------------------------------------------------------- upload
+	/**
+	 * Upload an image passed by forms.
+	 * @param $parameters Controller_Parameters
+	 * @param $form       array
+	 * @param $files      array
+	 * @return mixed
+	 */
 	public function upload(Controller_Parameters $parameters, $form, $files)
 	{
 		if(isset($files['image'])){
@@ -23,10 +30,11 @@ class Images_Upload_Controller implements Feature_Controller
 				&&($image['error'] == UPLOAD_ERR_OK)
 			) {
 				if($this->isImage($image)){
-					$destination = \Images_Upload_Utils::$images_repository;
+					$destination = Images_Upload_Utils::$images_repository;
+					$name = $this->generateName($destination, $image);
 					$result = move_uploaded_file(
 						$image['tmp_name'],
-						$destination . $image['name']
+						$destination . $name
 					);
 					if($result){
 						$message = "The image has been uploaded";
@@ -49,6 +57,24 @@ class Images_Upload_Controller implements Feature_Controller
 		return (new Images_Upload_List_Controller())->runView($parameters, $adding_parameters);
 	}
 
+	//---------------------------------------------------------------------------------- generateName
+	/**
+	 * Generate a name who not exist in this server
+	 * @param $destination  string The images folder.
+	 * @param $image        string The image.
+	 * @return string Return the same name if the file not exist,
+	 * or return this name file incremented by a number, this name is unique.
+	 */
+	public function generateName($destination, $image){
+		$tmp_name = explode(".", $image['name']);
+		$tmp_base_name = $tmp_name[0];
+		$i = 0;
+		while(file_exists($destination . join(".", $tmp_name))){
+			$tmp_name[0] = $tmp_base_name . ++$i;
+		}
+		return join(".",$tmp_name);
+	}
+
 	//----------------------------------------------------------------------------- getViewParameters
 	public function getViewParameters(Controller_Parameters $parameters, $message)
 	{
@@ -66,7 +92,7 @@ class Images_Upload_Controller implements Feature_Controller
 	public function isImage($image)
 	{
 		$extension = $image["type"];
-		foreach(\Images_Upload_Utils::$list_extension_accepted as $extension_accepted){
+		foreach(Images_Upload_Utils::$list_extension_accepted as $extension_accepted){
 			if($extension == "image/" . $extension_accepted)
 				return true;
 		}

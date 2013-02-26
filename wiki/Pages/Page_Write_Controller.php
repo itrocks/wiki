@@ -16,7 +16,7 @@ class Page_Write_Controller extends Default_Write_Controller
 	 */
 	public function run(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
-		$form["name"] = rtrim(ltrim(str_replace("_", " ", $form["name"])));
+		$form["name"] = str_replace("_", " ", $form["name"]);
 		return parent::run($parameters, $form, $files, $class_name);
 	}
 

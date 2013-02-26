@@ -11,6 +11,7 @@ class Menu_Output_Controller implements Feature_Controller
 
 	//----------------------------------------------------------------------------------- deleteBlock
 	/**
+	 * Delete a block in parameters
 	 * @param $parameters  array
 	 * @param $delete_item string
 	 */
@@ -24,6 +25,13 @@ class Menu_Output_Controller implements Feature_Controller
 	}
 
 	//------------------------------------------------------------------------------------------- run
+	/**
+	 * Test if user is login or not, and delete the
+	 * @param $parameters Controller_Parameters
+	 * @param $form       array
+	 * @param $files      array
+	 * @return mixed
+	 */
 	public function run(Controller_Parameters $parameters, $form, $files)
 	{
 		$parameters = $parameters->getObjects();
