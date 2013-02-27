@@ -143,7 +143,8 @@ class Search_List_Controller extends List_Controller
 	 * @param $search string The search string, the different search/word are separate by space.
 	 * @return int Return the times number where a search word appears.
 	 */
-	public function countOccurrences($text, $search){
+	public function countOccurrences($text, $search)
+	{
 		$tab = explode(" ", $search);
 		$count = 0;
 		foreach($tab as $element){
@@ -159,7 +160,8 @@ class Search_List_Controller extends List_Controller
 	 * @param $search string A list of word, separate by space
 	 * @return array Return all results.
 	 */
-	public function searchWords($object, $var, $search){
+	public function searchWords($object, $var, $search)
+	{
 		$tab = explode(" ", $search);
 		$searchResult = array();
 		foreach($tab as $element){
@@ -175,7 +177,8 @@ class Search_List_Controller extends List_Controller
 	 * @param $array2 array
 	 * @return array The result of the merge.
 	 */
-	public function mergeArray($array1, $array2){
+	public function mergeArray($array1, $array2)
+	{
 		foreach($array2 as $element){
 			if(!in_array($element, $array1))
 				$array1[] = $element;
