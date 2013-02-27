@@ -43,7 +43,7 @@ class Search_List_Controller extends List_Controller
 	{
 		if(isset($form["search"]))
 			$search_value = $form["search"];
-		if(isset($search_value) && $search_value != ""){
+		if(isset($search_value) && str_replace(" ", "", $search_value) != ""){
 			$parameters = parent::getViewParameters($parameters, $form, $class_name);
 			$search_type = array();
 			$search_type[] = $this->exactlyNameSearch($search_value);
@@ -95,15 +95,11 @@ class Search_List_Controller extends List_Controller
 		// Approximate name search
 		$page_var_name = self::$page_var_name;
 		$object = new self::$page_class_name();
-		$object->$page_var_name = "%" . $search . "%";
-		$approximate_name = Dao::search($object);
+		$approximate_name  = $this->searchWords($object, $page_var_name, $search);
 
 		$content = array();
 		foreach($approximate_name as $result){
-			$occurrences = substr_count(
-				strtolower($result->$page_var_name),
-				strtolower($search)
-			);
+			$occurrences = $this->countOccurrences($result->$page_var_name, $search);
 			$content[] = array(
 				"occurrence" => $occurrences,
 				"label" => "occurrence" . ($occurrences > 1 ? "s" : "") . " in the name",
@@ -126,15 +122,11 @@ class Search_List_Controller extends List_Controller
 		$page_var_name = self::$page_var_name;
 		$page_var_text = self::$page_var_text;
 		$object = new self::$page_class_name();
-		$object->$page_var_text = "%" . $search . "%";
-		$content_search = Dao::search($object);
+		$content_search = $this->searchWords($object, $page_var_text, $search);
 
 		$content = array();
 		foreach($content_search as $result){
-			$occurrences = substr_count(
-				strtolower($result->$page_var_text),
-				strtolower($search)
-			);
+			$occurrences = $this->countOccurrences($result->$page_var_text, $search);
 			$content[] = array(
 				"occurrence" => $occurrences,
 				"label" => "occurrence" . ($occurrences > 1 ? "s" : "") . " in the text",
@@ -143,6 +135,52 @@ class Search_List_Controller extends List_Controller
 			);
 		}
 		return array("title" => "Content search", "content" => $content);
+	}
+
+	/**
+	 * Count the number of occurrences of search word in a text.
+	 * @param $text string The text where search.
+	 * @param $search string The search string, the different search/word are separate by space.
+	 * @return int Return the times number where a search word appears.
+	 */
+	public function countOccurrences($text, $search){
+		$tab = explode(" ", $search);
+		$count = 0;
+		foreach($tab as $element){
+			$count += substr_count(strtolower($text),strtolower($element));
+		}
+		return $count;
+	}
+
+	/**
+	 * Search different words in database
+	 * @param $object string Objects corresponding to the database table.
+	 * @param $var string The var name of the object where search.
+	 * @param $search string A list of word, separate by space
+	 * @return array Return all results.
+	 */
+	public function searchWords($object, $var, $search){
+		$tab = explode(" ", $search);
+		$searchResult = array();
+		foreach($tab as $element){
+			$object->$var = "%" . $element . "%";
+			$searchResult = $this->mergeArray($searchResult, Dao::search($object));
+		}
+		return $searchResult;
+	}
+
+	/**
+	 * Merge two array without duplicate value.
+	 * @param $array1 array
+	 * @param $array2 array
+	 * @return array The result of the merge.
+	 */
+	public function mergeArray($array1, $array2){
+		foreach($array2 as $element){
+			if(!in_array($element, $array1))
+				$array1[] = $element;
+		}
+		return $array1;
 	}
 
 }
