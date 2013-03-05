@@ -1,0 +1,41 @@
+table.forum {
+	text-align: left;
+}
+
+tr.forum.titre.block {
+	background-color: rgb(146, 13, 13);
+	color: #ffffff;
+}
+
+tr.forum.titre.block a{
+	background-color: rgb(146, 13, 13);
+	color: #ffffff;
+}
+
+tr.forum.header {
+	background-color: #cccccc;
+	text-align: left;
+}
+
+.forum.attribute {
+	width: 20%;
+}
+
+table.forum {
+	border-collapse: collapse;
+	border: rgb(146, 13, 13) solid 2px;
+	width: 95%;
+}
+
+td.post.profile {
+	width: 20%;
+}
+
+table.output.topic {
+	border-collapse: collapse;
+	border: rgb(146, 13, 13) solid 2px;
+}
+
+tr.forum.titre.item {
+	background-color: #cccccc;
+}

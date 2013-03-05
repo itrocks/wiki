@@ -38,7 +38,8 @@ $CONFIG["wiki"] = array(
 			'SAF\Wiki\Change_Name_Page_Refactor',
 			'SAF\Wiki\Fix_Link_Url',
 			'SAF\Wiki\Links_Recognition',
-			'SAF\Wiki\Images_Upload'
+			'SAF\Wiki\Images_Upload',
+			'SAF\Wiki\Forum_Uri_Rewriter'
 		)
 	)
 );
