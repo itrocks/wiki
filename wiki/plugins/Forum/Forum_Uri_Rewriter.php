@@ -45,10 +45,16 @@ class Forum_Uri_Rewriter implements Plugin
 		if ($link) {
 			$str = self::uriToArray($link);
 			if(strtolower($str[0]) == "forum"){
+				$getters = $joinpoint->getArguments()[1];
+				$index_start = 1;
 				$link_read[0] = $str[0];
-				$link_read[1] = self::getTypeElement($str);
+				if(isset($getters["mode"])){
+					$link_read[$index_start] = $getters["mode"];
+					$index_start++;
+				}
+				$link_read[$index_start] = self::getTypeElement($str);
 				for($i = 1; $i < count($str); $i++){
-					$link_read[$i+1] = $str[$i];
+					$link_read[$index_start + $i] = $str[$i];
 				}
 				$link = self::arrayToUri($link_read);
 				$arguments[0] = $link;
@@ -57,6 +63,11 @@ class Forum_Uri_Rewriter implements Plugin
 		}
 	}
 
+	/**
+	 * Return the type of the current element.
+	 * @param $str
+	 * @return string
+	 */
 	private static function getTypeElement($str){
 		switch(count($str)){
 			case 2;

@@ -11,16 +11,16 @@ class Forum_Controller extends List_Controller
 	public function run(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
 		$parameters = parent::getViewParameters($parameters, $form, $class_name);
-		$parameters = Forum_Utils::generateContent($parameters, null, Forum_Utils::getBaseUrl(), 3);
+		$parameters = Forum_Utils::generateContent($parameters, null, Forum_Utils::getBaseUrl(), "output", 3);
 		return View::run($parameters, $form, $files, $class_name, "structure_double");
 	}
 
 	public function category(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
 		$parameters = parent::getViewParameters($parameters, $form, $class_name);
-		$answer = Forum_Utils::getElementsRequired($parameters[0]);
+		$answer = Forum_Utils::getElementsRequired($this->getLinkParameters($parameters));
 		$base_url = Forum_Utils::getBaseUrl($answer["path"]);
-		$parameters = Forum_Utils::generateContent($parameters, $answer["element"], $base_url, 2);
+		$parameters = Forum_Utils::generateContent($parameters, $answer["element"], $base_url, "output", 2);
 		$parameters["path"] = $answer["path"];
 		return View::run($parameters, $form, $files, $class_name, "structure_double");
 	}
@@ -28,19 +28,40 @@ class Forum_Controller extends List_Controller
 	public function forum(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
 		$parameters = parent::getViewParameters($parameters, $form, $class_name);
-		$answer = Forum_Utils::getElementsRequired($parameters[0], $parameters[1]);
+		$answer = Forum_Utils::getElementsRequired($this->getLinkParameters($parameters));
 		$base_url = Forum_Utils::getBaseUrl($answer["path"]);
-		$parameters = Forum_Utils::generateContent($parameters, $answer["element"], $base_url, 1);
+		$parameters = Forum_Utils::generateContent($parameters, $answer["element"], $base_url, "output", 1);
 		return View::run($parameters, $form, $files, $class_name, "structure_simple");
 	}
 
 	public function topic(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
 		$parameters = parent::getViewParameters($parameters, $form, $class_name);
-		$answer = Forum_Utils::getElementsRequired($parameters[0], $parameters[1], $parameters[2]);
+		$answer = Forum_Utils::getElementsRequired($this->getLinkParameters($parameters));
 		$base_url = Forum_Utils::getBaseUrl($answer["path"]);
-		$parameters = Forum_Utils::generateContent($parameters, $answer["element"], $base_url, 1);
+		$parameters = Forum_Utils::generateContent($parameters, $answer["element"], $base_url, "output", 1);
 		return View::run($parameters, $form, $files, $class_name, "output_topic");
+	}
+
+	public function edit(Controller_Parameters $parameters, $form, $files, $class_name){
+		$parameters = parent::getViewParameters($parameters, $form, $class_name);
+		$answer = Forum_Utils::getElementsRequired($this->getLinkParameters($parameters, 1));
+		$base_url = Forum_Utils::getBaseUrl($answer["path"]);
+		$element = Forum_Utils::getElementOnGetters($parameters);
+		if(!isset($element))
+			$element = $answer["element"];
+		$parameters = Forum_Utils::generateContent($parameters, $element, $base_url, "edit", 1);
+		return View::run($parameters, $form, $files, $class_name, "edit_post");
+	}
+
+	private function getLinkParameters($parameters, $start_index = 0){
+		$i = $start_index;
+		$url = array();
+		while(isset($parameters[$i])){
+			$url[] = $parameters[$i];
+			$i++;
+		}
+		return $url;
 	}
 
 

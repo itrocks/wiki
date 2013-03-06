@@ -39,3 +39,11 @@ table.output.topic {
 tr.forum.titre.item {
 	background-color: #cccccc;
 }
+
+.forum.align_right{
+	text-align: right;
+}
+
+.forum.align_left{
+	text-align: left;
+}
