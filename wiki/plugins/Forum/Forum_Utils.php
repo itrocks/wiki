@@ -49,11 +49,37 @@ class Forum_Utils
 		return $parameters;
 	}
 
+	//------------------------------------------------------------------------------------ arrayToUri
+	/**
+	 * @param $array string[]
+	 * @return string
+	 */
+	public static function arrayToUri($array)
+	{
+		$uri = "";
+		$isGets = false;
+		foreach ($array as $element) {
+			if(is_object($element)){
+				$element = $element->title;
+			}
+			if (strstr($element, "?") == true) {
+				$isGets = true;
+			}
+			if ($isGets) {
+				$uri .= $element;
+			}
+			else {
+				$uri .= "/" . $element;
+			}
+		}
+		return $uri;
+	}
+
 	/**
 	 * Assign the parameter
 	 * @param $parameters   array
-	 * @param $from         null|object
-	 * @param $base_url     string
+	 * @param $from         null|string|object The class name if the object is on parameters, or the object.
+	 * @param $path         array
 	 * @param $mode         string
 	 * @param $level_number int
 	 * @param $level_max    int
@@ -62,12 +88,15 @@ class Forum_Utils
 	public static function generateContent(
 		$parameters,
 		$from,
-		$base_url,
+		$path,
 		$mode,
 		$level_number = 1,
 		$level_max = -1
 	)
 	{
+		$base_url = Forum_Utils::getBaseUrl($path);
+		if($from != null && !is_object($from))
+			$from = $parameters[$from];
 		if($level_max == -1)
 			$level_max = $level_number;
 		if($level_number){
@@ -80,16 +109,19 @@ class Forum_Utils
 			if(is_array($block_elements)){
 				foreach($block_elements as $block_element){
 					$url = self::getUrl($block_element->title, $base_url);
+					$path_element = $path;
+					$path_element[] = $block_element->title;
 					$block = array(
 						"link" => $url
 					);
 					$block =
-						self::generateContent($block, $block_element, $url, $mode, $level_number, $level_max);
+						self::generateContent($block, $block_element, $path_element, $mode, $level_number, $level_max);
 					$block = self::addAttribute($block, $block_element, $url, $mode);
 					$blocks[] = $block;
 				}
 			}
 			$parameters[$level_name] = $blocks;
+			$parameters["path_string"] = self::arrayToUri($path);
 		}
 		return $parameters;
 	}
@@ -217,19 +249,19 @@ class Forum_Utils
 					case "SAF\\Wiki\\Post":
 						$buttons[] = array(
 							"Quote",
-							self::getUrl("", $base_url, array("mode" => "quote")),
+							self::getUrl("", self::getParentUrl($base_url), array("mode" => "quote")),
 							"edit",
 							array(Color::of("green"), "#main")
 						);
 						$buttons[] = array(
 							"Report",
-							self::getUrl("", $base_url, array("mode" => "report")),
+							self::getUrl("", self::getParentUrl($base_url), array("mode" => "report")),
 							"edit",
 							array(Color::of("green"), "#main")
 						);
 						$buttons[] = array(
 							"Delete",
-							self::getUrl("", $base_url, array("mode" => "delete")),
+							self::getUrl("", self::getParentUrl($base_url), array("mode" => "delete")),
 							"edit",
 							array(Color::of("green"), "#main")
 						);
@@ -261,14 +293,19 @@ class Forum_Utils
 					case "SAF\\Wiki\\Post":
 						$buttons[] = array(
 							"Submit",
-							self::getUrl("", self::getParentUrl($base_url),
-								array("mode" => "write")),
+							self::getUrl(
+								"", self::getParentUrl($base_url),
+								array("mode" => "write", "post" => Dao::getObjectIdentifier($object))
+							),
 							"write",
-							array(Color::of("green"), "#main")
+							array(Color::of("green"), ".submit", "#main")
 						);
 						$buttons[] = array(
 							"Preview",
-							self::getUrl("", $base_url, array("mode" => "preview")),
+							self::getUrl(
+								"", self::getParentUrl($base_url),
+								array("mode" => "preview", "post" => Dao::getObjectIdentifier($object))
+							),
 							"preview",
 							array(Color::of("green"), "#main")
 						);
@@ -406,13 +443,19 @@ class Forum_Utils
 						$level++;
 					}
 				}
-				else {
+				else if(is_string($arg)){
 					$element = self::getElement($parent, $arg);
 					if(!$element)
 						break;
 					$answer["element"] = $element;
 					$answer["path"][self::getClassInLevel($level)] = $element;
 					$parent = $element;
+					$level++;
+				}
+				else if(is_object($arg)){
+					$answer["element"] = $arg;
+					$answer["path"][self::getClassInLevel($level)] = $arg;
+					$parent = $arg;
 					$level++;
 				}
 			}
@@ -490,6 +533,23 @@ class Forum_Utils
 		return $url;
 	}
 
+	/**
+	 * Return the path put in parameters in forms or in parameters
+	 * @param $parameters array
+	 * @param $form       array
+	 * @return array
+	 */
+	public static function getPath($parameters, $form){
+		if(isset($form["path"]))
+			return $form["path"];
+		if(isset($form["path_string"]))
+			return self::uriToArray($form["path_string"]);
+		if(isset($parameters["path"]))
+			return $parameters["path"];
+		if(isset($parameters["path_string"]))
+			return self::uriToArray($parameters["path_string"]);
+	}
+
 	public static function getPosts($topic)
 	{
 		$search = new Post();
@@ -533,6 +593,21 @@ class Forum_Utils
 		}
 		$url = str_replace(" ", "%20", $url);
 		return $url;
+	}
+
+	//------------------------------------------------------------------------------------ uriToArray
+	/**
+	 * @param $uri string
+	 * @return string[]
+	 */
+	public static function uriToArray($uri)
+	{
+		$uri = explode("/", str_replace(",", "/", $uri));
+		array_shift($uri);
+		if (end($uri) === "") {
+			array_pop($uri);
+		}
+		return $uri;
 	}
 
 }

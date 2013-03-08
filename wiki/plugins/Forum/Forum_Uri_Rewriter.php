@@ -10,29 +10,6 @@ use SAF\Framework\Reflection_Class;
 class Forum_Uri_Rewriter implements Plugin
 {
 
-	//------------------------------------------------------------------------------------ arrayToUri
-	/**
-	 * @param $array string[]
-	 * @return string
-	 */
-	private static function arrayToUri($array)
-	{
-		$uri = "";
-		$isGets = false;
-		foreach ($array as $element) {
-			if (strstr($element, "?") == true) {
-				$isGets = true;
-			}
-			if ($isGets) {
-				$uri .= $element;
-			}
-			else {
-				$uri .= "/" . $element;
-			}
-		}
-		return $uri;
-	}
-
 	//------------------------------------------------------------- beforeMainControllerRunController
 	/**
 	 * @param $joinpoint AopJoinpoint
@@ -43,21 +20,30 @@ class Forum_Uri_Rewriter implements Plugin
 		$link = $arguments[0];
 		$link_read = array();
 		if ($link) {
-			$str = self::uriToArray($link);
+			$str = Forum_Utils::uriToArray($link);
 			if(strtolower($str[0]) == "forum"){
 				$getters = $joinpoint->getArguments()[1];
-				$index_start = 1;
-				$link_read[0] = $str[0];
-				if(isset($getters["mode"])){
-					$link_read[$index_start] = $getters["mode"];
-					$index_start++;
-				}
-				$link_read[$index_start] = self::getTypeElement($str);
+				$params = array();
 				for($i = 1; $i < count($str); $i++){
-					$link_read[$index_start + $i] = $str[$i];
+					$params[] = $str[$i];
 				}
-				$link = self::arrayToUri($link_read);
+				$element = Forum_Utils::getElementOnGetters($getters);
+				$answer = Forum_Utils::getElementsRequired($params, $element);
+				$mode = "output";
+				if(isset($getters["mode"])){
+					$mode = $getters["mode"];
+				}
+				$link_read[0] = self::getTypeElement($answer["path"]);
+				if(isset($answer["element"])){
+					$link_read[1] = Dao::getObjectIdentifier($answer["element"]);
+					$link_read[2] = $mode;
+				}
+				else {
+					$link_read[1] = "list_all";
+				}
+				$link = Forum_Utils::arrayToUri($link_read);
 				$arguments[0] = $link;
+				$arguments[1]["path"] = $answer["path"];
 				$joinpoint->setArguments($arguments);
 			}
 		}
@@ -70,16 +56,16 @@ class Forum_Uri_Rewriter implements Plugin
 	 */
 	private static function getTypeElement($str){
 		switch(count($str)){
-			case 2;
+			case 1;
 				return "Category";
-			case 3;
+			case 2;
 				return "Forum";
-			case 4;
+			case 3;
 				return "Topic";
-			case 5;
+			case 4;
 				return "Post";
 			default:
-				return "";
+				return "Category";
 		}
 	}
 
@@ -106,21 +92,6 @@ class Forum_Uri_Rewriter implements Plugin
 			'SAF\Framework\Main_Controller->runController()',
 			array(__CLASS__, "beforeMainControllerRunController")
 		);
-	}
-
-	//------------------------------------------------------------------------------------ uriToArray
-	/**
-	 * @param $uri string
-	 * @return string[]
-	 */
-	private static function uriToArray($uri)
-	{
-		$uri = explode("/", str_replace(",", "/", $uri));
-		array_shift($uri);
-		if (end($uri) === "") {
-			array_pop($uri);
-		}
-		return $uri;
 	}
 
 }
