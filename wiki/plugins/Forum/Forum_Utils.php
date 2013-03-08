@@ -245,98 +245,122 @@ class Forum_Utils
 		switch($mode){
 			case "output":
 			case "" :
-				switch(get_class($object)){
-					case "SAF\\Wiki\\Post":
-						$buttons[] = array(
-							"Quote",
-							self::getUrl("", self::getParentUrl($base_url), array("mode" => "quote")),
-							"edit",
-							array(Color::of("green"), "#main")
-						);
-						$buttons[] = array(
-							"Report",
-							self::getUrl("", self::getParentUrl($base_url), array("mode" => "report")),
-							"edit",
-							array(Color::of("green"), "#main")
-						);
-						$buttons[] = array(
-							"Delete",
-							self::getUrl("", self::getParentUrl($base_url), array("mode" => "delete")),
-							"edit",
-							array(Color::of("green"), "#main")
-						);
-						$buttons[] = array(
-							"Edit",
-							self::getUrl(
-								"", self::getParentUrl($base_url),
-								array("mode" => "edit", "post" => Dao::getObjectIdentifier($object))
-							),
-							"edit",
-							array(Color::of("green"), "#main")
-						);
-					break;
-					case "SAF\\Wiki\\Category":
-					case "SAF\\Wiki\\Forum":
-					case "SAF\\Wiki\\Topic":
-						$buttons[] = array(
-							"Edit",
-							self::getUrl("", $base_url, "edit"),
-							"edit",
-							array(Color::of("green"), "#main")
-						);
-					default:
-				}
+				$buttons = self::getButtonsModeOutput($object, $base_url);
 				break;
 			case "edit":
 			case "new":
-				switch(get_class($object)){
-					case "SAF\\Wiki\\Post":
-						$buttons[] = array(
-							"Submit",
-							self::getUrl(
-								"", self::getParentUrl($base_url),
-								array("mode" => "write", "post" => Dao::getObjectIdentifier($object))
-							),
-							"write",
-							array(Color::of("green"), ".submit", "#main")
-						);
-						$buttons[] = array(
-							"Preview",
-							self::getUrl(
-								"", self::getParentUrl($base_url),
-								array("mode" => "preview", "post" => Dao::getObjectIdentifier($object))
-							),
-							"preview",
-							array(Color::of("green"), "#main")
-						);
-						$buttons[] = array(
-							"Back",
-							self::getParentUrl($base_url),
-							"back",
-							array(Color::of("green"), "#main")
-						);
-						break;
-					case "SAF\\Wiki\\Category":
-					case "SAF\\Wiki\\Forum":
-					case "SAF\\Wiki\\Topic":
-					$buttons[] = array(
-						"Submit",
-						self::getUrl("", $base_url, array("mode" => "write")),
-						"write",
-						array(Color::of("green"),
-							"#main")
-					);
-					$buttons[] = array(
-						"Back",
-						self::getParentUrl($base_url),
-						"back",
-						array(Color::of("green"), "#main")
-					);
-					default:
-				}
+				$buttons = self::getButtonsModeEdit($object, $base_url);
 				break;
 		}
 		return Button::newCollection($buttons);
+	}
+
+	/**
+	 * Return a list of buttons for the mode edit.
+	 * @param $object Object concerned (Post, Topic, Forum or Category)
+	 * @param $base_url string The basic url
+	 * @return array A list of buttons.
+	 */
+	public static function getButtonsModeEdit($object, $base_url){
+		$buttons = array();
+		switch(get_class($object)){
+			case "SAF\\Wiki\\Post":
+				$buttons[] = array(
+					"Submit",
+					self::getUrl(
+						"", self::getParentUrl($base_url),
+						array("mode" => "write", "post" => Dao::getObjectIdentifier($object))
+					),
+					"write",
+					array(Color::of("green"), ".submit", "#main")
+				);
+				$buttons[] = array(
+					"Preview",
+					self::getUrl(
+						"", self::getParentUrl($base_url),
+						array("mode" => "preview", "post" => Dao::getObjectIdentifier($object))
+					),
+					"preview",
+					array(Color::of("green"), "#main")
+				);
+				$buttons[] = array(
+					"Back",
+					self::getParentUrl($base_url),
+					"back",
+					array(Color::of("green"), "#main")
+				);
+				break;
+			case "SAF\\Wiki\\Category":
+			case "SAF\\Wiki\\Forum":
+			case "SAF\\Wiki\\Topic":
+				$buttons[] = array(
+					"Submit",
+					self::getUrl("", $base_url, array("mode" => "write")),
+					"write",
+					array(Color::of("green"),
+						"#main")
+				);
+				$buttons[] = array(
+					"Back",
+					self::getParentUrl($base_url),
+					"back",
+					array(Color::of("green"), "#main")
+				);
+			default:
+		}
+		return $buttons;
+	}
+
+	/**
+	 * Return a list of buttons for the mode output.
+	 * @param $object Object concerned (Post, Topic, Forum or Category)
+	 * @param $base_url string The basic url
+	 * @return array A list of buttons.
+	 */
+	public static function getButtonsModeOutput($object, $base_url){
+		$buttons = array();
+		switch(get_class($object)){
+			case "SAF\\Wiki\\Post":
+				$buttons[] = array(
+					"Quote",
+					self::getUrl("", self::getParentUrl($base_url), array("mode" => "quote")),
+					"edit",
+					array(Color::of("green"), "#main")
+				);
+				$buttons[] = array(
+					"Report",
+					self::getUrl("", self::getParentUrl($base_url), array("mode" => "report")),
+					"edit",
+					array(Color::of("green"), "#main")
+				);
+				$buttons[] = array(
+					"Delete",
+					self::getUrl("", self::getParentUrl($base_url), array("mode" => "delete")),
+					"edit",
+					array(Color::of("green"), "#main")
+				);
+				$buttons[] = array(
+					"Edit",
+					self::getUrl(
+						"", self::getParentUrl($base_url),
+						array("mode" => "edit", "post" => Dao::getObjectIdentifier($object))
+					),
+					"edit",
+					array(Color::of("green"), "#main")
+				);
+				break;
+			case "SAF\\Wiki\\Category":
+			case "SAF\\Wiki\\Forum":
+			case "SAF\\Wiki\\Topic":
+				$buttons[] = array(
+					"Edit",
+					self::getUrl("", $base_url, "edit"),
+					"edit",
+					array(Color::of("green"), "#main")
+				);
+			default:
+		}
+		return $buttons;
 	}
 
 	/**
