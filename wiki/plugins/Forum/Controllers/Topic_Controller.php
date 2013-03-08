@@ -8,15 +8,17 @@ use SAF\Framework\View;
 
 class Topic_Controller extends List_Controller
 {
+	//------------------------------------------------------------------------------------------- run
 	public function run(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
 		return $this->output($parameters, $form, $files, $class_name);
 	}
 
+	//---------------------------------------------------------------------------------------- output
 	public function output(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
 		$parameters = parent::getViewParameters($parameters, $form, $class_name);
-		$path = Forum_Utils::getPath($parameters, $form);
+		$path = Forum_Utils::getPath();
 		$parameters = Forum_Utils::generateContent($parameters, "Topic", $path, "output", 2);
 		return View::run($parameters, $form, $files, "Forum", "output_topic");
 	}

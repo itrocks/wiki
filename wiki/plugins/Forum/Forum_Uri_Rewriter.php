@@ -21,7 +21,7 @@ class Forum_Uri_Rewriter implements Plugin
 		$link_read = array();
 		if ($link) {
 			$str = Forum_Utils::uriToArray($link);
-			if(strtolower($str[0]) == "forum"){
+			if(strtolower($str[0]) == "forum" && (!isset($str[1]) || !is_numeric($str[1]))){
 				$getters = $joinpoint->getArguments()[1];
 				$params = array();
 				for($i = 1; $i < count($str); $i++){
@@ -43,7 +43,7 @@ class Forum_Uri_Rewriter implements Plugin
 				}
 				$link = Forum_Utils::arrayToUri($link_read);
 				$arguments[0] = $link;
-				$arguments[1]["path"] = $answer["path"];
+				\SAF\Framework\Session::current()->set(Forum_Path::current(new Forum_Path($answer["path"])));
 				$joinpoint->setArguments($arguments);
 			}
 		}
@@ -54,7 +54,8 @@ class Forum_Uri_Rewriter implements Plugin
 	 * @param $str
 	 * @return string
 	 */
-	private static function getTypeElement($str){
+	private static function getTypeElement($str)
+	{
 		switch(count($str)){
 			case 1;
 				return "Category";
@@ -67,22 +68,6 @@ class Forum_Uri_Rewriter implements Plugin
 			default:
 				return "Category";
 		}
-	}
-
-	//--------------------------------------------------------------------------------------- isOrder
-	/**
-	 * @param $item_test string
-	 * @param $list_order string[]
-	 * @return bool
-	 */
-	private static function isOrder($item_test, $list_order)
-	{
-		foreach ($list_order as $item_order) {
-			if (strtolower($item_order) == strtolower($item_test)) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	//-------------------------------------------------------------------------------------- register

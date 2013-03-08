@@ -8,6 +8,7 @@ use SAF\Framework\Color;
 class Forum_Utils
 {
 
+	//---------------------------------------------------------------------------------- addAttribute
 	/**
 	 * Assign attributes of an object to parameters.
 	 * @param $parameters array The parameters where put
@@ -75,6 +76,7 @@ class Forum_Utils
 		return $uri;
 	}
 
+	//------------------------------------------------------------------------------- generateContent
 	/**
 	 * Assign the parameter
 	 * @param $parameters   array
@@ -121,11 +123,11 @@ class Forum_Utils
 				}
 			}
 			$parameters[$level_name] = $blocks;
-			$parameters["path_string"] = self::arrayToUri($path);
 		}
 		return $parameters;
 	}
 
+	//------------------------------------------------------------------------------- getAttributeCol
 	/**
 	 * Return attributes col.
 	 * @param $object     object It's a Category, Forum, Topic or Post object
@@ -167,6 +169,7 @@ class Forum_Utils
 		return $parameters;
 	}
 
+	//--------------------------------------------------------------------------- getAttributeNameCol
 	/**
 	 * Assign columns names in parameters.
 	 * @param $short_class string The short class name, as Category, Forum, Topic or Post
@@ -197,6 +200,7 @@ class Forum_Utils
 		return $parameters;
 	}
 
+	//------------------------------------------------------------------------------------ getBaseUrl
 	/**
 	 * Create a basic URL. If elements are passed in parameters, try to add this elements after.
 	 * Can take string parameters, arrays, and object if the object have a title parameters.
@@ -255,13 +259,15 @@ class Forum_Utils
 		return Button::newCollection($buttons);
 	}
 
+	//---------------------------------------------------------------------------- getButtonsModeEdit
 	/**
 	 * Return a list of buttons for the mode edit.
 	 * @param $object Object concerned (Post, Topic, Forum or Category)
 	 * @param $base_url string The basic url
 	 * @return array A list of buttons.
 	 */
-	public static function getButtonsModeEdit($object, $base_url){
+	public static function getButtonsModeEdit($object, $base_url)
+	{
 		$buttons = array();
 		switch(get_class($object)){
 			case "SAF\\Wiki\\Post":
@@ -311,13 +317,15 @@ class Forum_Utils
 		return $buttons;
 	}
 
+	//-------------------------------------------------------------------------- getButtonsModeOutput
 	/**
 	 * Return a list of buttons for the mode output.
 	 * @param $object Object concerned (Post, Topic, Forum or Category)
 	 * @param $base_url string The basic url
 	 * @return array A list of buttons.
 	 */
-	public static function getButtonsModeOutput($object, $base_url){
+	public static function getButtonsModeOutput($object, $base_url)
+	{
 		$buttons = array();
 		switch(get_class($object)){
 			case "SAF\\Wiki\\Post":
@@ -363,6 +371,7 @@ class Forum_Utils
 		return $buttons;
 	}
 
+	//--------------------------------------------------------------------------------- getCategories
 	/**
 	 * Return all Categories
 	 * @return Category
@@ -372,6 +381,7 @@ class Forum_Utils
 		return Dao::readAll("SAF\\Wiki\\Category");
 	}
 
+	//------------------------------------------------------------------------------- getClassInLevel
 	/**
 	 * Return a short class name in function of level.
 	 * @param $level int Current level
@@ -393,6 +403,7 @@ class Forum_Utils
 		}
 	}
 
+	//------------------------------------------------------------------------------------ getElement
 	/**
 	 * Return an element with his title in function of a parent element.
 	 * @param $parent object|null Parent element, as Category, Forum, Topic.
@@ -433,12 +444,14 @@ class Forum_Utils
 		return $element;
 	}
 
+	//--------------------------------------------------------------------------- getElementOnGetters
 	/**
 	 * Return an element put in getters.
 	 * @param $getters
 	 * @return object
 	 */
-	public static function getElementOnGetters($getters){
+	public static function getElementOnGetters($getters)
+	{
 		foreach($getters as $key => $getter){
 			switch(strtolower($key)){
 				case "post":
@@ -449,6 +462,12 @@ class Forum_Utils
 		}
 	}
 
+	//--------------------------------------------------------------------------- getElementsRequired
+	/**
+	 * Return the element required, found with parameters (strings, objects or array)
+	 * @return array An array with the answer, with two keys : element for the element found,
+	 * and path for an array width all element of the path.
+	 */
 	public static function getElementsRequired()
 	{
 		$parent = null;
@@ -487,7 +506,12 @@ class Forum_Utils
 		return $answer;
 	}
 
-
+	//------------------------------------------------------------------------------------- getForums
+	/**
+	 * Return all forums of a category.
+	 * @param $category
+	 * @return Forum[]
+	 */
 	public static function getForums($category)
 	{
 		$search = new Forum();
@@ -497,6 +521,7 @@ class Forum_Utils
 		return $forums;
 	}
 
+	//---------------------------------------------------------------------------------- getLevelName
 	/**
 	 * Return a name for a block's level
 	 * @param $level_now string current level
@@ -520,6 +545,7 @@ class Forum_Utils
 		}
 	}
 
+	//------------------------------------------------------------------------------- getNextElements
 	/**
 	 * Return next elements of an object (the forums of a category, topic of forum, etc.)
 	 * @param $object
@@ -541,12 +567,14 @@ class Forum_Utils
 		}
 	}
 
+	//---------------------------------------------------------------------------------- getParentUrl
 	/**
 	 * Return the parent url.
 	 * @param $url string
 	 * @return string
 	 */
-	public static function getParentUrl($url){
+	public static function getParentUrl($url)
+	{
 		$url_tab = explode("/", $url);
 		for($i = count($url_tab) - 1 ; $i >= 0 ; $i--){
 			if($url_tab[$i] != ""){
@@ -557,23 +585,26 @@ class Forum_Utils
 		return $url;
 	}
 
+	//--------------------------------------------------------------------------------------- getPath
 	/**
-	 * Return the path put in parameters in forms or in parameters
-	 * @param $parameters array
-	 * @param $form       array
+	 * Return the current path
 	 * @return array
 	 */
-	public static function getPath($parameters, $form){
-		if(isset($form["path"]))
-			return $form["path"];
-		if(isset($form["path_string"]))
-			return self::uriToArray($form["path_string"]);
-		if(isset($parameters["path"]))
-			return $parameters["path"];
-		if(isset($parameters["path_string"]))
-			return self::uriToArray($parameters["path_string"]);
+	public static function getPath()
+	{
+		$forum_path = \SAF\Framework\Session::current()->get("SAF\\Wiki\\Forum_Path");
+		if($forum_path != null && is_object($forum_path)){
+			return $forum_path->path;
+		}
+		return array();
 	}
 
+	//-------------------------------------------------------------------------------------- getPosts
+	/**
+	 * Return all posts in a topic.
+	 * @param $topic Topic
+	 * @return Post[]
+	 */
 	public static function getPosts($topic)
 	{
 		$search = new Post();
@@ -583,6 +614,12 @@ class Forum_Utils
 		return $forums;
 	}
 
+	//------------------------------------------------------------------------------------- getTopics
+	/**
+	 * Return all topics in a forum.
+	 * @param $forum
+	 * @return Topic[]
+	 */
 	public static function getTopics($forum)
 	{
 		$search = new Topic();
@@ -592,6 +629,7 @@ class Forum_Utils
 		return $forums;
 	}
 
+	//------------------------------------------------------------------------------- getUrl
 	/**
 	 * Form an url, an put in right format.
 	 * @param $element string The element destination for the url

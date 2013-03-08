@@ -8,12 +8,15 @@ use SAF\Framework\View;
 
 class Forum_Controller extends List_Controller
 {
+	//------------------------------------------------------------------------------------------- run
 	public function run(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
 		return $this->output($parameters, $form, $files, $class_name);
 	}
 
-	public function edit(Controller_Parameters $parameters, $form, $files, $class_name){
+	//------------------------------------------------------------------------------------------ edit
+	public function edit(Controller_Parameters $parameters, $form, $files, $class_name)
+	{
 		$parameters = parent::getViewParameters($parameters, $form, $class_name);
 		$answer = Forum_Utils::getElementsRequired($this->getLinkParameters($parameters, 1));
 		$element = Forum_Utils::getElementOnGetters($parameters);
@@ -23,10 +26,11 @@ class Forum_Controller extends List_Controller
 		return View::run($parameters, $form, $files, $class_name, "edit_post");
 	}
 
+	//---------------------------------------------------------------------------------------- output
 	public function output(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
 		$parameters = parent::getViewParameters($parameters, $form, $class_name);
-		$path = Forum_Utils::getPath($parameters, $form);
+		$path = Forum_Utils::getPath();
 		$parameters = Forum_Utils::generateContent($parameters, "Forum", $path, "output", 2);
 		return View::run($parameters, $form, $files, "Forum", "structure_simple");
 	}
