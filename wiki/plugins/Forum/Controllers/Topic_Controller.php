@@ -23,4 +23,20 @@ class Topic_Controller extends List_Controller
 		return View::run($parameters, $form, $files, "Forum", "output_topic");
 	}
 
+	//----------------------------------------------------------------------------------------- write
+	public function write(Controller_Parameters $parameters, $form, $files, $class_name)
+	{
+		$params = $parameters->getObjects();
+		$object = reset($params);
+		if(!is_object($object))
+			$object = new Topic();
+		$object->content = $form["content"];
+		$object->title = $form["title"];
+		$object->forum = Forum_Utils::getPath()["Forum"];
+		Dao::begin();
+		$object = Dao::write($object);
+		Dao::commit();
+		$parameters->set("Topic", $object);
+		return $this->output($parameters, $form, $files, $class_name);
+	}
 }

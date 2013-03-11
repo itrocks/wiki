@@ -16,6 +16,14 @@ class Post_Controller extends List_Controller
 	}
 
 	//---------------------------------------------------------------------------------------- output
+	/**
+	 * Return the parent topic output
+	 * @param \SAF\Framework\Controller_Parameters $parameters
+	 * @param                                      $form
+	 * @param                                      $files
+	 * @param                                      $class_name
+	 * @return mixed
+	 */
 	public function output(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
 		$parameters = parent::getViewParameters($parameters, $form, $class_name);
@@ -33,5 +41,33 @@ class Post_Controller extends List_Controller
 		$parameters = Forum_Utils::generateContent($parameters, "Post", $path, "edit", 1);
 		return View::run($parameters, $form, $files, "Forum", "edit_post");
 	}
+
+	//----------------------------------------------------------------------------------------- write
+	public function write(Controller_Parameters $parameters, $form, $files, $class_name)
+	{
+		$params = $parameters->getObjects();
+		$object = reset($params);
+		$object->content = $form["content"];
+		$object->title = $form["title"];
+		Dao::begin();
+		Dao::write($object);
+		Dao::commit();
+		return $this->output($parameters, $form, $files, $class_name);
+	}
+
+	/*//---------------------------------------------------------------------------------------- delete
+	public function delete(Controller_Parameters $parameters, $form, $files, $class_name)
+	{
+		if(isset($form["confirm"])){
+			$parameters = parent::getViewParameters($parameters, $form, $class_name);
+			return View::run($parameters, $form, $files, "Forum", "edit_post");
+		}
+		else {
+			$parameters = parent::getViewParameters($parameters, $form, $class_name);
+			$path = Forum_Utils::getPath();
+			$parameters = Forum_Utils::generateContent($parameters, "Post", $path, "remove", 1);
+			return View::run($parameters, $form, $files, "Forum", "edit_post");
+		}
+	}*/
 
 }

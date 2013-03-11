@@ -36,7 +36,14 @@ class Forum_Uri_Rewriter implements Plugin
 				$link_read[0] = self::getTypeElement($answer["path"]);
 				if(isset($answer["element"])){
 					$link_read[1] = Dao::getObjectIdentifier($answer["element"]);
-					$link_read[2] = $mode;
+					if($link_read[1] == null){
+						if(strtolower($mode) == "output")
+							$mode = "new";
+						$link_read[1] = $mode;
+					}
+					else {
+						$link_read[2] = $mode;
+					}
 				}
 				else {
 					$link_read[1] = "list_all";

@@ -4,6 +4,7 @@ use SAF\Framework\Dao;
 use SAF\Framework\Button;
 use SAF\Framework\View;
 use SAF\Framework\Color;
+use SAF\Framework\Namespaces;
 
 class Forum_Utils
 {
@@ -38,7 +39,6 @@ class Forum_Utils
 				$parameters["author_name"] = $author->login;
 				$parameters["author_link"] = self::getBaseUrl("author") . $parameters["author_name"];
 				$parameters["type"] = "Post";
-				$parameters["buttons"] = self::getButtons($object, $base_url, $mode);
 				break;
 			default:
 				break;
@@ -47,6 +47,7 @@ class Forum_Utils
 			$parameters["title"] = $object->title;
 		$parameters = self::getAttributeCol($object, $parameters);
 		$parameters["attributes_number"] = count($parameters["attribute_values"]) + 1;
+		$parameters["buttons"] = self::getButtons($object, $base_url, $mode);
 		return $parameters;
 	}
 
@@ -104,7 +105,6 @@ class Forum_Utils
 		if($level_number){
 			$level_number--;
 			$level_name = self::getLevelName($level_number, $level_max);
-			$parameters = self::addAttribute($parameters, $from, $base_url, $mode);
 			$block_elements = self::getNextElements($from);
 
 			$blocks = array();
@@ -112,18 +112,20 @@ class Forum_Utils
 				foreach($block_elements as $block_element){
 					$url = self::getUrl($block_element->title, $base_url);
 					$path_element = $path;
-					$path_element[] = $block_element->title;
+					$short_class_name = Namespaces::shortClassName(get_class($block_element));
+					$path_element[$short_class_name] = $block_element;
 					$block = array(
 						"link" => $url
 					);
-					$block =
-						self::generateContent($block, $block_element, $path_element, $mode, $level_number, $level_max);
-					$block = self::addAttribute($block, $block_element, $url, $mode);
+					$block = self::generateContent(
+						$block, $block_element, $path_element, $mode, $level_number, $level_max
+					);
 					$blocks[] = $block;
 				}
 			}
 			$parameters[$level_name] = $blocks;
 		}
+		$parameters = self::addAttribute($parameters, $from, $base_url, $mode);
 		return $parameters;
 	}
 
@@ -300,11 +302,10 @@ class Forum_Utils
 			case "SAF\\Wiki\\Forum":
 			case "SAF\\Wiki\\Topic":
 				$buttons[] = array(
-					"Submit",
+					"Write",
 					self::getUrl("", $base_url, array("mode" => "write")),
 					"write",
-					array(Color::of("green"),
-						"#main")
+					array(Color::of("green"), ".submit", "#main")
 				);
 				$buttons[] = array(
 					"Back",
@@ -329,43 +330,50 @@ class Forum_Utils
 		$buttons = array();
 		switch(get_class($object)){
 			case "SAF\\Wiki\\Post":
+				$parent_url = self::getParentUrl($base_url);
+				$identifier = Dao::getObjectIdentifier($object);
 				$buttons[] = array(
 					"Quote",
-					self::getUrl("", self::getParentUrl($base_url), array("mode" => "quote")),
+					self::getUrl("", $parent_url, array("mode" => "quote", "post" => $identifier)),
 					"edit",
 					array(Color::of("green"), "#main")
 				);
 				$buttons[] = array(
 					"Report",
-					self::getUrl("", self::getParentUrl($base_url), array("mode" => "report")),
+					self::getUrl("", $parent_url, array("mode" => "report", "post" => $identifier)),
 					"edit",
 					array(Color::of("green"), "#main")
 				);
 				$buttons[] = array(
 					"Delete",
-					self::getUrl("", self::getParentUrl($base_url), array("mode" => "delete")),
+					self::getUrl("", $parent_url, array("mode" => "delete", "post" => $identifier)),
 					"edit",
-					array(Color::of("green"), "#main")
+					array(Color::of("green"), ".need_confirm", "#main")
 				);
 				$buttons[] = array(
 					"Edit",
-					self::getUrl(
-						"", self::getParentUrl($base_url),
-						array("mode" => "edit", "post" => Dao::getObjectIdentifier($object))
-					),
+					self::getUrl("", $parent_url,	array("mode" => "edit", "post" => $identifier)),
 					"edit",
 					array(Color::of("green"), "#main")
 				);
 				break;
 			case "SAF\\Wiki\\Category":
 			case "SAF\\Wiki\\Forum":
+				break;
 			case "SAF\\Wiki\\Topic":
 				$buttons[] = array(
+					"New post",
+					self::getUrl($object->title, $base_url, array("mode" => "new")),
+					"new",
+					array(Color::of("green"), "#main")
+				);
+				$buttons[] = array(
 					"Edit",
-					self::getUrl("", $base_url, "edit"),
+					self::getUrl("", $base_url, array("mode" => "edit")),
 					"edit",
 					array(Color::of("green"), "#main")
 				);
+				break;
 			default:
 		}
 		return $buttons;
@@ -413,35 +421,33 @@ class Forum_Utils
 	 */
 	public static function getElement($parent, $title)
 	{
+		$item = null;
 		switch(get_class($parent)){
 			case "SAF\\Wiki\\Category" :
-				$forum = new Forum();
-				$forum->category = $parent;
-				$forum->title = $title;
-				$element = Dao::searchOne($forum);
+				$item = new Forum();
+				$item->category = $parent;
+				$item->title = $title;
 				break;
 			case "SAF\\Wiki\\Forum" :
-				$topic = new Topic();
-				$topic->forum = $parent;
-				$topic->title = $title;
-				$element = Dao::searchOne($topic);
+				$item = new Topic();
+				$item->forum = $parent;
+				$item->title = $title;
 				break;
 			case "SAF\\Wiki\\Topic" :
-				$post = new Post();
-				$post->topic = $parent;
-				$post->title = $title;
-				$element = Dao::searchOne($post);
+				$item = new Post();
+				$item->topic = $parent;
+				$item->title = $title;
 				break;
 			case "SAF\\Wiki\\Post" :
-				$element = $parent;
+				$item = $parent;
 				break;
 			default:
-				$category = new Category();
-				$category->title = $title;
-				$element = Dao::searchOne($category);
+				$item = new Category();
+				$item->title = $title;
 				break;
 		}
-		return $element;
+		$element = Dao::searchOne($item);
+		return (isset($element) ? $element : $item);
 	}
 
 	//--------------------------------------------------------------------------- getElementOnGetters
@@ -478,8 +484,6 @@ class Forum_Utils
 				if(is_array($arg)){
 					foreach($arg as $item){
 						$element = self::getElement($parent, $item);
-						if(!$element)
-							break;
 						$answer["element"] = $element;
 						$answer["path"][self::getClassInLevel($level)] = $element;
 						$parent = $element;
