@@ -47,3 +47,7 @@ tr.forum.titre.item {
 .align_left{
 	text-align: left;
 }
+
+.label.table {
+	width:10%;
+}

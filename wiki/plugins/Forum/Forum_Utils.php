@@ -398,18 +398,21 @@ class Forum_Utils
 					"edit",
 					array(Color::of("green"), "#main")
 				);
+				$context_edit = array("mode" => "edit");
+				$context_delete = array("mode" => "delete");
+				if($object->topic != null || $object->id_topic != 0){
+					$context_edit["post"] = $identifier;
+					$context_delete["post"] = $identifier;
+				}
 				$buttons[] = array(
 					"Delete",
-					self::getUrl("", $parent_url, array("mode" => "delete", "post" => $identifier)),
+					self::getUrl("", $parent_url, $context_delete),
 					"edit",
 					array(Color::of("green"), ".need_confirm", "#main")
 				);
-				$context = array("mode" => "edit", "post" => $identifier);
-				if($object->topic == null && $object->id_topic == 0)
-					$context = array("mode" => "edit");
 				$buttons[] = array(
 					"Edit",
-					self::getUrl("", $parent_url,	$context),
+					self::getUrl("", $parent_url,	$context_edit),
 					"edit",
 					array(Color::of("green"), "#main")
 				);
@@ -429,6 +432,12 @@ class Forum_Utils
 					self::getUrl("", $base_url, array("mode" => "edit")),
 					"edit",
 					array(Color::of("green"), "#main")
+				);
+				$buttons[] = array(
+					"Delete",
+					self::getUrl("", $base_url, array("mode" => "delete")),
+					"delete",
+					array(Color::of("green"), ".need_confirm", "#messages")
 				);
 				break;
 			default:
