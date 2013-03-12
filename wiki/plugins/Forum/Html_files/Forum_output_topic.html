@@ -8,14 +8,43 @@
 
 <!--BEGIN-->
 <div class="window">
+	<p class="path">
+		<!--path-->
+		&raquo;<a href="{link}">{title}</a>
+		<!--path-->
+	</p>
 	<div class="block_table">
 			<table class="topic output forum">
 				<thead>
 				<tr class="forum titre block">
-					<th colspan="2">{title}</th>
+					<th>{title}</th>
+					<th class="align_right">
+						<!--buttons-->
+						<a class="button trashable {feature.lower} {?class.short}" href="{link}" target="{?target}">|{caption}|</a>
+						<!--buttons-->
+					</th>
 				</tr>
 				</thead>
 				<tbody>
+				<!--first_post-->
+				<tr>
+					<td class="post profile">
+						<dl>
+							<dt><strong><a href="{profile_link}">{author_name}</a></strong></dt>
+						</dl>
+					</td>
+					<td>
+						<p>{content}</p>
+					</td>
+				</tr>
+				<tr class="forum post orders">
+					<td class="forum align_right" colspan="2">
+						<!--buttons-->
+						<a class="button trashable {feature.lower} {?class.short}" href="{link}" target="{?target}">|{caption}|</a>
+						<!--buttons-->
+					</td>
+				</tr>
+				<!--first_post-->
 				<!--blocks-->
 				<tr class="forum titre item">
 					<th colspan="2">{title}</th>

@@ -16,13 +16,6 @@ class Forum
 	 */
 	var $category;
 
-	//--------------------------------------------------------------------------------------- $author
-	/**
-	 * @link Object
-	 * @var \SAF\Framework\User
-	 */
-	var $author;
-
 	public function __toString()
 	{
 		return $this->title . "";

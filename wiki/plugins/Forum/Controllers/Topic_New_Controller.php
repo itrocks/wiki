@@ -16,8 +16,6 @@ class Topic_New_Controller extends List_Controller
 		$topic = new Topic();
 		if(isset($path["Topic"])){
 			$topic = $path["Topic"];
-			/*$parameters["title"] = $topic->title;
-			$parameters["content"] = $topic->content;*/
 		}
 		$parameters = Forum_Utils::generateContent($parameters, $topic, $path, "new", 0);
 		return View::run($parameters, $form, $files, "Forum", "edit_topic");

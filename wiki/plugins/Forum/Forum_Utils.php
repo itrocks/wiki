@@ -28,16 +28,26 @@ class Forum_Utils
 				$parameters["type"] = "Forum";
 				break;
 			case "SAF\\Wiki\\Topic" :
-				$parameters["author"] = $object->author;
 				$parameters["type"] = "Topic";
+				$post = Dao::read($object->id_first_post, "SAF\\Wiki\\Post");
+				$url = self::getUrl($object->title, $base_url);
+				$parameters["first_post"] = array(self::addAttribute($parameters, $post, $url, $mode));
 				break;
 			case "SAF\\Wiki\\Post" :
 				//TODO : see why the User is not auto recovered
-				$author = \SAF\Framework\Search_Object::newInstance('Saf\\Wiki\\Wiki_User');
-				$author = Dao::read($object->id_author, get_class($author));
+				if(isset($object->id_author)){
+					$author = \SAF\Framework\Search_Object::newInstance('Saf\\Wiki\\Wiki_User');
+					$author = Dao::read($object->id_author, get_class($author));
+					if(isset($author)){
+						$parameters["author_name"] = $author->login;
+						$parameters["author_link"] = self::getBaseUrl("author") . $parameters["author_name"];
+					}
+					else {
+						$parameters["author_name"] = "undefined";
+						$parameters["author_link"] = self::getBaseUrl("author");
+					}
+				}
 				$parameters["content"] = $object->content;
-				$parameters["author_name"] = $author->login;
-				$parameters["author_link"] = self::getBaseUrl("author") . $parameters["author_name"];
 				$parameters["type"] = "Post";
 				break;
 			default:
@@ -48,6 +58,25 @@ class Forum_Utils
 		$parameters = self::getAttributeCol($object, $parameters);
 		$parameters["attributes_number"] = count($parameters["attribute_values"]) + 1;
 		$parameters["buttons"] = self::getButtons($object, $base_url, $mode);
+		return $parameters;
+	}
+
+	//------------------------------------------------------------------------------ addPathAttribute
+	/**
+	 * Add the path in attributes
+	 * @param $parameters array Array of attributes where add the path attributes
+	 * @param $path       array The path, an array of objects
+	 * @return array Return the attributes with the path
+	 */
+	public static function addPathAttribute($parameters, $path){
+		$url = self::getBaseUrl();
+		$path_array = array(array("type" => "index", "title" => "Index", "link" => $url));
+		foreach($path as $key => $element){
+			$title = $element->title;
+			$url = self::getUrl($title, $url);
+			$path_array[] = array("type" => $key, "title" => $title, "link" => $url);
+		}
+		$parameters["path"] = $path_array;
 		return $parameters;
 	}
 
@@ -126,6 +155,7 @@ class Forum_Utils
 			$parameters[$level_name] = $blocks;
 		}
 		$parameters = self::addAttribute($parameters, $from, $base_url, $mode);
+		$parameters = self::addPathAttribute($parameters, $path);
 		return $parameters;
 	}
 
@@ -273,11 +303,15 @@ class Forum_Utils
 		$buttons = array();
 		switch(get_class($object)){
 			case "SAF\\Wiki\\Post":
+				$identifier = Dao::getObjectIdentifier($object);
+				if(!isset($identifier)){
+					$identifier = 0;
+				}
 				$buttons[] = array(
 					"Submit",
 					self::getUrl(
 						"", self::getParentUrl($base_url),
-						array("mode" => "write", "post" => Dao::getObjectIdentifier($object))
+						array("mode" => "write", "post" => $identifier)
 					),
 					"write",
 					array(Color::of("green"), ".submit", "#main")
@@ -286,7 +320,7 @@ class Forum_Utils
 					"Preview",
 					self::getUrl(
 						"", self::getParentUrl($base_url),
-						array("mode" => "preview", "post" => Dao::getObjectIdentifier($object))
+						array("mode" => "preview", "post" => $identifier)
 					),
 					"preview",
 					array(Color::of("green"), "#main")
@@ -309,7 +343,7 @@ class Forum_Utils
 				);
 				$buttons[] = array(
 					"Back",
-					self::getParentUrl($base_url),
+					$base_url,
 					"back",
 					array(Color::of("green"), "#main")
 				);
@@ -350,9 +384,12 @@ class Forum_Utils
 					"edit",
 					array(Color::of("green"), ".need_confirm", "#main")
 				);
+				$context = array("mode" => "edit", "post" => $identifier);
+				if($object->topic == null && $object->id_topic == 0)
+					$context = array("mode" => "edit");
 				$buttons[] = array(
 					"Edit",
-					self::getUrl("", $parent_url,	array("mode" => "edit", "post" => $identifier)),
+					self::getUrl("", $parent_url,	$context),
 					"edit",
 					array(Color::of("green"), "#main")
 				);
@@ -362,7 +399,7 @@ class Forum_Utils
 				break;
 			case "SAF\\Wiki\\Topic":
 				$buttons[] = array(
-					"New post",
+					"Reply",
 					self::getUrl($object->title, $base_url, array("mode" => "new")),
 					"new",
 					array(Color::of("green"), "#main")
@@ -463,9 +500,12 @@ class Forum_Utils
 				case "post":
 					$post = new Post();
 					$post = Dao::read($getter, get_class($post));
+					if(!isset($post))
+						$post = new Post();
 					return $post;
 			}
 		}
+		return null;
 	}
 
 	//--------------------------------------------------------------------------- getElementsRequired

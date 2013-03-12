@@ -28,7 +28,8 @@ class Post_Controller extends List_Controller
 	{
 		$parameters = parent::getViewParameters($parameters, $form, $class_name);
 		$path = Forum_Utils::getPath();
-		$topic = Dao::read($parameters["Post"]->id_topic, "SAF\\Wiki\\Topic");
+		//$topic = Dao::read($parameters["Post"]->id_topic, "SAF\\Wiki\\Topic");
+		$topic = $path["Topic"];
 		$parameters = Forum_Utils::generateContent($parameters, $topic, $path, "output", 1);
 		return View::run($parameters, $form, $files, "Forum", "output_topic");
 	}
@@ -45,10 +46,19 @@ class Post_Controller extends List_Controller
 	//----------------------------------------------------------------------------------------- write
 	public function write(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
+		$path = Forum_Utils::getPath();
 		$params = $parameters->getObjects();
 		$object = reset($params);
+		if(!is_object($object)){
+			$object = new Post();
+			$object->topic = $path["Topic"];
+		}
 		$object->content = $form["content"];
 		$object->title = $form["title"];
+		$user = User::current();
+		if(isset($user)){
+			$object->author = $user;
+		}
 		Dao::begin();
 		Dao::write($object);
 		Dao::commit();

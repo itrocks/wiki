@@ -14,7 +14,14 @@ class Post_New_Controller extends List_Controller
 	{
 		$parameters = parent::getViewParameters($parameters, $form, $class_name);
 		$path = Forum_Utils::getPath();
-		$parameters = Forum_Utils::generateContent($parameters, "Post", $path, "edit", 1);
+		$post = new Post();
+		if(isset($path["Post"])){
+			$post = $path["Post"];
+		}
+		if(isset($path["Topic"])){
+			$post->title = "RE : " . $path["Topic"]->title;
+		}
+		$parameters = Forum_Utils::generateContent($parameters, $post, $path, "new", 0);
 		return View::run($parameters, $form, $files, "Forum", "edit_post");
 	}
 }
