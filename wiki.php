@@ -44,4 +44,4 @@ $CONFIG["wiki"] = array(
 	)
 );
 
-require "index.php";
+if (strpos(__FILE__, $_SERVER["PHP_SELF"])) require "index.php";
