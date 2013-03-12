@@ -18,17 +18,16 @@ class Post_Controller extends List_Controller
 	//---------------------------------------------------------------------------------------- output
 	/**
 	 * Return the parent topic output
-	 * @param \SAF\Framework\Controller_Parameters $parameters
-	 * @param                                      $form
-	 * @param                                      $files
-	 * @param                                      $class_name
+	 * @param $parameters Controller_Parameters
+	 * @param $form       array
+	 * @param $files      array
+	 * @param $class_name string
 	 * @return mixed
 	 */
 	public function output(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
 		$parameters = parent::getViewParameters($parameters, $form, $class_name);
 		$path = Forum_Utils::getPath();
-		//$topic = Dao::read($parameters["Post"]->id_topic, "SAF\\Wiki\\Topic");
 		$topic = $path["Topic"];
 		$parameters = Forum_Utils::generateContent($parameters, $topic, $path, "output", 1);
 		return View::run($parameters, $form, $files, "Forum", "output_topic");

@@ -27,8 +27,8 @@ class Topic_Controller extends List_Controller
 	//----------------------------------------------------------------------------------------- write
 	public function write(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
-		if(count($form) > 0 && false){
-			$params = $parameters;
+		if(count($form) > 0){
+			$params = clone $parameters;
 			$params = $params->getObjects();
 			$object = reset($params);
 			if(!is_object($object))
