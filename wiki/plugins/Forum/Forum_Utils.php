@@ -29,9 +29,9 @@ class Forum_Utils
 				break;
 			case "SAF\\Wiki\\Topic" :
 				$parameters["type"] = "Topic";
-				$post = Dao::read($object->id_first_post, "SAF\\Wiki\\Post");
+				$object = self::assignTopicFirstPost($object);
 				$url = self::getUrl($object->title, $base_url);
-				$parameters["first_post"] = array(self::addAttribute($parameters, $post, $url, $mode));
+				$parameters["main_post"] = array(self::addAttribute($parameters, $object->first_post, $url, $mode));
 				break;
 			case "SAF\\Wiki\\Post" :
 				//TODO : see why the User is not auto recovered
@@ -104,6 +104,26 @@ class Forum_Utils
 			}
 		}
 		return $uri;
+	}
+
+	/**
+	 * Search and assign to the topic his first post value. Put a new object if the post not found.
+	 * If has already a first post, no change.
+	 * @param $topic object A topic.
+	 * @return Topic Return the topic with his first post
+	 */
+	public static function assignTopicFirstPost($topic){
+		if($topic->first_post == null){
+			$post = null;
+			if(isset($topic->id_first_post))
+				$post = Dao::read($topic->id_first_post, "SAF\\Wiki\\Post");
+			if($post == null){
+				$post = new Post();
+				$post->title = $topic->title;
+			}
+			$topic->first_post = $post;
+		}
+		return $topic;
 	}
 
 	//------------------------------------------------------------------------------- generateContent

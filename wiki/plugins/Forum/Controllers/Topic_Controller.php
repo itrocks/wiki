@@ -33,23 +33,15 @@ class Topic_Controller extends List_Controller
 			$object = reset($params);
 			if(!is_object($object))
 				$object = new Topic();
-			if($object->first_post == null){
-				$post = Dao::read($object->id_first_post, "SAF\\Wiki\\Post");
-				if($post == null){
-					$post = new Post();
-					$post->title = $object->title;
-				}
-			} else {
-				$post = $object->first_post;
-			}
-			$post->content = $form["content"];
+			Forum_Utils::assignTopicFirstPost($object);
+			$object->first_post->content = $form["content"];
 			$object->title = $form["title"];
 			$object->forum = Forum_Utils::getPath()["Forum"];
-			$object->first_post = $post;
 			Dao::begin();
-			Dao::write($post);
-			Dao::write($object);
+			Dao::write($object->first_post);
+			$topic = Dao::write($object);
 			Dao::commit();
+			$parameters->set("Topic", $topic);
 		}
 		return $this->output($parameters, array(), $files, $class_name);
 	}
