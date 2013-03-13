@@ -11,10 +11,16 @@
 		&raquo;<a href="{link}">{title}</a>
 		<!--path-->
 	</p>
-	<h1>{titre}</h1>
+	<h1>{title}</h1>
 	<p>
 		{message}
 	</p>
+	<form name="confirm_message" method="post">
+	<input type="hidden" name="confirm" value="true"/>
+	<!--buttons-->
+	<a class="button trashable {feature.lower} {?class.short}" href="{link}" target="{?target}">|{caption}|</a>
+	<!--buttons-->
+	</form>
 </div>
 <!--END-->
 </body>

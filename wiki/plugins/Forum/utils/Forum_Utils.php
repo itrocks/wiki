@@ -9,11 +9,14 @@ use SAF\Framework\Namespaces;
 class Forum_Utils
 {
 
+	public static $list_class =
+		array("SAF\\Wiki\\Category", "SAF\\Wiki\\Forum", "SAF\\Wiki\\Topic", "SAF\\Wiki\\Post");
+
 	//---------------------------------------------------------------------------------- addAttribute
 	/**
 	 * Assign attributes of an object to parameters.
 	 * @param $parameters array The parameters where put
-	 * @param $object     object It's a Category, Forum, Topic or Post object
+	 * @param $object     Category|Forum|Topic|Post It's a Category, Forum, Topic or Post object
 	 * @param $base_url   array
 	 * @param $mode       string
 	 * @return array
@@ -61,25 +64,6 @@ class Forum_Utils
 		return $parameters;
 	}
 
-	//------------------------------------------------------------------------------ addPathAttribute
-	/**
-	 * Add the path in attributes
-	 * @param $parameters array Array of attributes where add the path attributes
-	 * @param $path       array The path, an array of objects
-	 * @return array Return the attributes with the path
-	 */
-	public static function addPathAttribute($parameters, $path){
-		$url = self::getBaseUrl();
-		$path_array = array(array("type" => "index", "title" => "Index", "link" => $url));
-		foreach($path as $key => $element){
-			$title = $element->title;
-			$url = self::getUrl($title, $url);
-			$path_array[] = array("type" => $key, "title" => $title, "link" => $url);
-		}
-		$parameters["path"] = $path_array;
-		return $parameters;
-	}
-
 	//------------------------------------------------------------------------------------ arrayToUri
 	/**
 	 * @param $array string[]
@@ -112,7 +96,8 @@ class Forum_Utils
 	 * @param $topic object A topic.
 	 * @return Topic Return the topic with his first post
 	 */
-	public static function assignTopicFirstPost($topic){
+	public static function assignTopicFirstPost($topic)
+	{
 		if($topic->first_post == null){
 			$post = null;
 			if(isset($topic->id_first_post))
@@ -146,9 +131,14 @@ class Forum_Utils
 		$level_max = -1
 	)
 	{
+		if($from != null && !is_object($from)){
+			if(isset($parameters[$from]))
+				$from = $parameters[$from];
+			elseif(isset($path[$from]))
+				$from = $path[$from];
+		}
+		$path = Forum_Path_Utils::stopInLevel($path, $from);
 		$base_url = Forum_Utils::getBaseUrl($path);
-		if($from != null && !is_object($from))
-			$from = $parameters[$from];
 		if($level_max == -1)
 			$level_max = $level_number;
 		if($level_number){
@@ -175,7 +165,7 @@ class Forum_Utils
 			$parameters[$level_name] = $blocks;
 		}
 		$parameters = self::addAttribute($parameters, $from, $base_url, $mode);
-		$parameters = self::addPathAttribute($parameters, $path);
+		$parameters = Forum_Path_Utils::addPathAttribute($parameters, $path);
 		return $parameters;
 	}
 
@@ -307,8 +297,60 @@ class Forum_Utils
 			case "new":
 				$buttons = self::getButtonsModeEdit($object, $base_url);
 				break;
+			case "delete":
+				$buttons = self::getButtonsModeDelete($object, $base_url);
+				break;
 		}
 		return Button::newCollection($buttons);
+	}
+
+	//---------------------------------------------------------------------------- getButtonsModeEdit
+	/**
+	 * Return a list of buttons for the mode delete.
+	 * @param $object Object concerned (Post, Topic, Forum or Category)
+	 * @param $base_url string The basic url
+	 * @return array A list of buttons.
+	 */
+	public static function getButtonsModeDelete($object, $base_url)
+	{
+		$buttons = array();
+		switch(get_class($object)){
+			case "SAF\\Wiki\\Post":
+				$identifier = Dao::getObjectIdentifier($object);
+				$buttons[] = array(
+					"Confirm",
+					self::getUrl(
+						"", self::getParentUrl($base_url),
+						array("mode" => "delete", "post" => $identifier)
+					),
+					"delete",
+					array(Color::of("green"), ".submit", "#main")
+				);
+				$buttons[] = array(
+					"Back",
+					$base_url,
+					"back",
+					array(Color::of("green"), "#main")
+				);
+				break;
+			case "SAF\\Wiki\\Category":
+			case "SAF\\Wiki\\Forum":
+			case "SAF\\Wiki\\Topic":
+				$buttons[] = array(
+					"Confirm",
+					self::getUrl("", $base_url, array("mode" => "delete")),
+					"delete",
+					array(Color::of("green"), ".submit", "#main")
+				);
+				$buttons[] = array(
+					"Back",
+					$base_url,
+					"back",
+					array(Color::of("green"), "#main")
+				);
+			default:
+		}
+		return $buttons;
 	}
 
 	//---------------------------------------------------------------------------- getButtonsModeEdit
@@ -437,7 +479,7 @@ class Forum_Utils
 					"Delete",
 					self::getUrl("", $base_url, array("mode" => "delete")),
 					"delete",
-					array(Color::of("green"), ".need_confirm", "#messages")
+					array(Color::of("green"), "#main")
 				);
 				break;
 			default:
@@ -463,18 +505,11 @@ class Forum_Utils
 	 */
 	public static function getClassInLevel($level)
 	{
-		switch($level){
-			case 0:
-				return "Category";
-			case 1:
-				return "Forum";
-			case 2:
-				return "Topic";
-			case 3:
-				return "Post";
-			default:
-				return "undefined";
+		$level_name = self::getNextClass();
+		for($i=1;$i<=$level;$i++){
+			$level_name = self::getNextClass($level_name);
 		}
+		return Namespaces::shortClassName($level_name);
 	}
 
 	//------------------------------------------------------------------------------------ getElement
@@ -618,6 +653,24 @@ class Forum_Utils
 		}
 	}
 
+	//---------------------------------------------------------------------------------- getNextClass
+	/**
+	 * Return the next class of the object or class name
+	 * @param $class object|string Object or full class name
+	 * @return string The class name.
+	 */
+	public static function getNextClass($class = null){
+		if($class == null && isset(self::$list_class[0]))
+			return self::$list_class[0];
+		if(is_object($class))
+			$class = get_class($class);
+		$index = array_search($class, self::$list_class);
+		if(isset(self::$list_class[$index+1])){
+			return self::$list_class[$index+1];
+		}
+		return "";
+	}
+
 	//------------------------------------------------------------------------------- getNextElements
 	/**
 	 * Return next elements of an object (the forums of a category, topic of forum, etc.)
@@ -638,6 +691,23 @@ class Forum_Utils
 			default:
 				return self::getCategories();
 		}
+	}
+
+
+	//-------------------------------------------------------------------------------- getParentClass
+	/**
+	 * Return the parent class of the object or class name
+	 * @param $class object|string Object or full class name
+	 * @return string The class name.
+	 */
+	public static function getParentClass($class){
+		if(is_object($class))
+			$class = get_class($class);
+		$index = array_search($class, self::$list_class);
+		if(isset(self::$list_class[$index-1])){
+			return self::$list_class[$index-1];
+		}
+		return "";
 	}
 
 	//---------------------------------------------------------------------------------- getParentUrl

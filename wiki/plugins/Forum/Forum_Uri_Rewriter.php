@@ -64,14 +64,13 @@ class Forum_Uri_Rewriter implements Plugin
 	private static function getTypeElement($str)
 	{
 		switch(count($str)){
-			case 1;
-				return "Category";
-			case 2;
+			case 2:
 				return "Forum";
-			case 3;
+			case 3:
 				return "Topic";
-			case 4;
+			case 4:
 				return "Post";
+			case 1:
 			default:
 				return "Category";
 		}

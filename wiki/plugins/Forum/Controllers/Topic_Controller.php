@@ -2,6 +2,7 @@
 namespace SAF\Wiki;
 use SAF\Framework\Controller_Parameters;
 use SAF\Framework\List_Controller;
+use SAF\Framework\Default_Delete_Controller;
 use SAF\Framework\Dao;
 use SAF\Framework\User;
 use SAF\Framework\View;
@@ -27,6 +28,7 @@ class Topic_Controller extends List_Controller
 	//----------------------------------------------------------------------------------------- write
 	public function write(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
+		$is_written = false;
 		if(count($form) > 0){
 			$params = clone $parameters;
 			$params = $params->getObjects();
@@ -37,13 +39,20 @@ class Topic_Controller extends List_Controller
 			$object->first_post->content = $form["content"];
 			$object->title = $form["title"];
 			$object->forum = Forum_Utils::getPath()["Forum"];
+			$object->user = User::current();
 			Dao::begin();
 			Dao::write($object->first_post);
 			$topic = Dao::write($object);
 			Dao::commit();
 			$parameters->set("Topic", $topic);
+			$is_written = true;
 		}
-		return $this->output($parameters, array(), $files, $class_name);
+		if($is_written){
+			return $this->output($parameters, array(), $files, $class_name);
+		}
+		else {
+			return $this->edit($parameters, $form, $files, $class_name);
+		}
 	}
 
 	//------------------------------------------------------------------------------------------ edit
@@ -54,4 +63,10 @@ class Topic_Controller extends List_Controller
 		$parameters = Forum_Utils::generateContent($parameters, "Topic", $path, "edit", 1);
 		return View::run($parameters, $form, $files, "Forum", "edit_topic");
 	}
+
+	//---------------------------------------------------------------------------------------- delete
+	public function delete(Controller_Parameters $parameters, $form, $files, $class_name){
+		return Forum_Controller_Utils::delete($parameters, $form, $files, $class_name);
+	}
+
 }
