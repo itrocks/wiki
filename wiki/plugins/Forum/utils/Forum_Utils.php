@@ -90,6 +90,30 @@ class Forum_Utils
 		return $uri;
 	}
 
+	//---------------------------------------------------------------- assignAttributeObjectInElement
+	/**
+	 * Search and assign to the element his object attribute. Put a new object if the object not found.
+	 * If has already an object, no change.
+	 * @param $element
+	 * @param $attribute
+	 * @param $class_name
+	 * @return mixed
+	 */
+	public static function assignAttributeObjectInElement($element, $attribute, $class_name)
+	{
+		$attribute_id = "id_" . $attribute;
+		if($element->$attribute == null){
+			$object = null;
+			if(isset($element->$attribute_id))
+				$object = Dao::read($element->$attribute_id, $class_name);
+			if($object == null){
+				$object = new $class_name();
+			}
+			$element->$attribute = $object;
+		}
+		return $element;
+	}
+
 	/**
 	 * Search and assign to the topic his first post value. Put a new object if the post not found.
 	 * If has already a first post, no change.
@@ -98,17 +122,7 @@ class Forum_Utils
 	 */
 	public static function assignTopicFirstPost($topic)
 	{
-		if($topic->first_post == null){
-			$post = null;
-			if(isset($topic->id_first_post))
-				$post = Dao::read($topic->id_first_post, "SAF\\Wiki\\Post");
-			if($post == null){
-				$post = new Post();
-				$post->title = $topic->title;
-			}
-			$topic->first_post = $post;
-		}
-		return $topic;
+		return self::assignAttributeObjectInElement($topic, "first_post", "SAF\\Wiki\\Post");
 	}
 
 	//------------------------------------------------------------------------------- generateContent
@@ -709,6 +723,16 @@ class Forum_Utils
 			return self::$list_class[$index-1];
 		}
 		return "";
+	}
+
+	//--------------------------------------------------------------------------- getParentShortClass
+	/**
+	 * Return the parent short class name of the object or class name
+	 * @param $class object|string Object or full class name
+	 * @return string The short class name.
+	 */
+	public static function getParentShortClass($class){
+		return Namespaces::shortClassName(self::getParentClass($class));
 	}
 
 	//---------------------------------------------------------------------------------- getParentUrl

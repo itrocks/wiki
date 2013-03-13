@@ -31,4 +31,11 @@ class Category_Controller extends List_Controller
 		return View::run($parameters, $form, $files, "Forum", "structure_double");
 	}
 
+	//----------------------------------------------------------------------------------------- write
+	public function write(Controller_Parameters $parameters, $form, $files, $class_name)
+	{
+		$parameters = Forum_Controller_Utils::write($parameters, $form, $class_name);
+		return $this->output($parameters, $form, $files, $class_name);
+	}
+
 }

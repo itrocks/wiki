@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>|Topic|</title>
+	<title>|{type}|</title>
 </head>
 <body>
 
@@ -21,15 +21,7 @@
 				<th class="table label"><label for="title">|Title|</label></th>
 				<th><input id="title" name="title" class="autowidth" value="{title}"/></th>
 			</tr>
-			<!--main_post-->
-			<tr>
-				<td class="table label"><label for="content">|Content|</label></td>
-				<td>
-					<p><textarea id="content" class="autoheight autowidth" name="content">{content}</textarea></p>
-				</td>
-			</tr>
-			<!--main_post-->
-			<tr class="forum topic orders">
+			<tr class="forum post orders">
 				<td class="forum align_right" colspan="2">
 					<!--buttons-->
 					<a class="button trashable {feature.lower} {?class.short}" href="{link}" target="{?target}">|{caption}|</a>

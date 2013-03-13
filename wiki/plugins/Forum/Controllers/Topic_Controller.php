@@ -30,22 +30,9 @@ class Topic_Controller extends List_Controller
 	{
 		$is_written = false;
 		if(count($form) > 0){
-			$params = clone $parameters;
-			$params = $params->getObjects();
-			$object = reset($params);
-			if(!is_object($object))
-				$object = new Topic();
-
 			$form["author"] = User::current();
-			$form["forum"] = Forum_Utils::getPath()["Forum"];
-			$object = Forum_Controller_Utils::formToObject($object, $form);
-			Forum_Utils::assignTopicFirstPost($object);
-			$object->first_post = Forum_Controller_Utils::formToObject($object->first_post, $form);
-			Dao::begin();
-			$object->id_first_post = Dao::write($object->first_post);
-			$topic = Dao::write($object);
-			Dao::commit();
-			$parameters->set("Topic", $topic);
+			$attributes = array("first_post" => "SAF\\Wiki\\Post");
+			$parameters = Forum_Controller_Utils::write($parameters, $form, $class_name, $attributes);
 			$is_written = true;
 		}
 		if($is_written){

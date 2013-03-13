@@ -1,12 +1,13 @@
 <?php
 namespace SAF\Wiki;
 use SAF\Framework\Controller_Parameters;
-use SAF\Framework\List_Controller;
+use SAF\Framework\Output_Controller;
 use SAF\Framework\Dao;
 use SAF\Framework\User;
 use SAF\Framework\View;
+use SAF\Framework\Namespaces;
 
-class Forum_Controller extends List_Controller
+class Forum_Controller extends Output_Controller
 {
 	//------------------------------------------------------------------------------------------- run
 	public function run(Controller_Parameters $parameters, $form, $files, $class_name)
@@ -35,5 +36,11 @@ class Forum_Controller extends List_Controller
 		return View::run($parameters, $form, $files, "Forum", "structure_simple");
 	}
 
+	//----------------------------------------------------------------------------------------- write
+	public function write(Controller_Parameters $parameters, $form, $files, $class_name)
+	{
+		$parameters = Forum_Controller_Utils::write($parameters, $form, $class_name);
+		return $this->output($parameters, $form, $files, $class_name);
+	}
 
 }

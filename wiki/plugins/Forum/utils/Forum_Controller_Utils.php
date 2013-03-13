@@ -10,10 +10,11 @@ class Forum_Controller_Utils
 
 	//---------------------------------------------------------------------------------------- delete
 	/**
+	 * Ask confirmation, check if user accept, delete the item and charge parent output
 	 * @param $parameters Controller_Parameters
-	 * @param $form
-	 * @param $files
-	 * @param $class_name
+	 * @param $form       array
+	 * @param $files      array
+	 * @param $class_name string
 	 * @return mixed
 	 */
 	public static function delete(Controller_Parameters $parameters, $form, $files, $class_name)
@@ -35,7 +36,13 @@ class Forum_Controller_Utils
 		}
 	}
 
-	public static function delete_objects($objects){
+	//-------------------------------------------------------------------------------- delete_objects
+	/**
+	 * Delete a list of objects. If this object have next elements, delete the next elements.
+	 * @param $objects object[] List of objects to delete
+	 */
+	public static function delete_objects($objects)
+	{
 		foreach ($objects as $object) {
 			if (is_object($object)) {
 				$objects_child = Forum_Utils::getNextElements($object);
@@ -47,7 +54,33 @@ class Forum_Controller_Utils
 		}
 	}
 
+	//---------------------------------------------------------------------------------- formToObject
+	/**
+	 * Assign form contains to object attributes. If element of the form is an object, assign to the id element.
+	 * @param $object object
+	 * @param $form   array
+	 * @return object Return the object filled
+	 */
+	public static function formToObject($object, $form)
+	{
+		foreach ($form as $name => $value) {
+			if (property_exists($object,$name)) {
+				$object->$name = $value;
+				if(is_object($value)){
+					$name = "id_" . $name;
+					$object->$name = Dao::getObjectIdentifier($value);
+				}
+			}
+		}
+		return $object;
+	}
+
 	//----------------------------------------------------------------------------- getViewParameters
+	/**
+	 * @param $parameters Controller_Parameters
+	 * @param $class_name string
+	 * @return array Return an array with the parameters.
+	 */
 	public static function getViewParameters(Controller_Parameters $parameters, $class_name)
 	{
 		$parameters = $parameters->getObjects();
@@ -59,6 +92,15 @@ class Forum_Controller_Utils
 		return $parameters;
 	}
 
+	//------------------------------------------------------------------------------------- getOutput
+	/**
+	 * Return the result of the output for the controller of the class_name
+	 * @param $parameters Controller_Parameters
+	 * @param $form       array
+	 * @param $files      array
+	 * @param $class_name string
+	 * @return string
+	 */
 	public static function getOutput(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
 		if(is_object($class_name))
@@ -87,16 +129,46 @@ class Forum_Controller_Utils
 		return self::getOutput($parameters, $form, $files, Forum_Utils::getParentClass($class_name));
 	}
 
-	public static function formToObject($object, $form){
-		foreach ($form as $name => $value) {
-			if (property_exists($object,$name)) {
-				$object->$name = $value;
-				if(is_object($value)){
-					$name = "id_" . $name;
-					$object->$name = Dao::getObjectIdentifier($value);
-				}
+	//----------------------------------------------------------------------------------------- write
+	/**
+	 * Write an element.
+	 * @param $parameters         Controller_Parameters
+	 * @param $form               array
+	 * @param $class_name         string
+	 * @param $attributes_object  array The attributes that are objects to search and update too.
+	 * It must be in this form :
+	 * array("attribute_name" => "object_full_class_name")
+	 * @return Controller_Parameters Return the parameters updated
+	 */
+	public static function write(Controller_Parameters $parameters, $form, $class_name, $attributes_object = array())
+	{
+		$parent_type = Forum_Utils::getParentShortClass($class_name);
+		$short_class_name = Namespaces::shortClassName($class_name);
+		$path = Forum_Utils::getPath();
+		$params = $parameters->getObjects();
+		$object = reset($params);
+		if(!is_object($object)){
+			$object = new $class_name();
+		}
+		$parent_type_lower = strtolower($parent_type);
+		if(isset($path[$parent_type]))
+			$form[$parent_type_lower] = $path[$parent_type];
+		$object = Forum_Controller_Utils::formToObject($object, $form);
+		foreach($attributes_object as $attribute => $class_attribute){
+			$object = Forum_Utils::assignAttributeObjectInElement($object, $attribute, $class_attribute);
+			if(isset($object->$attribute)){
+				$object->$attribute = Forum_Controller_Utils::formToObject($object->$attribute, $form);
 			}
 		}
-		return $object;
+		Dao::begin();
+		foreach($attributes_object as $attribute => $class_attribute){
+			if(isset($object->$attribute)){
+				Dao::write($object->$attribute);
+			}
+		}
+		$object = Dao::write($object);
+		Dao::commit();
+		$parameters->set($short_class_name, $object);
+		return $parameters;
 	}
 }
