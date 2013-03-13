@@ -50,14 +50,10 @@ class Post_Controller extends Output_Controller
 		$object = reset($params);
 		if(!is_object($object)){
 			$object = new Post();
-			$object->topic = $path["Topic"];
 		}
-		$object->content = $form["content"];
-		$object->title = $form["title"];
-		$user = User::current();
-		if(isset($user)){
-			$object->author = $user;
-		}
+		$form["topic"] = $path["Topic"];
+		$form["author"] = User::current();
+		$object = Forum_Controller_Utils::formToObject($object, $form);
 		Dao::begin();
 		Dao::write($object);
 		Dao::commit();
@@ -65,7 +61,8 @@ class Post_Controller extends Output_Controller
 	}
 
 	//---------------------------------------------------------------------------------------- delete
-	public function delete(Controller_Parameters $parameters, $form, $files, $class_name){
+	public function delete(Controller_Parameters $parameters, $form, $files, $class_name)
+	{
 		return Forum_Controller_Utils::delete($parameters, $form, $files, $class_name);
 	}
 

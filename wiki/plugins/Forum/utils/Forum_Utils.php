@@ -24,15 +24,13 @@ class Forum_Utils
 	 */
 	public static function addAttribute($parameters, $object, $base_url, $mode)
 	{
-		switch(get_class($object)){
+		$class_name = get_class($object);
+		switch($class_name){
 			case "SAF\\Wiki\\Category" :
-				$parameters["type"] = "Category";
 				break;
 			case "SAF\\Wiki\\Forum" :
-				$parameters["type"] = "Forum";
 				break;
 			case "SAF\\Wiki\\Topic" :
-				$parameters["type"] = "Topic";
 				$object = self::assignTopicFirstPost($object);
 				$url = self::getUrl($object->title, $base_url);
 				$parameters["main_post"] = array(self::addAttribute($parameters, $object->first_post, $url, $mode));
@@ -42,17 +40,16 @@ class Forum_Utils
 				if(isset($object->id_author)){
 					$author = \SAF\Framework\Search_Object::newInstance('Saf\\Wiki\\Wiki_User');
 					$author = Dao::read($object->id_author, get_class($author));
+					$author_name = "undefined";
 					if(isset($author)){
-						$parameters["author_name"] = $author->login;
-						$parameters["author_link"] = self::getBaseUrl("author") . $parameters["author_name"];
+						$author_name = $author->login;
 					}
-					else {
-						$parameters["author_name"] = "undefined";
-						$parameters["author_link"] = self::getBaseUrl("author");
-					}
+					$parameters["author_name"] = $author_name;
+					$parameters["author_link"] = self::getUrl(self::getBaseUrl("author"), $author_name);
 				}
-				$parameters["content"] = Wiki::textile($object->content);
-				$parameters["type"] = "Post";
+				$parameters["content"] = $object->content;
+				if(strtolower($mode) == "output")
+					$parameters["content"] = Wiki::textile($parameters["content"]);
 				break;
 			default:
 				break;
@@ -62,6 +59,8 @@ class Forum_Utils
 		$parameters = self::getAttributeCol($object, $parameters);
 		$parameters["attributes_number"] = count($parameters["attribute_values"]) + 1;
 		$parameters["buttons"] = self::getButtons($object, $base_url, $mode);
+		$parameters["type"] = Namespaces::shortClassName($class_name);
+		$parameters["type_child"] = Namespaces::shortClassName(self::getNextClass($class_name));
 		return $parameters;
 	}
 
@@ -165,6 +164,7 @@ class Forum_Utils
 			}
 			$parameters[$level_name] = $blocks;
 		}
+		/** @var $from Category|Forum|Topic|Post */
 		$parameters = self::addAttribute($parameters, $from, $base_url, $mode);
 		$parameters = Forum_Path_Utils::addPathAttribute($parameters, $path);
 		return $parameters;
