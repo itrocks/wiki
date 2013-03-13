@@ -35,13 +35,14 @@ class Topic_Controller extends List_Controller
 			$object = reset($params);
 			if(!is_object($object))
 				$object = new Topic();
+
+			$form["author"] = User::current();
+			$form["forum"] = Forum_Utils::getPath()["Forum"];
+			$object = Forum_Controller_Utils::formToObject($object, $form);
 			Forum_Utils::assignTopicFirstPost($object);
-			$object->first_post->content = $form["content"];
-			$object->title = $form["title"];
-			$object->forum = Forum_Utils::getPath()["Forum"];
-			$object->user = User::current();
+			$object->first_post = Forum_Controller_Utils::formToObject($object->first_post, $form);
 			Dao::begin();
-			Dao::write($object->first_post);
+			$object->id_first_post = Dao::write($object->first_post);
 			$topic = Dao::write($object);
 			Dao::commit();
 			$parameters->set("Topic", $topic);

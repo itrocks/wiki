@@ -21,11 +21,7 @@ class Forum_Controller_Utils
 		if(isset($form["confirm"])){
 			$objects = $parameters->getObjects();
 			Dao::begin();
-			foreach ($objects as $object) {
-				if (is_object($object)) {
-					Dao::delete($object);
-				}
-			}
+			self::delete_objects($objects);
 			Dao::commit();
 			return self::getParentOutput($parameters, $form, $files, $class_name);
 		}
@@ -36,6 +32,18 @@ class Forum_Controller_Utils
 			$parameters = Forum_Utils::generateContent($parameters, $class_name, $path, "delete", 1);
 			$parameters["message"] = "Are you sure to permanently delete this element ?";
 			return View::run($parameters, $form, $files, "Forum", "write_message");
+		}
+	}
+
+	public static function delete_objects($objects){
+		foreach ($objects as $object) {
+			if (is_object($object)) {
+				$objects_child = Forum_Utils::getNextElements($object);
+				if($objects_child != null){
+					self::delete_objects($objects_child);
+				}
+				Dao::delete($object);
+			}
 		}
 	}
 
@@ -77,5 +85,18 @@ class Forum_Controller_Utils
 	public static function getParentOutput($parameters, $form, $files, $class_name)
 	{
 		return self::getOutput($parameters, $form, $files, Forum_Utils::getParentClass($class_name));
+	}
+
+	public static function formToObject($object, $form){
+		foreach ($form as $name => $value) {
+			if (property_exists($object,$name)) {
+				$object->$name = $value;
+				if(is_object($value)){
+					$name = "id_" . $name;
+					$object->$name = Dao::getObjectIdentifier($value);
+				}
+			}
+		}
+		return $object;
 	}
 }
