@@ -5,6 +5,7 @@ use SAF\Framework\Button;
 use SAF\Framework\View;
 use SAF\Framework\Color;
 use SAF\Framework\Namespaces;
+use SAF\Framework\Wiki;
 
 class Forum_Utils
 {
@@ -50,7 +51,7 @@ class Forum_Utils
 						$parameters["author_link"] = self::getBaseUrl("author");
 					}
 				}
-				$parameters["content"] = $object->content;
+				$parameters["content"] = Wiki::textile($object->content);
 				$parameters["type"] = "Post";
 				break;
 			default:
@@ -442,7 +443,7 @@ class Forum_Utils
 				);
 				$context_edit = array("mode" => "edit");
 				$context_delete = array("mode" => "delete");
-				if($object->topic != null || $object->id_topic != 0){
+				if(isset($object->topic) && $object->topic != null || isset($object->id_topic) && $object->id_topic != 0){
 					$context_edit["post"] = $identifier;
 					$context_delete["post"] = $identifier;
 				}
