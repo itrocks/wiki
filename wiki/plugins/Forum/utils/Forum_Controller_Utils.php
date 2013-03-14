@@ -169,6 +169,7 @@ class Forum_Controller_Utils
 		$object = Dao::write($object);
 		Dao::commit();
 		$parameters->set($short_class_name, $object);
+		Forum_Path::current()->set($short_class_name, Dao::read($object, $class_name));
 		return $parameters;
 	}
 }

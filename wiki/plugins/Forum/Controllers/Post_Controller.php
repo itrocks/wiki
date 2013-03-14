@@ -45,18 +45,6 @@ class Post_Controller extends Output_Controller
 	//----------------------------------------------------------------------------------------- write
 	public function write(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
-		/*$path = Forum_Utils::getPath();
-		$params = $parameters->getObjects();
-		$object = reset($params);
-		if(!is_object($object)){
-			$object = new Post();
-		}
-		$form["topic"] = $path["Topic"];
-		$form["author"] = User::current();
-		$object = Forum_Controller_Utils::formToObject($object, $form);
-		Dao::begin();
-		Dao::write($object);
-		Dao::commit();*/
 		$form["author"] = User::current();
 		$parameters = Forum_Controller_Utils::write($parameters, $form, $class_name);
 		return $this->output($parameters, $form, $files, $class_name);

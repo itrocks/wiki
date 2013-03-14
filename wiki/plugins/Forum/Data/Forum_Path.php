@@ -31,4 +31,14 @@ class Forum_Path
 		return self::pCurrent($set_current);
 	}
 
+	//------------------------------------------------------------------------------------------- set
+	/**
+	 * Set a value in the path
+	 * @param $index string The index, generally the short class name of the object.
+	 * @param $value object The object of this level.
+	 */
+	public function set($index, $value){
+		$this->path[$index] = $value;
+	}
+
 }
