@@ -2,7 +2,6 @@
 namespace SAF\Wiki;
 use SAF\Framework\Controller_Parameters;
 use SAF\Framework\List_Controller;
-use SAF\Framework\Default_Delete_Controller;
 use SAF\Framework\Dao;
 use SAF\Framework\User;
 use SAF\Framework\View;

@@ -5,7 +5,6 @@ use SAF\Framework\Output_Controller;
 use SAF\Framework\Dao;
 use SAF\Framework\User;
 use SAF\Framework\View;
-use SAF\Framework\Default_Delete_Controller;
 
 class Post_Controller extends Output_Controller
 {
@@ -54,6 +53,21 @@ class Post_Controller extends Output_Controller
 	public function delete(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
 		return Forum_Controller_Utils::delete($parameters, $form, $files, $class_name);
+	}
+
+	//----------------------------------------------------------------------------------------- quote
+	public function quote(Controller_Parameters $parameters, $form, $files, $class_name){
+		//$form["content"] = str_replace("\n", "\n>", Dao::getObjectIdentifier())
+		$parameters->set("post", 0);
+		$parameters->set("Post", 0);
+		$post = Forum_Path::current()->get("Post");
+		$post = Forum_Utils::assignAuthorInPost($post);
+		$new_post = new Post();
+		$new_post->title = $post->title;
+		$new_post->content = $post->author->login . " :" . "\n\n";
+		$new_post->content .= "&gt;" . str_replace("\n","\n&gt;", $post->content);
+		Forum_Path::current()->set("Post", $new_post);
+		return (new Post_New_Controller())->run($parameters, $form, $files, $class_name);
 	}
 
 }

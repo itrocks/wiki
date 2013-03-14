@@ -5,7 +5,9 @@ use SAF\Framework\Namespaces;
 class Forum_Path_Utils
 {
 
+	//----------------------------------------------------------------------------------- stopInLevel
 	/**
+	 * Stop the path in a level, corresponding of a class name, and delete all object after.
 	 * @param $path array
 	 * @param $class_name string|object
 	 * @return array

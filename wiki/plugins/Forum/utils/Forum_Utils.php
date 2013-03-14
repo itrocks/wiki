@@ -1,11 +1,10 @@
 <?php
 namespace SAF\Wiki;
 use SAF\Framework\Dao;
-use SAF\Framework\Button;
 use SAF\Framework\View;
-use SAF\Framework\Color;
 use SAF\Framework\Namespaces;
 use SAF\Framework\Wiki;
+use SAF\Framework\User;
 
 class Forum_Utils
 {
@@ -36,10 +35,9 @@ class Forum_Utils
 				$parameters["main_post"] = array(self::addAttribute($parameters, $object->first_post, $url, $mode));
 				break;
 			case "SAF\\Wiki\\Post" :
-				//TODO : see why the User is not auto recovered
-				if(isset($object->id_author)){
-					$author = \SAF\Framework\Search_Object::newInstance('Saf\\Wiki\\Wiki_User');
-					$author = Dao::read($object->id_author, get_class($author));
+				self::assignAuthorInPost($object);
+				if(isset($object->author)){
+					$author = $object->author;
 					$author_name = "undefined";
 					if(isset($author)){
 						$author_name = $author->login;
@@ -89,6 +87,10 @@ class Forum_Utils
 			}
 		}
 		return $uri;
+	}
+
+	public static function assignAuthorInPost($post){
+		return self::assignAttributeObjectInElement($post, "author", get_class(User::current()));
 	}
 
 	//---------------------------------------------------------------- assignAttributeObjectInElement

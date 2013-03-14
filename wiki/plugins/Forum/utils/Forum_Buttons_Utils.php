@@ -33,6 +33,84 @@ class Forum_Buttons_Utils{
 		return Button::newCollection($buttons);
 	}
 
+	//------------------------------------------------------------------ getButtonsCategoryModeOutput
+	/**
+	 * @param $object   object
+	 * @param $base_url string
+	 * @return array
+	 */
+	public static function getButtonsCategoryModeOutput($object, $base_url)
+	{
+		$buttons = array();
+		$buttons[] = array(
+			"New forum",
+			Forum_Utils::getUrl("New forum", $base_url, array("mode" => "new")),
+			"new",
+			array(Color::of("green"), "#main")
+		);
+		$buttons[] = array(
+			"Edit",
+			Forum_Utils::getUrl("", $base_url, array("mode" => "edit")),
+			"edit",
+			array(Color::of("green"), "#main")
+		);
+		$buttons[] = array(
+			"Delete",
+			Forum_Utils::getUrl("", $base_url, array("mode" => "delete")),
+			"delete",
+			array(Color::of("green"), "#main")
+		);
+		return $buttons;
+	}
+
+	//------------------------------------------------------------------- getButtonsDefaultModeOutput
+	/**
+	 * @param $base_url string
+	 * @return array The list of buttons
+	 */
+	public static function getButtonsDefaultModeOutput($base_url)
+	{
+		$buttons[] = array(
+			"New category",
+			Forum_Utils::getUrl(
+				"New category", $base_url, array("mode" => "new")
+			),
+			"new",
+			array(Color::of("green"), "#main")
+		);
+		return $buttons;
+	}
+
+	//--------------------------------------------------------------------- getButtonsForumModeOutput
+	/**
+	 * @param $object   object
+	 * @param $base_url string
+	 * @return array
+	 */
+	public static function getButtonsForumModeOutput($object, $base_url)
+	{
+		$buttons = array();
+		$buttons[] = array(
+			"New topic",
+			Forum_Utils::getUrl("New topic", $base_url, array("mode" => "new")),
+			"new",
+			array(Color::of("green"), "#main")
+		);
+		$buttons[] = array(
+			"Edit",
+			Forum_Utils::getUrl("", $base_url, array("mode" => "edit")),
+			"edit",
+			array(Color::of("orange"), "#main")
+		);
+		$buttons[] = array(
+			"Delete",
+			Forum_Utils::getUrl("", $base_url, array("mode" => "delete")),
+			"delete",
+			array(Color::of("red"), "#main")
+		);
+		return $buttons;
+	}
+
 	//---------------------------------------------------------------------------- getButtonsModeEdit
 	/**
 	 * Return a list of buttons for the mode delete.
@@ -171,90 +249,12 @@ class Forum_Buttons_Utils{
 		return $buttons;
 	}
 
-	public static function getButtonsDefaultModeOutput($base_url)
-	{
-		$buttons[] = array(
-			"New category",
-			Forum_Utils::getUrl(
-				"New category", $base_url, array("mode" => "new")
-			),
-			"new",
-			array(Color::of("green"), "#main")
-		);
-		return $buttons;
-	}
-
-	public static function getButtonsForumModeOutput($object, $base_url)
-	{
-		$buttons = array();
-		$buttons[] = array(
-			"New topic",
-			Forum_Utils::getUrl("New topic", $base_url, array("mode" => "new")),
-			"new",
-			array(Color::of("green"), "#main")
-		);
-		$buttons[] = array(
-			"Edit",
-			Forum_Utils::getUrl("", $base_url, array("mode" => "edit")),
-			"edit",
-			array(Color::of("orange"), "#main")
-		);
-		$buttons[] = array(
-			"Delete",
-			Forum_Utils::getUrl("", $base_url, array("mode" => "delete")),
-			"delete",
-			array(Color::of("red"), "#main")
-		);
-		return $buttons;
-	}
-
-	public static function getButtonsCategoryModeOutput($object, $base_url)
-	{
-		$buttons = array();
-		$buttons[] = array(
-			"New forum",
-			Forum_Utils::getUrl("New forum", $base_url, array("mode" => "new")),
-			"new",
-			array(Color::of("green"), "#main")
-		);
-		$buttons[] = array(
-			"Edit",
-			Forum_Utils::getUrl("", $base_url, array("mode" => "edit")),
-			"edit",
-			array(Color::of("green"), "#main")
-		);
-		$buttons[] = array(
-			"Delete",
-			Forum_Utils::getUrl("", $base_url, array("mode" => "delete")),
-			"delete",
-			array(Color::of("green"), "#main")
-		);
-		return $buttons;
-	}
-
-	public static function getButtonsTopicModeOutput($object, $base_url)
-	{
-		$buttons[] = array(
-			"Reply",
-			Forum_Utils::getUrl("New post", $base_url, array("mode" => "new")),
-			"new",
-			array(Color::of("green"), "#main")
-		);
-		$buttons[] = array(
-			"Edit",
-			Forum_Utils::getUrl("", $base_url, array("mode" => "edit")),
-			"edit",
-			array(Color::of("green"), "#main")
-		);
-		$buttons[] = array(
-			"Delete",
-			Forum_Utils::getUrl("", $base_url, array("mode" => "delete")),
-			"delete",
-			array(Color::of("green"), "#main")
-		);
-		return $buttons;
-	}
-
+	//---------------------------------------------------------------------- getButtonsPostModeOutput
+	/**
+	 * @param $object   object
+	 * @param $base_url string
+	 * @return array
+	 */
 	public static function getButtonsPostModeOutput($object, $base_url)
 	{
 		$buttons = array();
@@ -288,6 +288,35 @@ class Forum_Buttons_Utils{
 			"Edit",
 			Forum_Utils::getUrl("", $parent_url,	$context_edit),
 			"edit",
+			array(Color::of("green"), "#main")
+		);
+		return $buttons;
+	}
+
+	//--------------------------------------------------------------------- getButtonsTopicModeOutput
+	/**
+	 * @param $object   object
+	 * @param $base_url string
+	 * @return array
+	 */
+	public static function getButtonsTopicModeOutput($object, $base_url)
+	{
+		$buttons[] = array(
+			"Reply",
+			Forum_Utils::getUrl("New post", $base_url, array("mode" => "new")),
+			"new",
+			array(Color::of("green"), "#main")
+		);
+		$buttons[] = array(
+			"Edit",
+			Forum_Utils::getUrl("", $base_url, array("mode" => "edit")),
+			"edit",
+			array(Color::of("green"), "#main")
+		);
+		$buttons[] = array(
+			"Delete",
+			Forum_Utils::getUrl("", $base_url, array("mode" => "delete")),
+			"delete",
 			array(Color::of("green"), "#main")
 		);
 		return $buttons;

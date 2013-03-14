@@ -41,4 +41,16 @@ class Forum_Path
 		$this->path[$index] = $value;
 	}
 
+	//------------------------------------------------------------------------------------------- get
+	/**
+	 * Set a value in the path
+	 * @param $index string The index, generally the short class name of the object.
+	 * @return null|object
+	 */
+	public function get($index){
+		if(isset($this->path[$index]))
+			return $this->path[$index];
+		return null;
+	}
+
 }

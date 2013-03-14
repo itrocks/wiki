@@ -122,12 +122,30 @@ class Forum_Controller_Utils
 		}
 	}
 
-	public static function getNextOutput($parameters, $form, $files, $class_name)
+	//--------------------------------------------------------------------------------- getNextOutput
+	/**
+	 * Return the output method result of the child class
+	 * @param $parameters Controller_Parameters
+	 * @param $form       array
+	 * @param $files      array
+	 * @param $class_name string
+	 * @return string
+	 */
+	public static function getNextOutput(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
 		return self::getOutput($parameters, $form, $files, Forum_Utils::getNextClass($class_name));
 	}
 
-	public static function getParentOutput($parameters, $form, $files, $class_name)
+	//------------------------------------------------------------------------------- getParentOutput
+	/**
+	 * Return the output method result of the parent class
+	 * @param $parameters Controller_Parameters
+	 * @param $form       array
+	 * @param $files      array
+	 * @param $class_name string
+	 * @return string
+	 */
+	public static function getParentOutput(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
 		return self::getOutput($parameters, $form, $files, Forum_Utils::getParentClass($class_name));
 	}

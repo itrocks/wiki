@@ -5,7 +5,6 @@ use SAF\Framework\Output_Controller;
 use SAF\Framework\Dao;
 use SAF\Framework\User;
 use SAF\Framework\View;
-use SAF\Framework\Namespaces;
 
 class Forum_Controller extends Output_Controller
 {
