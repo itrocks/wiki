@@ -60,7 +60,6 @@ class Forum_Utils
 		$parameters = self::getAttributeCol($object, $parameters);
 		$parameters["attributes_number"] = count($parameters["attribute_values"]) + 1;
 		$parameters["buttons"] = Forum_Buttons_Utils::getButtons($object, $base_url, $mode);
-		$parameters["general_buttons"] = Forum_Buttons_Utils::getGeneralButtons($object, $base_url);
 		$parameters["type"] = Namespaces::shortClassName($class_name);
 		$parameters["type_child"] = Namespaces::shortClassName(self::getNextClass($class_name));
 		return $parameters;

@@ -40,17 +40,19 @@ class Forum_Controller_Utils
 	//-------------------------------------------------------------------------------- delete_objects
 	/**
 	 * Delete a list of objects. If this object have next elements, delete the next elements.
-	 * @param $objects object[] List of objects to delete
+	 * @param $objects object[]|null List of objects to delete
 	 */
 	public static function delete_objects($objects)
 	{
-		foreach ($objects as $object) {
-			if (is_object($object)) {
-				$objects_child = Forum_Utils::getNextElements($object);
-				if($objects_child != null){
-					self::delete_objects($objects_child);
+		if(isset($objects)){
+			foreach ($objects as $object) {
+				if (is_object($object)) {
+					$objects_child = Forum_Utils::getNextElements($object);
+					if($objects_child != null){
+						self::delete_objects($objects_child);
+					}
+					Dao::delete($object);
 				}
-				Dao::delete($object);
 			}
 		}
 	}

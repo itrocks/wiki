@@ -6,63 +6,6 @@ use SAF\Framework\Color;
 
 class Forum_Buttons_Utils{
 
-	public static function getGeneralButtons($object, $base_url){
-		$buttons = array();
-		switch(get_class($object)){
-			case "SAF\\Wiki\\Post":
-				$identifier = Dao::getObjectIdentifier($object);
-				$buttons[] = array(
-					"Confirm",
-					Forum_Utils::getUrl(
-						"", Forum_Utils::getParentUrl($base_url),
-						array("mode" => "delete", "post" => $identifier)
-					),
-					"delete",
-					array(Color::of("green"), ".submit", "#main")
-				);
-				$buttons[] = array(
-					"New category",
-					Forum_Utils::getUrl("", $base_url, array("mode" => "new","post" => $identifier)),
-					"new",
-					array(Color::of("green"), "#main")
-				);
-				break;
-			case "SAF\\Wiki\\Category":
-				$buttons[] = array(
-					"New category",
-					Forum_Utils::getUrl(
-						$object->title, Forum_Utils::getParentUrl($base_url), array("mode" => "new")
-					),
-					"new",
-					array(Color::of("green"), "#main")
-				);
-				break;
-			case "SAF\\Wiki\\Forum":
-				$buttons[] = array(
-					"New forum",
-					Forum_Utils::getUrl(
-						$object->title, Forum_Utils::getParentUrl($base_url), array("mode" => "new")
-					),
-					"new",
-					array(Color::of("green"), "#main")
-				);
-				break;
-			case "SAF\\Wiki\\Topic":
-				$buttons[] = array(
-					"New topic",
-					Forum_Utils::getUrl(
-						$object->title, Forum_Utils::getParentUrl($base_url), array("mode" => "new")
-					),
-					"new",
-					array(Color::of("green"), "#main")
-				);
-				break;
-			default:
-				break;
-		}
-		return Button::newCollection($buttons);
-	}
-
 	//------------------------------------------------------------------------------------ getButtons
 	/**
 	 * Return the buttons corresponding of the type object and the mode
@@ -228,7 +171,8 @@ class Forum_Buttons_Utils{
 		return $buttons;
 	}
 
-	public static function getButtonsDefaultModeOutput($base_url){
+	public static function getButtonsDefaultModeOutput($base_url)
+	{
 		$buttons[] = array(
 			"New category",
 			Forum_Utils::getUrl(
@@ -240,7 +184,8 @@ class Forum_Buttons_Utils{
 		return $buttons;
 	}
 
-	public static function getButtonsForumModeOutput($object, $base_url){
+	public static function getButtonsForumModeOutput($object, $base_url)
+	{
 		$buttons = array();
 		$buttons[] = array(
 			"New topic",
@@ -263,7 +208,8 @@ class Forum_Buttons_Utils{
 		return $buttons;
 	}
 
-	public static function getButtonsCategoryModeOutput($object, $base_url){
+	public static function getButtonsCategoryModeOutput($object, $base_url)
+	{
 		$buttons = array();
 		$buttons[] = array(
 			"New forum",
@@ -286,7 +232,8 @@ class Forum_Buttons_Utils{
 		return $buttons;
 	}
 
-	public static function getButtonsTopicModeOutput($object, $base_url){
+	public static function getButtonsTopicModeOutput($object, $base_url)
+	{
 		$buttons[] = array(
 			"Reply",
 			Forum_Utils::getUrl("New post", $base_url, array("mode" => "new")),
@@ -308,7 +255,8 @@ class Forum_Buttons_Utils{
 		return $buttons;
 	}
 
-	public static function getButtonsPostModeOutput($object, $base_url){
+	public static function getButtonsPostModeOutput($object, $base_url)
+	{
 		$buttons = array();
 		$parent_url = Forum_Utils::getParentUrl($base_url);
 		$identifier = Dao::getObjectIdentifier($object);

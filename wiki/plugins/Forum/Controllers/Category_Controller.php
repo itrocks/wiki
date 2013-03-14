@@ -35,8 +35,12 @@ class Category_Controller extends List_Controller
 	//-------------------------------------------------------------------------------------- list_all
 	public function list_all(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
+		$class_name = get_class(new Category());
 		$parameters = parent::getViewParameters($parameters, $form, $class_name);
 		$parameters = Forum_Utils::generateContent($parameters, null, array(), "output", 2);
+		if(isset($parameters["Category"])){
+			unset($parameters["Category"]);
+		}
 		return View::run($parameters, $form, $files, "Forum", "structure_double");
 	}
 
