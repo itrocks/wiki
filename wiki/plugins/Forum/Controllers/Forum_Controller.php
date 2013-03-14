@@ -19,12 +19,9 @@ class Forum_Controller extends Output_Controller
 	public function edit(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
 		$parameters = parent::getViewParameters($parameters, $form, $class_name);
-		$answer = Forum_Utils::getElementsRequired($this->getLinkParameters($parameters, 1));
-		$element = Forum_Utils::getElementOnGetters($parameters);
-		if(!isset($element))
-			$element = $answer["element"];
-		$parameters = Forum_Utils::generateContent($parameters, $element, $answer["path"], "edit", 1);
-		return View::run($parameters, $form, $files, $class_name, "edit_post");
+		$path = Forum_Utils::getPath();
+		$parameters = Forum_Utils::generateContent($parameters, "Forum", $path, "edit", 0);
+		return View::run($parameters, $form, $files, "Forum", "edit_simple");
 	}
 
 	//---------------------------------------------------------------------------------------- output
@@ -43,4 +40,8 @@ class Forum_Controller extends Output_Controller
 		return $this->output($parameters, $form, $files, $class_name);
 	}
 
+	//---------------------------------------------------------------------------------------- delete
+	public function delete(Controller_Parameters $parameters, $form, $files, $class_name){
+		return Forum_Controller_Utils::delete($parameters, $form, $files, $class_name);
+	}
 }

@@ -38,7 +38,7 @@ class Post_Controller extends Output_Controller
 	{
 		$parameters = parent::getViewParameters($parameters, $form, $class_name);
 		$path = Forum_Utils::getPath();
-		$parameters = Forum_Utils::generateContent($parameters, "Post", $path, "edit", 1);
+		$parameters = Forum_Utils::generateContent($parameters, "Post", $path, "edit", 0);
 		return View::run($parameters, $form, $files, "Forum", "edit_post");
 	}
 

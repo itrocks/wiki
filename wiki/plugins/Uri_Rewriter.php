@@ -39,7 +39,7 @@ class Uri_Rewriter implements Plugin
 	 */
 	public static function beforeMainControllerRunController(AopJoinpoint $joinpoint)
 	{
-		$list_ignore = array("Menu", "User", "Page", "Search", "Content", "Upload", "Images_Upload", "uploaded_img", "Forum", "category");
+		$list_ignore = array("Menu", "User", "Page", "Search", "Content", "Upload", "Images_Upload", "uploaded_img", "Forum", "Category", "Post", "Topic");
 		$list_orders = array("edit", "output", "new", "delete", "included");
 		$link = $joinpoint->getArguments()[0];
 		$class_name = 'SAF\Wiki\Page';

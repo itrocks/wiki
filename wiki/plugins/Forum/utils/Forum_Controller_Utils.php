@@ -20,6 +20,7 @@ class Forum_Controller_Utils
 	public static function delete(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
 		if(isset($form["confirm"])){
+			/** @var  $objects object[] */
 			$objects = $parameters->getObjects();
 			Dao::begin();
 			self::delete_objects($objects);

@@ -23,11 +23,20 @@ class Category_Controller extends List_Controller
 		return View::run($parameters, $form, $files, "Forum", "structure_double");
 	}
 
+	//------------------------------------------------------------------------------------------ edit
+	public function edit(Controller_Parameters $parameters, $form, $files, $class_name)
+	{
+		$parameters = parent::getViewParameters($parameters, $form, $class_name);
+		$path = Forum_Utils::getPath();
+		$parameters = Forum_Utils::generateContent($parameters, "Category", $path, "edit", 0);
+		return View::run($parameters, $form, $files, "Forum", "edit_simple");
+	}
+
 	//-------------------------------------------------------------------------------------- list_all
 	public function list_all(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
 		$parameters = parent::getViewParameters($parameters, $form, $class_name);
-		$parameters = Forum_Utils::generateContent($parameters, null, array(), "output", 3);
+		$parameters = Forum_Utils::generateContent($parameters, null, array(), "output", 2);
 		return View::run($parameters, $form, $files, "Forum", "structure_double");
 	}
 
@@ -38,4 +47,8 @@ class Category_Controller extends List_Controller
 		return $this->output($parameters, $form, $files, $class_name);
 	}
 
+	//---------------------------------------------------------------------------------------- delete
+	public function delete(Controller_Parameters $parameters, $form, $files, $class_name){
+		return Forum_Controller_Utils::delete($parameters, $form, $files, $class_name);
+	}
 }

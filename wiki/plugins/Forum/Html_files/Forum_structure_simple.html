@@ -15,13 +15,25 @@
 		<!--path-->
 	</p>
 	<div class="block_table forum">
+		<div class="right">
+			<!--buttons-->
+			<a class="button trashable {feature.lower} {?class.short}" href="{link}" target="{?target}">|{caption}|</a>
+			<!--buttons-->
+		</div>
 		<h1>{title}</h1>
 		<div class="block forum">
 			<div class="items forum">
 				<table class="forum">
 					<thead>
 					<tr class="forum titre block">
-						<th colspan="{attributes_number}"><a href="{link}">{title}</a></th>
+						<th colspan="{attributes_number}">
+							<a href="{link}">{title}</a>
+							<span class="right">
+								<!--buttons-->
+								<a class="button trashable {feature.lower} {?class.short}" href="{link}" target="{?target}">|{caption}|</a>
+								<!--buttons-->
+							</span>
+						</th>
 					</tr>
 					<tr class="forum header">
 						<th>{type_child}</th>
