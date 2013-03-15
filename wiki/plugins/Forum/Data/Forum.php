@@ -7,40 +7,32 @@ class Forum
 	/**
 	 * @var string
 	 */
-	var $title;
+	public $title;
 
 	//------------------------------------------------------------------------------------- $category
 	/**
 	 * @link Object
 	 * @var Category
 	 */
-	var $category;
+	public $category;
 
 	//-------------------------------------------------------------------------------------- $content
 	/**
-	 * Description
 	 * @var string
 	 */
-	var $content;
-
-	//----------------------------------------------------------------------------------- $moderators
-	/**
-	 * @link Object
-	 * @var \SAF\Framework\User[]
-	 */
-	var $moderators;
+	public $content;
 
 	//------------------------------------------------------------------------------------ $nb_topics
 	/**
-	 * @var int
+	 * @var integer
 	 */
-	var $nb_topics;
+	public $nb_topics;
 
 	//------------------------------------------------------------------------------------- $nb_posts
 	/**
-	 * @var int
+	 * @var integer
 	 */
-	var $nb_posts;
+	public $nb_posts;
 
 	//------------------------------------------------------------------------------------ $last_post
 	/**
@@ -51,10 +43,9 @@ class Forum
 
 	//------------------------------------------------------------------------------------- $position
 	/**
-	 * The position
-	 * @var int
+	 * @var integer
 	 */
-	var $position;
+	public $position;
 
 	public function __toString()
 	{

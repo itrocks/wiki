@@ -7,19 +7,19 @@ class Category
 	/**
 	 * @var string
 	 */
-	var $title;
+	public $title;
 
 	//-------------------------------------------------------------------------------------- $content
 	/**
 	 * Description
 	 * @var string
 	 */
-	var $content;
+	public $content;
 
 	//------------------------------------------------------------------------------------- $position
 	/**
-	 * @var int
+	 * @var integer
 	 */
-	var $position;
+	public $position;
 
 }

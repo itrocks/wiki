@@ -62,7 +62,6 @@ class Post_Controller extends Output_Controller
 		$post = Forum_Path::current()->get("Post");
 		$post = Forum_Utils::assignAuthorInPost($post);
 		$new_post = new Post();
-		$new_post->title = $post->title;
 		$new_post->content = $post->author->login . " :" . "\n\n";
 		$new_post->content .= "&gt;" . str_replace("\n","\n&gt;", $post->content);
 		Forum_Path::current()->set("Post", $new_post);

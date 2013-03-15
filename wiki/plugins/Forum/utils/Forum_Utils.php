@@ -53,7 +53,7 @@ class Forum_Utils
 				$parameters["title"] = "Index";
 				break;
 		}
-		if($object)
+		if($object && isset($object->title))
 			$parameters["title"] = $object->title;
 		$parameters = self::getAttributeCol($object, $parameters);
 		$parameters["attributes_number"] = count($parameters["attribute_values"]) + 1;
@@ -166,7 +166,7 @@ class Forum_Utils
 			$blocks = array();
 			if(is_array($block_elements)){
 				foreach($block_elements as $block_element){
-					$url = self::getUrl($block_element->title, $base_url);
+					$url = self::getUrl($block_element, $base_url);
 					$path_element = $path;
 					$short_class_name = Namespaces::shortClassName(get_class($block_element));
 					$path_element[$short_class_name] = $block_element;
@@ -206,20 +206,20 @@ class Forum_Utils
 			case "SAF\\Wiki\\Category" :
 				$parameters = self::getAttributeNameCol("Category", $title_parent_var_name, $parameters);
 				$parameters = self::getAttributeNameCol("Forum", $title_var_name, $parameters);
-				$parameters[$value_var_name][] = array("value" => 1);
-				$parameters[$value_var_name][] = array("value" => 2);
-				$parameters[$value_var_name][] = array("value" => 3);
+				$parameters[$value_var_name][] = array("value" => self::getNbForums($object));
+				$parameters[$value_var_name][] = array("value" => self::getNbTopics($object));
+				$parameters[$value_var_name][] = array("value" => self::getNbPosts($object));
 				break;
 			case "SAF\\Wiki\\Forum" :
 				$parameters = self::getAttributeNameCol("Forum", $title_parent_var_name, $parameters);
 				$parameters = self::getAttributeNameCol("Topic", $title_var_name, $parameters);
-				$parameters[$value_var_name][] = array("value" => 4);
-				$parameters[$value_var_name][] = array("value" => 5);
+				$parameters[$value_var_name][] = array("value" => self::getNbTopics($object));
+				$parameters[$value_var_name][] = array("value" => self::getNbPosts($object));
 				break;
 			case "SAF\\Wiki\\Topic" :
 				$parameters = self::getAttributeNameCol("Forum", $title_parent_var_name, $parameters);
 				$parameters = self::getAttributeNameCol("Post", $title_var_name, $parameters);
-				$parameters[$value_var_name][] = array("value" => 4);
+				$parameters[$value_var_name][] = array("value" => self::getNbPosts($object));
 				break;
 			case "SAF\\Wiki\\Post" :
 				break;
@@ -227,6 +227,24 @@ class Forum_Utils
 				break;
 		}
 		return $parameters;
+	}
+
+	public static function getNbForums($object){
+		if(isset($object->nb_forums))
+			return isset($object->nb_forums);
+		return 0;
+	}
+
+	public static function getNbTopics($object){
+		if(isset($object->nb_topics))
+			return isset($object->nb_topics);
+		return 0;
+	}
+
+	public static function getNbPosts($object){
+		if(isset($object->nb_posts))
+			return isset($object->nb_posts);
+		return 0;
 	}
 
 	//--------------------------------------------------------------------------- getAttributeNameCol
@@ -241,16 +259,16 @@ class Forum_Utils
 	{
 		switch($short_class){
 			case "Category" :
-				$parameters[$var_name][] = array("value" => "Number of forums");
-				$parameters[$var_name][] = array("value" => "Number of topics");
-				$parameters[$var_name][] = array("value" => "Number of posts");
+				$parameters[$var_name][] = array("value" => "Forums");
+				$parameters[$var_name][] = array("value" => "Topics");
+				$parameters[$var_name][] = array("value" => "Posts");
 				break;
 			case "Forum" :
-				$parameters[$var_name][] = array("value" => "Number of topics");
-				$parameters[$var_name][] = array("value" => "Number of posts");
+				$parameters[$var_name][] = array("value" => "Topics");
+				$parameters[$var_name][] = array("value" => "Posts");
 				break;
 			case "Topic" :
-				$parameters[$var_name][] = array("value" => "Number of posts");
+				$parameters[$var_name][] = array("value" => "Posts");
 				break;
 			case "Post" :
 				break;
@@ -273,22 +291,13 @@ class Forum_Utils
 			. "/Forum/";
 		if(func_get_args()){
 			foreach(func_get_args() as $arg){
-				if(is_object($arg)){
-					if(isset($arg->title)){
-						$base .= $arg->title . "/";
-					}
-				}
-				else if(is_array($arg)){
+				if(is_array($arg)){
 					foreach($arg as $element){
-						if(is_object($element))
-							if(isset($element->title))
-								$base .= $element->title . "/";
-							else
-								$base .= $element . "/";
+						$base = self::getUrl($element, $base);
 					}
 				}
 				else {
-					$base .= $arg . "/";
+					$base = self::getUrl($arg, $base);
 				}
 			}
 		}
@@ -331,6 +340,7 @@ class Forum_Utils
 	public static function getElement($parent, $title)
 	{
 		$item = null;
+		$search = true;
 		switch(get_class($parent)){
 			case "SAF\\Wiki\\Category" :
 				$item = new Forum();
@@ -344,18 +354,19 @@ class Forum_Utils
 				break;
 			case "SAF\\Wiki\\Topic" :
 				$item = new Post();
-				$item->topic = $parent;
-				$item->title = $title;
+				$search = false;
 				break;
 			case "SAF\\Wiki\\Post" :
 				$item = $parent;
+				$search = false;
 				break;
 			default:
 				$item = new Category();
 				$item->title = $title;
 				break;
 		}
-		$element = Dao::searchOne($item);
+		if($search)
+			$element = Dao::searchOne($item);
 		return (isset($element) ? $element : $item);
 	}
 
@@ -593,7 +604,7 @@ class Forum_Utils
 	//------------------------------------------------------------------------------- getUrl
 	/**
 	 * Form an url, an put in right format.
-	 * @param $element string The element destination for the url
+	 * @param $element string|object The element destination for the url
 	 * @param $base_url null|string The base url, if not indicated or null, use getBaseUrl()
 	 * @param $getters array
 	 * @return mixed The url
@@ -603,6 +614,16 @@ class Forum_Utils
 		if($base_url == null)
 			$base_url = self::getBaseUrl();
 		$url = $base_url;
+		if(is_object($element)){
+			if(isset($element->title)){
+				$element = $element->title;
+			}
+			else {
+				$getters[strtolower(Namespaces::shortClassName(get_class($element)))] =
+					Dao::getObjectIdentifier($element);
+				$element = "";
+			}
+		}
 		if($element != null && count($element))
 			$url .= $element . "/";
 		$is_first = true;

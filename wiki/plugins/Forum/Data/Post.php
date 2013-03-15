@@ -6,11 +6,6 @@ namespace SAF\Wiki;
  */
 class Post
 {
-	//---------------------------------------------------------------------------------------- $title
-	/**
-	 * @var string
-	 */
-	var $title;
 
 	//-------------------------------------------------------------------------------------- $content
 	/**
@@ -18,43 +13,43 @@ class Post
 	 * @max_length 2000000
 	 * @multiline
 	 */
-	var $content;
+	public $content;
 
 	//--------------------------------------------------------------------------------------- $author
 	/**
 	 * @var \SAF\Framework\User
 	 */
-	var $author;
+	public $author;
 
 	//---------------------------------------------------------------------------------------- $topic
 	/**
 	 * @link Object
 	 * @var Topic
 	 */
-	var $topic;
+	public $topic;
 
 	//------------------------------------------------------------------------------------ $date_post
 	/**
-	 * @var int
+	 * @var integer
 	 */
-	var $date_post;
+	public $date_post;
 
 
 	//------------------------------------------------------------------------------------ $nb_edited
 	/**
-	 * @var int
+	 * @var integer
 	 */
-	var $nb_edited;
+	public $nb_edited;
+
+	//---------------------------------------------------------------------------------- $last_edited
+	/**
+	 * @var integer
+	 */
+	public $last_edited;
 
 	//------------------------------------------------------------------------------- $last_edited_by
 	/**
 	 * @var string
 	 */
-	var $last_edited_by;
-
-	public function __toString()
-	{
-		return $this->title . "";
-	}
-
+	public $last_edited_by;
 }

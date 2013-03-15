@@ -10,50 +10,44 @@ class Topic
 	/**
 	 * @var string
 	 */
-	var $title;
+	public $title;
 
 	//---------------------------------------------------------------------------------------- $forum
 	/**
 	 * @link Object
 	 * @var Forum
 	 */
-	var $forum;
+	public $forum;
 
 	//----------------------------------------------------------------------------------- $first_post
 	/**
 	 * @link Object
 	 * @var Post
 	 */
-	var $first_post;
+	public $first_post;
 
 	//------------------------------------------------------------------------------------ $last_post
 	/**
 	 * @link Object
 	 * @var Post
 	 */
-	var $last_post;
+	public $last_post;
 
 	//-------------------------------------------------------------------------------------- $nb_view
 	/**
-	 * @var int
+	 * @var integer
 	 */
-	var $nb_view;
+	public $nb_view;
 
 	//-------------------------------------------------------------------------------------- $nb_post
 	/**
-	 * @var int
+	 * @var integer
 	 */
-	var $nb_post;
+	public $nb_post;
 
 	//--------------------------------------------------------------------------------------- $closed
 	/**
 	 * @var boolean
 	 */
-	var $closed;
-
-	public function __toString()
-	{
-		return $this->title . "";
-	}
-
+	public $closed;
 }

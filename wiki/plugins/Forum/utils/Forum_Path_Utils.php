@@ -37,8 +37,11 @@ class Forum_Path_Utils
 		$url = Forum_Utils::getBaseUrl();
 		$path_array = array(array("type" => "index", "title" => "Index", "link" => $url));
 		foreach($path as $key => $element){
-			$title = $element->title;
-			$url = Forum_Utils::getUrl($title, $url);
+			if(isset($element->title))
+				$title = $element->title;
+			else
+				$title = get_class($element);
+			$url = Forum_Utils::getUrl($element, $url);
 			$path_array[] = array("type" => $key, "title" => $title, "link" => $url);
 		}
 		$parameters["path"] = $path_array;
