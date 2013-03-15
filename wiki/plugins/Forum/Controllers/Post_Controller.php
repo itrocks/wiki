@@ -57,7 +57,6 @@ class Post_Controller extends Output_Controller
 
 	//----------------------------------------------------------------------------------------- quote
 	public function quote(Controller_Parameters $parameters, $form, $files, $class_name){
-		//$form["content"] = str_replace("\n", "\n>", Dao::getObjectIdentifier())
 		$parameters->set("post", 0);
 		$parameters->set("Post", 0);
 		$post = Forum_Path::current()->get("Post");

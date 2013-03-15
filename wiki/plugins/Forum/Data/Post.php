@@ -39,6 +39,19 @@ class Post
 	 */
 	var $date_post;
 
+
+	//------------------------------------------------------------------------------------ $nb_edited
+	/**
+	 * @var int
+	 */
+	var $nb_edited;
+
+	//------------------------------------------------------------------------------- $last_edited_by
+	/**
+	 * @var string
+	 */
+	var $last_edited_by;
+
 	public function __toString()
 	{
 		return $this->title . "";
