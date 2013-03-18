@@ -123,12 +123,11 @@ class Forum_Buttons_Utils{
 		$buttons = array();
 		switch(get_class($object)){
 			case "SAF\\Wiki\\Post":
-				$identifier = Dao::getObjectIdentifier($object);
 				$buttons[] = array(
 					"Confirm",
 					Forum_Utils::getUrl(
-						"", Forum_Utils::getParentUrl($base_url),
-						array("mode" => "delete", "post" => $identifier)
+						$object, Forum_Utils::getParentUrl($base_url),
+						array("mode" => "delete")
 					),
 					"delete",
 					array(Color::of("red"), ".submit", "#main")
@@ -172,15 +171,11 @@ class Forum_Buttons_Utils{
 		$buttons = array();
 		switch(get_class($object)){
 			case "SAF\\Wiki\\Post":
-				$identifier = Dao::getObjectIdentifier($object);
-				if(!isset($identifier)){
-					$identifier = 0;
-				}
 				$buttons[] = array(
 					"Submit",
 					Forum_Utils::getUrl(
-						"", Forum_Utils::getParentUrl($base_url),
-						array("mode" => "write", "post" => $identifier)
+						$object, Forum_Utils::getParentUrl($base_url),
+						array("mode" => "write")
 					),
 					"write",
 					array(Color::of("green"), ".submit", "#main")
@@ -188,8 +183,8 @@ class Forum_Buttons_Utils{
 				$buttons[] = array(
 					"Preview",
 					Forum_Utils::getUrl(
-						"", Forum_Utils::getParentUrl($base_url),
-						array("mode" => "preview", "post" => $identifier)
+						$object, Forum_Utils::getParentUrl($base_url),
+						array("mode" => "preview")
 					),
 					"preview",
 					array(Color::of("orange"), "#main")
@@ -259,34 +254,27 @@ class Forum_Buttons_Utils{
 	{
 		$buttons = array();
 		$parent_url = Forum_Utils::getParentUrl($base_url);
-		$identifier = Dao::getObjectIdentifier($object);
 		$buttons[] = array(
 			"Quote",
-			Forum_Utils::getUrl("", $parent_url, array("mode" => "quote", "post" => $identifier)),
+			Forum_Utils::getUrl($object, $parent_url, array("mode" => "quote")),
 			"edit",
 			array(Color::of("green"), "#main")
 		);
 		$buttons[] = array(
 			"Report",
-			Forum_Utils::getUrl("", $parent_url, array("mode" => "report", "post" => $identifier)),
+			Forum_Utils::getUrl($object, $parent_url, array("mode" => "report")),
 			"edit",
 			array(Color::of("green"), "#main")
 		);
-		$context_edit = array("mode" => "edit");
-		$context_delete = array("mode" => "delete");
-		if(isset($object->topic) && $object->topic != null || isset($object->id_topic) && $object->id_topic != 0){
-			$context_edit["post"] = $identifier;
-			$context_delete["post"] = $identifier;
-		}
 		$buttons[] = array(
 			"Delete",
-			Forum_Utils::getUrl("", $parent_url, $context_delete),
+			Forum_Utils::getUrl($object, $parent_url, array("mode" => "delete")),
 			"edit",
 			array(Color::of("green"), ".need_confirm", "#main")
 		);
 		$buttons[] = array(
 			"Edit",
-			Forum_Utils::getUrl("", $parent_url,	$context_edit),
+			Forum_Utils::getUrl($object, $parent_url,	array("mode" => "edit")),
 			"edit",
 			array(Color::of("green"), "#main")
 		);
