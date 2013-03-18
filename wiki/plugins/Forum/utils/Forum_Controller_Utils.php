@@ -46,14 +46,23 @@ class Forum_Controller_Utils
 	{
 		if(isset($objects)){
 			foreach ($objects as $object) {
-				if (is_object($object)) {
-					$objects_child = Forum_Utils::getNextElements($object);
-					if($objects_child != null){
-						self::delete_objects($objects_child);
-					}
-					Dao::delete($object);
-				}
+				self::delete_object($object);
 			}
+		}
+	}
+
+	//--------------------------------------------------------------------------------- delete_object
+	public static function delete_object($object){
+		if (is_object($object)) {
+			$objects_depending = Forum_Utils::getObjectDepending($object);
+			foreach($objects_depending as $object_depending){
+				self::delete_object($object_depending);
+			}
+			$objects_child = Forum_Utils::getNextElements($object);
+			if($objects_child != null){
+				self::delete_objects($objects_child);
+			}
+			Dao::delete($object);
 		}
 	}
 
@@ -62,9 +71,10 @@ class Forum_Controller_Utils
 	 * Assign form contains to object attributes. If element of the form is an object, assign to the id element.
 	 * @param $object object
 	 * @param $form   array
+	 * @param $attributes_object array
 	 * @return object Return the object filled
 	 */
-	public static function formToObject($object, $form)
+	public static function formToObject($object, $form, $attributes_object = array())
 	{
 		foreach ($form as $name => $value) {
 			if (property_exists($object,$name)) {

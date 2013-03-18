@@ -549,6 +549,21 @@ class Forum_Utils
 		}
 	}
 
+	//---------------------------------------------------------------------------- getObjectDepending
+	/**
+	 * Allow to specify objects dependencies.
+	 * @param $object object
+	 * @return array
+	 */
+	public static function getObjectDepending($object){
+		$list_objects = array();
+		switch(get_class($object)){
+			case "SAF\\Wiki\\Topic":
+				$object = self::assignTopicFirstPost($object);
+				$list_objects[] = $object->first_post;
+		}
+		return $list_objects;
+	}
 
 	//-------------------------------------------------------------------------------- getParentClass
 	/**
