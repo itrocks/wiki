@@ -71,7 +71,7 @@ class Forum_Buttons_Utils{
 	public static function getButtonsDefaultModeOutput($base_url)
 	{
 		$buttons[] = array(
-			"",
+			"New category",
 			Forum_Utils::getUrl(
 				"", $base_url, array("mode" => "new")
 			),
@@ -121,14 +121,12 @@ class Forum_Buttons_Utils{
 	public static function getButtonsModeDelete($object, $base_url)
 	{
 		$buttons = array();
+		$parent_url = Forum_Utils::getParentUrl($base_url);
 		switch(get_class($object)){
 			case "SAF\\Wiki\\Post":
 				$buttons[] = array(
 					"Confirm",
-					Forum_Utils::getUrl(
-						$object, Forum_Utils::getParentUrl($base_url),
-						array("mode" => "delete")
-					),
+					Forum_Utils::getUrl($object, $parent_url, array("mode" => "delete"), true),
 					"delete",
 					array(Color::of("red"), ".submit", "#main")
 				);
@@ -144,7 +142,7 @@ class Forum_Buttons_Utils{
 			case "SAF\\Wiki\\Topic":
 				$buttons[] = array(
 					"Confirm",
-					Forum_Utils::getUrl("", $base_url, array("mode" => "delete")),
+					Forum_Utils::getUrl($object, $parent_url, array("mode" => "delete"), true),
 					"delete",
 					array(Color::of("green"), ".submit", "#main")
 				);
@@ -169,23 +167,18 @@ class Forum_Buttons_Utils{
 	public static function getButtonsModeEdit($object, $base_url)
 	{
 		$buttons = array();
+		$parent_url = Forum_Utils::getParentUrl($base_url);
 		switch(get_class($object)){
 			case "SAF\\Wiki\\Post":
 				$buttons[] = array(
 					"Submit",
-					Forum_Utils::getUrl(
-						$object, Forum_Utils::getParentUrl($base_url),
-						array("mode" => "write")
-					),
+					Forum_Utils::getUrl($object, $parent_url,	array("mode" => "write"),	true),
 					"write",
 					array(Color::of("green"), ".submit", "#main")
 				);
 				$buttons[] = array(
 					"Preview",
-					Forum_Utils::getUrl(
-						$object, Forum_Utils::getParentUrl($base_url),
-						array("mode" => "preview")
-					),
+					Forum_Utils::getUrl($object, $parent_url, array("mode" => "preview")),
 					"preview",
 					array(Color::of("orange"), "#main")
 				);
@@ -201,7 +194,7 @@ class Forum_Buttons_Utils{
 			case "SAF\\Wiki\\Topic":
 				$buttons[] = array(
 					"Write",
-					Forum_Utils::getUrl("", $base_url, array("mode" => "write")),
+					Forum_Utils::getUrl($object, $parent_url, array("mode" => "write"), true),
 					"write",
 					array(Color::of("green"), ".submit", "#main")
 				);

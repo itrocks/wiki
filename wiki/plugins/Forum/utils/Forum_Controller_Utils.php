@@ -193,4 +193,33 @@ class Forum_Controller_Utils
 		Forum_Path::current()->set($short_class_name, Dao::read($object, $class_name));
 		return $parameters;
 	}
+	//------------------------------------------------------------------------------------- testTitle
+	/**
+	 * Test if the title is correct and if is not exist. This method must be call by write method, if necessary.
+	 * @param $form       array
+	 * @param $object     object
+	 * @param $class_name string
+	 * @return null|string Return a message error or null if no errors.
+	 */
+	public static function testTitle($form, $object, $class_name){
+		$error = null;
+		$object_identifier = Dao::getObjectIdentifier($object);
+		// The title must be valid
+		if(isset($form["title"]) && strlen($form["title"]) >= 3){
+			// The title must be unique
+			$search = new $class_name();
+			$search->title = $form["title"];
+			$attribute_parent = Forum_Utils::getParentShortClass($class_name);
+			$attribute_parent = strtolower($attribute_parent);
+			if(isset($object->$attribute_parent))
+				$search->$attribute_parent = $object->$attribute_parent;
+			$search = Dao::searchOne($search);
+			if($search != null && Dao::getObjectIdentifier($search) != $object_identifier)
+				$error = "This title exist, please choose another title.";
+		}
+		else {
+			$error = "The title must contain at least 3 characters.";
+		}
+		return $error;
+	}
 }

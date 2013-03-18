@@ -60,6 +60,7 @@ class Forum_Utils
 		$parameters["buttons"] = Forum_Buttons_Utils::getButtons($object, $base_url, $mode);
 		$parameters["type"] = Namespaces::shortClassName($class_name);
 		$parameters["type_child"] = Namespaces::shortClassName(self::getNextClass($class_name));
+		$parameters["id"] = Dao::getObjectIdentifier($object);
 		return $parameters;
 	}
 
@@ -380,13 +381,24 @@ class Forum_Utils
 	public static function getElementOnGetters($getters)
 	{
 		foreach($getters as $key => $getter){
+			$search = null;
 			switch(strtolower($key)){
 				case "post":
-					$post = new Post();
-					$post = Dao::read($getter, get_class($post));
-					if(!isset($post))
-						$post = new Post();
-					return $post;
+					$search = new Post();
+					break;
+				case "topic":
+					$search = new Topic();
+					break;
+				case "forum":
+					$search = new Forum();
+					break;
+				case "category":
+					$search = new Category();
+					break;
+			}
+			if(isset($search)){
+				$element = Dao::read($getter, get_class($search));
+				return ($element ? $element : $search);
 			}
 		}
 		return null;
@@ -424,6 +436,9 @@ class Forum_Utils
 					$level++;
 				}
 				else if(is_object($arg)){
+					if(self::isEmpty($arg)){
+						$arg = self::setParentObject($arg, $parent);
+					}
 					$answer["element"] = $arg;
 					$answer["path"][self::getClassInLevel($level)] = $arg;
 					$parent = $arg;
@@ -608,15 +623,16 @@ class Forum_Utils
 	 * @param $element string|object The element destination for the url
 	 * @param $base_url null|string The base url, if not indicated or null, use getBaseUrl()
 	 * @param $getters array
+	 * @param $is_secure boolean For edit/delete or other operation which change the state of the object, use the id reference if is_secure is true.
 	 * @return mixed The url
 	 */
-	public static function getUrl($element, $base_url = null, $getters = array())
+	public static function getUrl($element, $base_url = null, $getters = array(), $is_secure = false)
 	{
 		if($base_url == null)
 			$base_url = self::getBaseUrl();
 		$url = $base_url;
 		if(is_object($element)){
-			if(isset($element->title)){
+			if(isset($element->title) && !$is_secure){
 				$element = $element->title;
 			}
 			else {
@@ -654,6 +670,35 @@ class Forum_Utils
 		if(isset($element->$attribute_id) && $element->$attribute_id != 0)
 			return true;
 		return false;
+	}
+
+	//--------------------------------------------------------------------------------------- isEmpty
+	/**
+	 * Test if an object is empty or not
+	 * @param $object object
+	 * @return bool
+	 */
+	public static function isEmpty($object){
+		foreach(get_object_vars($object) as $attribute){
+			if(isset($attribute))
+				return false;
+		}
+		return true;
+	}
+
+	//------------------------------------------------------------------------------- setParentObject
+	/**
+	 * Change the refer to the parent object.
+	 * @param $object object The object
+	 * @param $parent object The new parent element
+	 * @return object Return the object changed
+	 */
+	public static function setParentObject($object, $parent){
+		$attribute_parent = Forum_Utils::getParentShortClass($object);
+		$attribute_parent = strtolower($attribute_parent);
+		if(property_exists($object, $attribute_parent))
+			$object->$attribute_parent = $parent;
+		return $object;
 	}
 
 	//------------------------------------------------------------------------------------ uriToArray

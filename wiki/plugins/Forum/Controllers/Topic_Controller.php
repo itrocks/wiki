@@ -28,11 +28,16 @@ class Topic_Controller extends List_Controller
 	public function write(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
 		$is_written = false;
+		$path = Forum_Utils::getPath();
 		if(count($form) > 0){
-			$form["author"] = User::current();
-			$attributes = array("first_post" => "SAF\\Wiki\\Post");
-			$parameters = Forum_Controller_Utils::write($parameters, $form, $class_name, $attributes);
-			$is_written = true;
+			$errors = $this->testForms($form, end($path));
+			if(count($errors) == 0){
+				$form["author"] = User::current();
+				$attributes = array("first_post" => "SAF\\Wiki\\Post");
+				$parameters = Forum_Controller_Utils::write($parameters, $form, $class_name, $attributes);
+				$is_written = true;
+			}
+			$parameters->set("errors", $errors);
 		}
 		if($is_written){
 			return $this->output($parameters, array(), $files, $class_name);
@@ -40,6 +45,19 @@ class Topic_Controller extends List_Controller
 		else {
 			return $this->edit($parameters, $form, $files, $class_name);
 		}
+	}
+
+	/**
+	 * @param $form   array
+	 * @param $object int|object
+	 * @return array
+	 */
+	public function testForms($form, $object){
+		$errors = array();
+		$error = Forum_Controller_Utils::testTitle($form, $object, "SAF\\Wiki\\Topic");
+		if($error != null)
+			$errors[] = $error;
+		return $errors;
 	}
 
 	//------------------------------------------------------------------------------------------ edit
