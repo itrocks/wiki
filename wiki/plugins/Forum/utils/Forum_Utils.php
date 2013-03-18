@@ -31,7 +31,7 @@ class Forum_Utils
 				break;
 			case "SAF\\Wiki\\Topic" :
 				$object = self::assignTopicFirstPost($object);
-				$url = self::getUrl($object->title, $base_url);
+				$url = self::getUrl($object, $base_url);
 				$parameters["main_post"] = array(self::addAttribute($parameters, $object->first_post, $url, $mode));
 				break;
 			case "SAF\\Wiki\\Post" :
@@ -43,7 +43,7 @@ class Forum_Utils
 						$author_name = $author->login;
 					}
 					$parameters["author_name"] = $author_name;
-					$parameters["author_link"] = self::getUrl(self::getBaseUrl("author"), $author_name);
+					$parameters["author_link"] = self::getUrl($author_name, self::getBaseUrl("author"));
 				}
 				$parameters["content"] = $object->content;
 				if(strtolower($mode) == "output")
@@ -111,6 +111,7 @@ class Forum_Utils
 				$object = Dao::read($element->$attribute_id, $class_name);
 			if($object == null){
 				$object = new $class_name();
+				unset($element->$attribute_id);
 			}
 			$element->$attribute = $object;
 		}
