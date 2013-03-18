@@ -30,7 +30,7 @@ class Topic_Controller extends List_Controller
 		$is_written = false;
 		$path = Forum_Utils::getPath();
 		if(count($form) > 0){
-			$errors = $this->testForms($form, end($path));
+			$errors = $this->testForm($form, end($path));
 			if(count($errors) == 0){
 				$form["author"] = User::current();
 				$attributes = array("first_post" => "SAF\\Wiki\\Post");
@@ -47,12 +47,14 @@ class Topic_Controller extends List_Controller
 		}
 	}
 
+	//-------------------------------------------------------------------------------------- testForm
 	/**
+	 * Test the form, and put in array all errors. If there are not errors, array returned is empty.
 	 * @param $form   array
 	 * @param $object int|object
 	 * @return array
 	 */
-	public function testForms($form, $object){
+	public function testForm($form, $object){
 		$errors = array();
 		$error = Forum_Controller_Utils::testTitle($form, $object, "SAF\\Wiki\\Topic");
 		if($error != null)

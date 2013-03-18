@@ -35,12 +35,41 @@ class Forum_Controller extends Output_Controller
 	//----------------------------------------------------------------------------------------- write
 	public function write(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
-		$parameters = Forum_Controller_Utils::write($parameters, $form, $class_name);
-		return $this->output($parameters, $form, $files, $class_name);
+		$is_written = false;
+		$path = Forum_Utils::getPath();
+		if(count($form) > 0){
+			$errors = $this->testForm($form, end($path));
+			if(count($errors) == 0){
+				$parameters = Forum_Controller_Utils::write($parameters, $form, $class_name);
+				$is_written = true;
+			}
+			$parameters->set("errors", $errors);
+		}
+		if($is_written){
+			return $this->output($parameters, array(), $files, $class_name);
+		}
+		else {
+			return $this->edit($parameters, $form, $files, $class_name);
+		}
 	}
 
 	//---------------------------------------------------------------------------------------- delete
 	public function delete(Controller_Parameters $parameters, $form, $files, $class_name){
 		return Forum_Controller_Utils::delete($parameters, $form, $files, $class_name);
+	}
+
+	//-------------------------------------------------------------------------------------- testForm
+	/**
+	 * Test the form, and put in array all errors. If there are not errors, array returned is empty.
+	 * @param $form   array
+	 * @param $object int|object
+	 * @return array
+	 */
+	public function testForm($form, $object){
+		$errors = array();
+		$error = Forum_Controller_Utils::testTitle($form, $object, "SAF\\Wiki\\Forum");
+		if($error != null)
+			$errors[] = $error;
+		return $errors;
 	}
 }
