@@ -130,6 +130,27 @@ class Forum_Utils
 		return self::assignAttributeObjectInElement($topic, "first_post", "SAF\\Wiki\\Post");
 	}
 
+	public static function encodeUrlElement($element){
+		$element = rawurlencode(strtolower($element));
+		//accents
+		$pattern = array(
+			"/%B0/", "/%E8/", "/%E9/", "/%EA/", "/%EB/", "/%E7/", "/%E0/", "/%E2/", "/%E4/", "/%EE/",
+			"/%EF/", "/%F9/", "/%FC/", "/%FB/", "/%F4/", "/%F6/", "/%F1/", "/%E3%A9/", "/%E3%A0/",
+			"/%E3%A8/", "/%E3%AB/", "/%E3%AE/", "/%E3%AA/"
+		);
+		$rep_pat = array(
+			"-", "e", "e", "e", "e", "c", "a", "a", "a", "i", "i", "u",
+			"u", "u", "o", "o", "n", "e", "a", "e", "e", "i", "e"
+		);
+		$element   = preg_replace($pattern, $rep_pat, $element);
+
+		$pattern = array("/%C3%AB/", "/%C3%AE/");
+		$rep_pat = array( "e", "i" );
+		$element = preg_replace($pattern, $rep_pat, $element);
+
+		return $element;
+	}
+
 	//------------------------------------------------------------------------------- generateContent
 	/**
 	 * Assign the parameter
@@ -642,7 +663,7 @@ class Forum_Utils
 			}
 		}
 		if($element != null && count($element))
-			$url .= $element . "/";
+			$url .= self::encodeUrlElement($element) . "/";
 		$is_first = true;
 		foreach($getters as $key => $getter){
 			$join = "&";
@@ -652,7 +673,7 @@ class Forum_Utils
 			}
 			$url .= $join . $key . "=" . $getter;
 		}
-		$url = str_replace(" ", "%20", $url);
+		$utl = str_replace(" ", "%20;", $url);
 		return $url;
 	}
 
