@@ -18,7 +18,7 @@ class Forum_Controller extends Output_Controller
 	public function edit(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
 		$parameters = parent::getViewParameters($parameters, $form, $class_name);
-		$path = Forum_Utils::getPath();
+		$path = Forum_Path_Utils::getPath();
 		$parameters = Forum_Utils::generateContent($parameters, "Forum", $path, "edit", 0);
 		return View::run($parameters, $form, $files, "Forum", "edit_simple");
 	}
@@ -27,7 +27,7 @@ class Forum_Controller extends Output_Controller
 	public function output(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
 		$parameters = parent::getViewParameters($parameters, $form, $class_name);
-		$path = Forum_Utils::getPath();
+		$path = Forum_Path_Utils::getPath();
 		$parameters = Forum_Utils::generateContent($parameters, "Forum", $path, "output", 1);
 		return View::run($parameters, $form, $files, "Forum", "structure_simple");
 	}
@@ -36,7 +36,7 @@ class Forum_Controller extends Output_Controller
 	public function write(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
 		$is_written = false;
-		$path = Forum_Utils::getPath();
+		$path = Forum_Path_Utils::getPath();
 		if(count($form) > 0){
 			$errors = $this->testForm($form, end($path));
 			if(count($errors) == 0){

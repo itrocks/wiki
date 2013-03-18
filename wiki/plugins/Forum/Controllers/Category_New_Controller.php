@@ -12,7 +12,7 @@ class Category_New_Controller extends List_Controller
 	public function run(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
 		$parameters = parent::getViewParameters($parameters, $form, $class_name);
-		$path = Forum_Utils::getPath();
+		$path = Forum_Path_Utils::getPath();
 		$category = new Category();
 		if(isset($path["Category"])){
 			$category = $path["Category"];

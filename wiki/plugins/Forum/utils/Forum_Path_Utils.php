@@ -34,17 +34,31 @@ class Forum_Path_Utils
 	 */
 	public static function addPathAttribute($parameters, $path)
 	{
-		$url = Forum_Utils::getBaseUrl();
+		$url = Forum_Url_Utils::getBaseUrl();
 		$path_array = array(array("type" => "index", "title" => "Index", "link" => $url));
 		foreach($path as $key => $element){
 			if(isset($element->title))
 				$title = $element->title;
 			else
 				$title = get_class($element);
-			$url = Forum_Utils::getUrl($element, $url);
+			$url = Forum_Url_Utils::getUrl($element, $url);
 			$path_array[] = array("type" => $key, "title" => $title, "link" => $url);
 		}
 		$parameters["path"] = $path_array;
 		return $parameters;
+	}
+
+	//--------------------------------------------------------------------------------------- getPath
+	/**
+	 * Return the current path
+	 * @return array
+	 */
+	public static function getPath()
+	{
+		$forum_path = \SAF\Framework\Session::current()->get("SAF\\Wiki\\Forum_Path");
+		if($forum_path != null && is_object($forum_path)){
+			return $forum_path->path;
+		}
+		return array();
 	}
 }

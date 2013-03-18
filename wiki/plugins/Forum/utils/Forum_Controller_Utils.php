@@ -29,7 +29,7 @@ class Forum_Controller_Utils
 		}
 		else {
 			$parameters = Forum_Controller_Utils::getViewParameters($parameters, $class_name);
-			$path = Forum_Utils::getPath();
+			$path = Forum_Path_Utils::getPath();
 			$class_name = Namespaces::shortClassName($class_name);
 			$parameters = Forum_Utils::generateContent($parameters, $class_name, $path, "delete", 1);
 			$parameters["message"] = "Are you sure to permanently delete this element ?";
@@ -175,7 +175,7 @@ class Forum_Controller_Utils
 	{
 		$parent_type = Forum_Utils::getParentShortClass($class_name);
 		$short_class_name = Namespaces::shortClassName($class_name);
-		$path = Forum_Utils::getPath();
+		$path = Forum_Path_Utils::getPath();
 		$params = $parameters->getObjects();
 		$object = reset($params);
 		if(!is_object($object)){

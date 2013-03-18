@@ -13,7 +13,7 @@ class Post_New_Controller extends List_Controller
 	public function run(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
 		$parameters = parent::getViewParameters($parameters, $form, $class_name);
-		$path = Forum_Utils::getPath();
+		$path = Forum_Path_Utils::getPath();
 		$post = new Post();
 		if(isset($path["Post"])){
 			$post = $path["Post"];

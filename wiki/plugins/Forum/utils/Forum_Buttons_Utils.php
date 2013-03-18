@@ -44,19 +44,19 @@ class Forum_Buttons_Utils{
 		$buttons = array();
 		$buttons[] = array(
 			"New forum",
-			Forum_Utils::getUrl("", $base_url, array("mode" => "new")),
+			Forum_Url_Utils::getUrl("", $base_url, array("mode" => "new")),
 			"new",
 			array(Color::of("green"), "#main")
 		);
 		$buttons[] = array(
 			"Edit",
-			Forum_Utils::getUrl("", $base_url, array("mode" => "edit")),
+			Forum_Url_Utils::getUrl("", $base_url, array("mode" => "edit")),
 			"edit",
 			array(Color::of("green"), "#main")
 		);
 		$buttons[] = array(
 			"Delete",
-			Forum_Utils::getUrl("", $base_url, array("mode" => "delete")),
+			Forum_Url_Utils::getUrl("", $base_url, array("mode" => "delete")),
 			"delete",
 			array(Color::of("green"), "#main")
 		);
@@ -72,7 +72,7 @@ class Forum_Buttons_Utils{
 	{
 		$buttons[] = array(
 			"New category",
-			Forum_Utils::getUrl(
+			Forum_Url_Utils::getUrl(
 				"", $base_url, array("mode" => "new")
 			),
 			"new",
@@ -92,19 +92,19 @@ class Forum_Buttons_Utils{
 		$buttons = array();
 		$buttons[] = array(
 			"New topic",
-			Forum_Utils::getUrl("", $base_url, array("mode" => "new")),
+			Forum_Url_Utils::getUrl("", $base_url, array("mode" => "new")),
 			"new",
 			array(Color::of("green"), "#main")
 		);
 		$buttons[] = array(
 			"Edit",
-			Forum_Utils::getUrl("", $base_url, array("mode" => "edit")),
+			Forum_Url_Utils::getUrl("", $base_url, array("mode" => "edit")),
 			"edit",
 			array(Color::of("orange"), "#main")
 		);
 		$buttons[] = array(
 			"Delete",
-			Forum_Utils::getUrl("", $base_url, array("mode" => "delete")),
+			Forum_Url_Utils::getUrl("", $base_url, array("mode" => "delete")),
 			"delete",
 			array(Color::of("red"), "#main")
 		);
@@ -121,12 +121,12 @@ class Forum_Buttons_Utils{
 	public static function getButtonsModeDelete($object, $base_url)
 	{
 		$buttons = array();
-		$parent_url = Forum_Utils::getParentUrl($base_url);
+		$parent_url = Forum_Url_Utils::getParentUrl($base_url);
 		switch(get_class($object)){
 			case "SAF\\Wiki\\Post":
 				$buttons[] = array(
 					"Confirm",
-					Forum_Utils::getUrl($object, $parent_url, array("mode" => "delete"), true),
+					Forum_Url_Utils::getUrl($object, $parent_url, array("mode" => "delete"), true),
 					"delete",
 					array(Color::of("red"), ".submit", "#main")
 				);
@@ -142,7 +142,7 @@ class Forum_Buttons_Utils{
 			case "SAF\\Wiki\\Topic":
 				$buttons[] = array(
 					"Confirm",
-					Forum_Utils::getUrl($object, $parent_url, array("mode" => "delete"), true),
+					Forum_Url_Utils::getUrl($object, $parent_url, array("mode" => "delete"), true),
 					"delete",
 					array(Color::of("green"), ".submit", "#main")
 				);
@@ -167,24 +167,24 @@ class Forum_Buttons_Utils{
 	public static function getButtonsModeEdit($object, $base_url)
 	{
 		$buttons = array();
-		$parent_url = Forum_Utils::getParentUrl($base_url);
+		$parent_url = Forum_Url_Utils::getParentUrl($base_url);
 		switch(get_class($object)){
 			case "SAF\\Wiki\\Post":
 				$buttons[] = array(
 					"Submit",
-					Forum_Utils::getUrl($object, $parent_url,	array("mode" => "write"),	true),
+					Forum_Url_Utils::getUrl($object, $parent_url,	array("mode" => "write"),	true),
 					"write",
 					array(Color::of("green"), ".submit", "#main")
 				);
 				$buttons[] = array(
 					"Preview",
-					Forum_Utils::getUrl($object, $parent_url, array("mode" => "preview")),
+					Forum_Url_Utils::getUrl($object, $parent_url, array("mode" => "preview")),
 					"preview",
 					array(Color::of("orange"), "#main")
 				);
 				$buttons[] = array(
 					"Back",
-					Forum_Utils::getParentUrl($base_url),
+					Forum_Url_Utils::getParentUrl($base_url),
 					"back",
 					array(Color::of("red"), "#main")
 				);
@@ -194,7 +194,7 @@ class Forum_Buttons_Utils{
 			case "SAF\\Wiki\\Topic":
 				$buttons[] = array(
 					"Write",
-					Forum_Utils::getUrl($object, $parent_url, array("mode" => "write"), true),
+					Forum_Url_Utils::getUrl($object, $parent_url, array("mode" => "write"), true),
 					"write",
 					array(Color::of("green"), ".submit", "#main")
 				);
@@ -246,16 +246,16 @@ class Forum_Buttons_Utils{
 	public static function getButtonsPostModeOutput($object, $base_url)
 	{
 		$buttons = array();
-		$parent_url = Forum_Utils::getParentUrl($base_url);
+		$parent_url = Forum_Url_Utils::getParentUrl($base_url);
 		$buttons[] = array(
 			"Quote",
-			Forum_Utils::getUrl($object, $parent_url, array("mode" => "quote")),
+			Forum_Url_Utils::getUrl($object, $parent_url, array("mode" => "quote")),
 			"edit",
 			array(Color::of("green"), "#main")
 		);
 		$buttons[] = array(
 			"Report",
-			Forum_Utils::getUrl($object, $parent_url, array("mode" => "report")),
+			Forum_Url_Utils::getUrl($object, $parent_url, array("mode" => "report")),
 			"edit",
 			array(Color::of("green"), "#main")
 		);
@@ -263,13 +263,13 @@ class Forum_Buttons_Utils{
 			$object = "";
 		$buttons[] = array(
 			"Delete",
-			Forum_Utils::getUrl($object, $parent_url, array("mode" => "delete")),
+			Forum_Url_Utils::getUrl($object, $parent_url, array("mode" => "delete")),
 			"edit",
 			array(Color::of("green"), ".need_confirm", "#main")
 		);
 		$buttons[] = array(
 			"Edit",
-			Forum_Utils::getUrl($object, $parent_url,	array("mode" => "edit")),
+			Forum_Url_Utils::getUrl($object, $parent_url,	array("mode" => "edit")),
 			"edit",
 			array(Color::of("green"), "#main")
 		);
@@ -286,19 +286,19 @@ class Forum_Buttons_Utils{
 	{
 		$buttons[] = array(
 			"Reply",
-			Forum_Utils::getUrl("", $base_url, array("mode" => "new")),
+			Forum_Url_Utils::getUrl("", $base_url, array("mode" => "new")),
 			"new",
 			array(Color::of("green"), "#main")
 		);
 		$buttons[] = array(
 			"Edit",
-			Forum_Utils::getUrl("", $base_url, array("mode" => "edit")),
+			Forum_Url_Utils::getUrl("", $base_url, array("mode" => "edit")),
 			"edit",
 			array(Color::of("green"), "#main")
 		);
 		$buttons[] = array(
 			"Delete",
-			Forum_Utils::getUrl("", $base_url, array("mode" => "delete")),
+			Forum_Url_Utils::getUrl("", $base_url, array("mode" => "delete")),
 			"delete",
 			array(Color::of("green"), "#main")
 		);

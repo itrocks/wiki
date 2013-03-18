@@ -21,7 +21,7 @@ class Forum_Uri_Rewriter implements Plugin
 		$link = $arguments[0];
 		$link_read = array();
 		if ($link) {
-			$str = Forum_Utils::uriToArray($link);
+			$str = Forum_Url_Utils::uriToArray($link);
 			if(strtolower($str[0]) == "forum" && (!isset($str[1]) || !is_numeric($str[1]))){
 				$getters = $joinpoint->getArguments()[1];
 				$params = array();
@@ -58,7 +58,7 @@ class Forum_Uri_Rewriter implements Plugin
 				else {
 					$link_read[1] = "list_all";
 				}
-				$link = Forum_Utils::arrayToUri($link_read);
+				$link = Forum_Url_Utils::arrayToUri($link_read);
 				$arguments[0] = $link;
 				\SAF\Framework\Session::current()->set(Forum_Path::current(new Forum_Path($answer["path"])));
 				$joinpoint->setArguments($arguments);

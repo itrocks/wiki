@@ -26,7 +26,7 @@ class Post_Controller extends Output_Controller
 	public function output(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
 		$parameters = parent::getViewParameters($parameters, $form, $class_name);
-		$path = Forum_Utils::getPath();
+		$path = Forum_Path_Utils::getPath();
 		$topic = $path["Topic"];
 		$parameters = Forum_Utils::generateContent($parameters, $topic, $path, "output", 1);
 		return View::run($parameters, $form, $files, "Forum", "output_topic");
@@ -38,7 +38,7 @@ class Post_Controller extends Output_Controller
 		$params = parent::getViewParameters($parameters, $form, $class_name);
 		if(!Forum_Utils::hasElementAtAttribute($params["Post"], "topic"))
 			return (new Topic_Controller())->edit($parameters, $form, $files, $class_name);
-		$path = Forum_Utils::getPath();
+		$path = Forum_Path_Utils::getPath();
 		$params = Forum_Utils::generateContent($params, "Post", $path, "edit", 0);
 		return View::run($params, $form, $files, "Forum", "edit_post");
 	}
@@ -70,4 +70,15 @@ class Post_Controller extends Output_Controller
 		return (new Post_New_Controller())->run($parameters, $form, $files, $class_name);
 	}
 
+	//-------------------------------------------------------------------------------------- testForm
+	/**
+	 * Test the form, and put in array all errors. If there are not errors, array returned is empty.
+	 * @param $form   array
+	 * @param $object int|object
+	 * @return array
+	 */
+	public function testForm($form, $object){
+		$errors = array();
+		return $errors;
+	}
 }

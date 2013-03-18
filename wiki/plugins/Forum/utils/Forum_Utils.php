@@ -31,8 +31,9 @@ class Forum_Utils
 				break;
 			case "SAF\\Wiki\\Topic" :
 				$object = self::assignTopicFirstPost($object);
-				$url = self::getUrl($object, $base_url);
-				$parameters["main_post"] = array(self::addAttribute($parameters, $object->first_post, $url, $mode));
+				$url = Forum_Url_Utils::getUrl($object, $base_url);
+				$parameters["main_post"]
+					= array(self::addAttribute($parameters, $object->first_post, $url, $mode));
 				break;
 			case "SAF\\Wiki\\Post" :
 				self::assignAuthorInPost($object);
@@ -43,7 +44,8 @@ class Forum_Utils
 						$author_name = $author->login;
 					}
 					$parameters["author_name"] = $author_name;
-					$parameters["author_link"] = self::getUrl($author_name, self::getBaseUrl("author"));
+					$parameters["author_link"]
+						= Forum_Url_Utils::getUrl($author_name, Forum_Url_Utils::getBaseUrl("author"));
 				}
 				$parameters["content"] = $object->content;
 				if(strtolower($mode) == "output")
@@ -62,32 +64,6 @@ class Forum_Utils
 		$parameters["type_child"] = Namespaces::shortClassName(self::getNextClass($class_name));
 		$parameters["id"] = Dao::getObjectIdentifier($object);
 		return $parameters;
-	}
-
-	//------------------------------------------------------------------------------------ arrayToUri
-	/**
-	 * @param $array string[]
-	 * @return string
-	 */
-	public static function arrayToUri($array)
-	{
-		$uri = "";
-		$isGets = false;
-		foreach ($array as $element) {
-			if(is_object($element)){
-				$element = $element->title;
-			}
-			if (strstr($element, "?") == true) {
-				$isGets = true;
-			}
-			if ($isGets) {
-				$uri .= $element;
-			}
-			else {
-				$uri .= "/" . $element;
-			}
-		}
-		return $uri;
 	}
 
 	public static function assignAuthorInPost($post){
@@ -130,27 +106,6 @@ class Forum_Utils
 		return self::assignAttributeObjectInElement($topic, "first_post", "SAF\\Wiki\\Post");
 	}
 
-	public static function encodeUrlElement($element){
-		$element = rawurlencode(strtolower($element));
-		//accents
-		$pattern = array(
-			"/%B0/", "/%E8/", "/%E9/", "/%EA/", "/%EB/", "/%E7/", "/%E0/", "/%E2/", "/%E4/", "/%EE/",
-			"/%EF/", "/%F9/", "/%FC/", "/%FB/", "/%F4/", "/%F6/", "/%F1/", "/%E3%A9/", "/%E3%A0/",
-			"/%E3%A8/", "/%E3%AB/", "/%E3%AE/", "/%E3%AA/"
-		);
-		$rep_pat = array(
-			"-", "e", "e", "e", "e", "c", "a", "a", "a", "i", "i", "u",
-			"u", "u", "o", "o", "n", "e", "a", "e", "e", "i", "e"
-		);
-		$element   = preg_replace($pattern, $rep_pat, $element);
-
-		$pattern = array("/%C3%AB/", "/%C3%AE/");
-		$rep_pat = array( "e", "i" );
-		$element = preg_replace($pattern, $rep_pat, $element);
-
-		return $element;
-	}
-
 	//------------------------------------------------------------------------------- generateContent
 	/**
 	 * Assign the parameter
@@ -178,7 +133,7 @@ class Forum_Utils
 				$from = $path[$from];
 		}
 		$path = Forum_Path_Utils::stopInLevel($path, $from);
-		$base_url = Forum_Utils::getBaseUrl($path);
+		$base_url = Forum_Url_Utils::getBaseUrl($path);
 		if($level_max == -1)
 			$level_max = $level_number;
 		if($level_number){
@@ -189,7 +144,7 @@ class Forum_Utils
 			$blocks = array();
 			if(is_array($block_elements)){
 				foreach($block_elements as $block_element){
-					$url = self::getUrl($block_element, $base_url);
+					$url = Forum_Url_Utils::getUrl($block_element, $base_url);
 					$path_element = $path;
 					$short_class_name = Namespaces::shortClassName(get_class($block_element));
 					$path_element[$short_class_name] = $block_element;
@@ -299,32 +254,6 @@ class Forum_Utils
 				break;
 		}
 		return $parameters;
-	}
-
-	//------------------------------------------------------------------------------------ getBaseUrl
-	/**
-	 * Create a basic URL. If elements are passed in parameters, try to add this elements after.
-	 * Can take string parameters, arrays, and object if the object have a title parameters.
-	 * @return string
-	 */
-	public static function getBaseUrl()
-	{
-		$base = "http://" . $_SERVER["HTTP_HOST"]
-			. str_replace(".php", "", $_SERVER["SCRIPT_NAME"])
-			. "/Forum/";
-		if(func_get_args()){
-			foreach(func_get_args() as $arg){
-				if(is_array($arg)){
-					foreach($arg as $element){
-						$base = self::getUrl($element, $base);
-					}
-				}
-				else {
-					$base = self::getUrl($arg, $base);
-				}
-			}
-		}
-		return $base;
 	}
 
 	//--------------------------------------------------------------------------------- getCategories
@@ -591,38 +520,6 @@ class Forum_Utils
 		return Namespaces::shortClassName(self::getParentClass($class));
 	}
 
-	//---------------------------------------------------------------------------------- getParentUrl
-	/**
-	 * Return the parent url.
-	 * @param $url string
-	 * @return string
-	 */
-	public static function getParentUrl($url)
-	{
-		$url_tab = explode("/", $url);
-		for($i = count($url_tab) - 1 ; $i >= 0 ; $i--){
-			if($url_tab[$i] != ""){
-				unset($url_tab[$i]);
-				return join("/", $url_tab);
-			}
-		}
-		return $url;
-	}
-
-	//--------------------------------------------------------------------------------------- getPath
-	/**
-	 * Return the current path
-	 * @return array
-	 */
-	public static function getPath()
-	{
-		$forum_path = \SAF\Framework\Session::current()->get("SAF\\Wiki\\Forum_Path");
-		if($forum_path != null && is_object($forum_path)){
-			return $forum_path->path;
-		}
-		return array();
-	}
-
 	//-------------------------------------------------------------------------------------- getPosts
 	/**
 	 * Return all posts in a topic.
@@ -651,45 +548,6 @@ class Forum_Utils
 		/** @var $forums Topic[] */
 		$forums = Dao::search($search);
 		return $forums;
-	}
-
-	//------------------------------------------------------------------------------- getUrl
-	/**
-	 * Form an url, an put in right format.
-	 * @param $element string|object The element destination for the url
-	 * @param $base_url null|string The base url, if not indicated or null, use getBaseUrl()
-	 * @param $getters array
-	 * @param $is_secure boolean For edit/delete or other operation which change the state of the object, use the id reference if is_secure is true.
-	 * @return mixed The url
-	 */
-	public static function getUrl($element, $base_url = null, $getters = array(), $is_secure = false)
-	{
-		if($base_url == null)
-			$base_url = self::getBaseUrl();
-		$url = $base_url;
-		if(is_object($element)){
-			if(isset($element->title) && !$is_secure){
-				$element = $element->title;
-			}
-			else {
-				$getters[strtolower(Namespaces::shortClassName(get_class($element)))] =
-					Dao::getObjectIdentifier($element);
-				$element = "";
-			}
-		}
-		if($element != null && count($element))
-			$url .= self::encodeUrlElement($element) . "/";
-		$is_first = true;
-		foreach($getters as $key => $getter){
-			$join = "&";
-			if($is_first){
-				$join = "?";
-				$is_first = false;
-			}
-			$url .= $join . $key . "=" . $getter;
-		}
-		$utl = str_replace(" ", "%20;", $url);
-		return $url;
 	}
 
 	/**
@@ -735,21 +593,6 @@ class Forum_Utils
 		if(property_exists($object, $attribute_parent))
 			$object->$attribute_parent = $parent;
 		return $object;
-	}
-
-	//------------------------------------------------------------------------------------ uriToArray
-	/**
-	 * @param $uri string
-	 * @return string[]
-	 */
-	public static function uriToArray($uri)
-	{
-		$uri = explode("/", str_replace(",", "/", $uri));
-		array_shift($uri);
-		if (end($uri) === "") {
-			array_pop($uri);
-		}
-		return $uri;
 	}
 
 }
