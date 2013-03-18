@@ -44,7 +44,7 @@ class Forum_Buttons_Utils{
 		$buttons = array();
 		$buttons[] = array(
 			"New forum",
-			Forum_Utils::getUrl("New forum", $base_url, array("mode" => "new")),
+			Forum_Utils::getUrl("", $base_url, array("mode" => "new")),
 			"new",
 			array(Color::of("green"), "#main")
 		);
@@ -71,9 +71,9 @@ class Forum_Buttons_Utils{
 	public static function getButtonsDefaultModeOutput($base_url)
 	{
 		$buttons[] = array(
-			"New category",
+			"",
 			Forum_Utils::getUrl(
-				"New category", $base_url, array("mode" => "new")
+				"", $base_url, array("mode" => "new")
 			),
 			"new",
 			array(Color::of("green"), "#main")
@@ -92,7 +92,7 @@ class Forum_Buttons_Utils{
 		$buttons = array();
 		$buttons[] = array(
 			"New topic",
-			Forum_Utils::getUrl("New topic", $base_url, array("mode" => "new")),
+			Forum_Utils::getUrl("", $base_url, array("mode" => "new")),
 			"new",
 			array(Color::of("green"), "#main")
 		);
@@ -293,7 +293,7 @@ class Forum_Buttons_Utils{
 	{
 		$buttons[] = array(
 			"Reply",
-			Forum_Utils::getUrl("New post", $base_url, array("mode" => "new")),
+			Forum_Utils::getUrl("", $base_url, array("mode" => "new")),
 			"new",
 			array(Color::of("green"), "#main")
 		);

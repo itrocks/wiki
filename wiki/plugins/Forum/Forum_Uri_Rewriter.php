@@ -6,6 +6,7 @@ use SAF\Framework\Builder;
 use SAF\Framework\Dao;
 use SAF\Framework\Plugin;
 use SAF\Framework\Reflection_Class;
+use SAF\Framework\Namespaces;
 
 class Forum_Uri_Rewriter implements Plugin
 {
@@ -33,7 +34,16 @@ class Forum_Uri_Rewriter implements Plugin
 				if(isset($getters["mode"])){
 					$mode = $getters["mode"];
 				}
-				$link_read[0] = self::getTypeElement($answer["path"]);
+				if(strtolower($mode) == "new"){
+					$class_children = Forum_Utils::getNextClass($answer["element"]);
+					$short_class_name = Namespaces::shortClassName($class_children);
+					$new_element = new $class_children();
+					$new_element->title = "New " . $short_class_name;
+					$answer["path"][$short_class_name] = $new_element;
+					$answer["element"] = $new_element;
+				}
+				$type = self::getTypeElement($answer["path"]);
+				$link_read[0] = $type;
 				if(isset($answer["element"])){
 					$link_read[1] = Dao::getObjectIdentifier($answer["element"]);
 					if($link_read[1] == null){
@@ -58,12 +68,14 @@ class Forum_Uri_Rewriter implements Plugin
 
 	/**
 	 * Return the type of the current element.
-	 * @param $str
+	 * @param $count array|int
 	 * @return string
 	 */
-	private static function getTypeElement($str)
+	private static function getTypeElement($count)
 	{
-		switch(count($str)){
+		if(is_array($count))
+			$count = count($count);
+		switch($count){
 			case 2:
 				return "Forum";
 			case 3:
