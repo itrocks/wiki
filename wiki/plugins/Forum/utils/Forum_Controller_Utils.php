@@ -52,7 +52,8 @@ class Forum_Controller_Utils
 	}
 
 	//--------------------------------------------------------------------------------- delete_object
-	public static function delete_object($object){
+	public static function delete_object($object)
+	{
 		if (is_object($object)) {
 			$objects_depending = Forum_Utils::getObjectDepending($object);
 			foreach($objects_depending as $object_depending){
@@ -71,10 +72,9 @@ class Forum_Controller_Utils
 	 * Assign form contains to object attributes. If element of the form is an object, assign to the id element.
 	 * @param $object object
 	 * @param $form   array
-	 * @param $attributes_object array
 	 * @return object Return the object filled
 	 */
-	public static function formToObject($object, $form, $attributes_object = array())
+	public static function formToObject($object, $form)
 	{
 		foreach ($form as $name => $value) {
 			if (property_exists($object,$name)) {
@@ -173,6 +173,7 @@ class Forum_Controller_Utils
 	 */
 	public static function write(Controller_Parameters $parameters, $form, $class_name, $attributes_object = array())
 	{
+		$parameters["errors"] = array();
 		$parent_type = Forum_Utils::getParentShortClass($class_name);
 		$short_class_name = Namespaces::shortClassName($class_name);
 		$path = Forum_Path_Utils::getPath();
@@ -197,33 +198,46 @@ class Forum_Controller_Utils
 				Dao::write($object->$attribute);
 			}
 		}
-		$object = Dao::write($object);
+		$object = self::writeObject($object);
 		Dao::commit();
 		$parameters->set($short_class_name, $object);
 		Forum_Path::current()->set($short_class_name, Dao::read($object, $class_name));
 		return $parameters;
 	}
+
+	//----------------------------------------------------------------------------------- writeObject
+	/**
+	 * @param $object object
+	 * @return int The object id
+	 */
+	public static function writeObject($object)
+	{
+		$parent_object = Forum_Utils::getParentObject($object);
+		if(isset($parent_object) && Forum_Utils::isNotFound($parent_object))
+			self::writeObject($parent_object);
+		return Dao::write($object);
+	}
+
 	//------------------------------------------------------------------------------------- testTitle
 	/**
 	 * Test if the title is correct and if is not exist. This method must be call by write method, if necessary.
 	 * @param $form       array
 	 * @param $object     object
-	 * @param $class_name string
 	 * @return null|string Return a message error or null if no errors.
 	 */
-	public static function testTitle($form, $object, $class_name){
+	public static function testTitle($form, $object)
+	{
 		$error = null;
 		$object_identifier = Dao::getObjectIdentifier($object);
 		// The title must be valid
 		if(isset($form["title"]) && strlen($form["title"]) >= 3){
 			// The title must be unique
+			$class_name = get_class($object);
 			$search = new $class_name();
 			$search->title = $form["title"];
-			$attribute_parent = Forum_Utils::getParentShortClass($class_name);
-			$attribute_parent = strtolower($attribute_parent);
-			if(isset($object->$attribute_parent))
-				$search->$attribute_parent = $object->$attribute_parent;
-			$search = Dao::searchOne($search);
+			Forum_Utils::setParentObject($search, Forum_Utils::getParentObject($object));
+			if(!Forum_Utils::isNotFound(Forum_Utils::getParentObject($search)))
+				$search = Dao::searchOne($search);
 			if($search != null && Dao::getObjectIdentifier($search) != $object_identifier)
 				$error = "This title exist, please choose another title.";
 		}

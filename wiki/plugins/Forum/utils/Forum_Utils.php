@@ -207,19 +207,22 @@ class Forum_Utils
 		return $parameters;
 	}
 
-	public static function getNbForums($object){
+	public static function getNbForums($object)
+	{
 		if(isset($object->nb_forums))
 			return isset($object->nb_forums);
 		return 0;
 	}
 
-	public static function getNbTopics($object){
+	public static function getNbTopics($object)
+	{
 		if(isset($object->nb_topics))
 			return isset($object->nb_topics);
 		return 0;
 	}
 
-	public static function getNbPosts($object){
+	public static function getNbPosts($object)
+	{
 		if(isset($object->nb_posts))
 			return isset($object->nb_posts);
 		return 0;
@@ -287,9 +290,10 @@ class Forum_Utils
 	 * @param $parent object|null Parent element, as Category, Forum, Topic.
 	 * If the parent is null, the children element is a Category.
 	 * @param $title  string Title of the object
+	 * @param $search_in_dao boolean Determine if search in dao or not, allow get default value when it is at false.
 	 * @return object Return the element.
 	 */
-	public static function getElement($parent, $title)
+	public static function getElement($parent, $title, $search_in_dao = true)
 	{
 		$item = null;
 		$search = true;
@@ -317,7 +321,7 @@ class Forum_Utils
 				$item->title = $title;
 				break;
 		}
-		if($search)
+		if($search && $search_in_dao)
 			$element = Dao::searchOne($item);
 		return (isset($element) ? $element : $item);
 	}
@@ -363,26 +367,22 @@ class Forum_Utils
 	public static function getElementsRequired()
 	{
 		$parent = null;
-		$answer = array("element" => null, "path" => array());
+		$answer = array("element" => null, "path" => array(), "lost_chain" => false);
 		$level = 0;
+		$lost_chain = false;
 		if(func_get_args()){
 			foreach(func_get_args() as $arg){
 				if(is_array($arg)){
 					foreach($arg as $item){
-						$element = self::getElement($parent, $item);
-						$answer["element"] = $element;
-						$answer["path"][self::getClassInLevel($level)] = $element;
-						$parent = $element;
+						$answer = self::getElementsRequiredItem($answer, $parent, $item, $level, $lost_chain);
+						$parent = $answer["element"];
+						$lost_chain = $answer["lost_chain"];
 						$level++;
 					}
 				}
 				else if(is_string($arg)){
-					$element = self::getElement($parent, $arg);
-					if(!$element)
-						break;
-					$answer["element"] = $element;
-					$answer["path"][self::getClassInLevel($level)] = $element;
-					$parent = $element;
+					$answer = self::getElementsRequiredItem($answer, $parent, $arg, $level, $lost_chain);
+					$parent = $answer["element"];
 					$level++;
 				}
 				else if(is_object($arg)){
@@ -396,6 +396,16 @@ class Forum_Utils
 				}
 			}
 		}
+		return $answer;
+	}
+
+	public static function getElementsRequiredItem($answer, $parent, $item, $level)
+	{
+		$element = self::getElement($parent, $item, !$answer["lost_chain"]);
+		$answer["element"] = $element;
+		$answer["path"][self::getClassInLevel($level)] = $element;
+		if(self::isNotFound($element))
+			$answer["lost_chain"] = true;
 		return $answer;
 	}
 
@@ -444,7 +454,8 @@ class Forum_Utils
 	 * @param $class object|string Object or full class name
 	 * @return string The class name.
 	 */
-	public static function getNextClass($class = null){
+	public static function getNextClass($class = null)
+	{
 		if($class == null && isset(self::$list_class[0]))
 			return self::$list_class[0];
 		if(is_object($class))
@@ -484,7 +495,8 @@ class Forum_Utils
 	 * @param $object object
 	 * @return array
 	 */
-	public static function getObjectDepending($object){
+	public static function getObjectDepending($object)
+	{
 		$list_objects = array();
 		switch(get_class($object)){
 			case "SAF\\Wiki\\Topic":
@@ -500,7 +512,8 @@ class Forum_Utils
 	 * @param $class object|string Object or full class name
 	 * @return string The class name.
 	 */
-	public static function getParentClass($class){
+	public static function getParentClass($class)
+	{
 		if(is_object($class))
 			$class = get_class($class);
 		$index = array_search($class, self::$list_class);
@@ -508,6 +521,33 @@ class Forum_Utils
 			return self::$list_class[$index-1];
 		}
 		return "";
+	}
+
+	//------------------------------------------------------------------------------- getParentObject
+	/**
+	 * Change the refer to the parent object.
+	 * @param $object object The object
+	 * @return object Return the parent object
+	 */
+	public static function getParentObject($object)
+	{
+		$attribute_parent = self::getParentObjectAttribute($object);
+		if(property_exists($object, $attribute_parent))
+			return $object->$attribute_parent;
+		return null;
+	}
+
+	//------------------------------------------------------------------------------- getParentObject
+	/**
+	 * Return the parent attribute name of an object
+	 * @param $object object The object
+	 * @return string Return the attribute name
+	 */
+	public static function getParentObjectAttribute($object)
+	{
+		$attribute_parent = Forum_Utils::getParentShortClass($object);
+		$attribute_parent = strtolower($attribute_parent);
+		return $attribute_parent;
 	}
 
 	//--------------------------------------------------------------------------- getParentShortClass
@@ -557,7 +597,8 @@ class Forum_Utils
 	 * @param $attribute string The attribute name
 	 * @return boolean True if has an object or object id, false if has no object (null).
 	 */
-	public static function hasElementAtAttribute($element, $attribute){
+	public static function hasElementAtAttribute($element, $attribute)
+	{
 		$attribute_id = "id_" . $attribute;
 		if(isset($element->$attribute) && $element->$attribute != null)
 			return true;
@@ -572,7 +613,8 @@ class Forum_Utils
 	 * @param $object object
 	 * @return bool
 	 */
-	public static function isEmpty($object){
+	public static function isEmpty($object)
+	{
 		foreach(get_object_vars($object) as $attribute){
 			if(isset($attribute))
 				return false;
@@ -580,16 +622,28 @@ class Forum_Utils
 		return true;
 	}
 
+	//------------------------------------------------------------------------------------ isNotFound
+	/**
+	 * Test if an object is not found when it has search.
+	 * @param $object object
+	 * @return bool
+	 */
+	public static function isNotFound($object)
+	{
+		$identifier = Dao::getObjectIdentifier($object);
+		return !isset($identifier);
+	}
+
 	//------------------------------------------------------------------------------- setParentObject
 	/**
 	 * Change the refer to the parent object.
 	 * @param $object object The object
-	 * @param $parent object The new parent element
+	 * @param $parent object|null The new parent element
 	 * @return object Return the object changed
 	 */
-	public static function setParentObject($object, $parent){
-		$attribute_parent = Forum_Utils::getParentShortClass($object);
-		$attribute_parent = strtolower($attribute_parent);
+	public static function setParentObject($object, $parent)
+	{
+		$attribute_parent = self::getParentObjectAttribute($object);
 		if(property_exists($object, $attribute_parent))
 			$object->$attribute_parent = $parent;
 		return $object;
