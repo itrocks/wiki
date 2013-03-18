@@ -266,6 +266,8 @@ class Forum_Buttons_Utils{
 			"edit",
 			array(Color::of("green"), "#main")
 		);
+		if(!Forum_Utils::hasElementAtAttribute($object, "topic"))
+			$object = "";
 		$buttons[] = array(
 			"Delete",
 			Forum_Utils::getUrl($object, $parent_url, array("mode" => "delete")),

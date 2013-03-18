@@ -35,10 +35,12 @@ class Post_Controller extends Output_Controller
 	//------------------------------------------------------------------------------------------ edit
 	public function edit(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
-		$parameters = parent::getViewParameters($parameters, $form, $class_name);
+		$params = parent::getViewParameters($parameters, $form, $class_name);
+		if(!Forum_Utils::hasElementAtAttribute($params["Post"], "topic"))
+			return (new Topic_Controller())->edit($parameters, $form, $files, $class_name);
 		$path = Forum_Utils::getPath();
-		$parameters = Forum_Utils::generateContent($parameters, "Post", $path, "edit", 0);
-		return View::run($parameters, $form, $files, "Forum", "edit_post");
+		$params = Forum_Utils::generateContent($params, "Post", $path, "edit", 0);
+		return View::run($params, $form, $files, "Forum", "edit_post");
 	}
 
 	//----------------------------------------------------------------------------------------- write

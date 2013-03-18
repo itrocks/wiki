@@ -640,6 +640,22 @@ class Forum_Utils
 		return $url;
 	}
 
+	/**
+	 * Test if the attribute of an object is not void/null.
+	 * Don't test if the object exist.
+	 * @param $element object The element which must contains the attribute
+	 * @param $attribute string The attribute name
+	 * @return boolean True if has an object or object id, false if has no object (null).
+	 */
+	public static function hasElementAtAttribute($element, $attribute){
+		$attribute_id = "id_" . $attribute;
+		if(isset($element->$attribute) && $element->$attribute != null)
+			return true;
+		if(isset($element->$attribute_id) && $element->$attribute_id != 0)
+			return true;
+		return false;
+	}
+
 	//------------------------------------------------------------------------------------ uriToArray
 	/**
 	 * @param $uri string
