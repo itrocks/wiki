@@ -6,7 +6,7 @@ use SAF\Framework\Plugin;
 use SAF\Framework\Dao;
 use SAF\Framework\Namespaces;
 
-class Update_Nb_Post implements Plugin
+class Update_Nb_Values implements Plugin
 {
 
 	private static $class_names = array("SAF\\Wiki\\Post", "SAF\\Wiki\\Topic");
