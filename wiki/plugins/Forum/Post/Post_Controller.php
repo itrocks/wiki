@@ -46,6 +46,7 @@ class Post_Controller extends Output_Controller
 	public function write(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
 		$form["author"] = User::current();
+		$form["date_post"] = time();
 		$parameters = Forum_Controller_Utils::write($parameters, $form, $class_name);
 		return $this->output($parameters, $form, $files, $class_name);
 	}

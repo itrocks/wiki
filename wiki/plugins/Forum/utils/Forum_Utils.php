@@ -25,17 +25,17 @@ class Forum_Utils
 	{
 		$class_name = get_class($object);
 		switch($class_name){
-			case "SAF\\Wiki\\Category" :
+			case self::$namespace . "Category" :
 				break;
-			case "SAF\\Wiki\\Forum" :
+			case self::$namespace . "Forum" :
 				break;
-			case "SAF\\Wiki\\Topic" :
+			case self::$namespace . "Topic" :
 				$object = self::assignTopicFirstPost($object);
 				$url = Forum_Url_Utils::getUrl($object, $base_url);
 				$parameters["main_post"]
 					= array(self::addAttribute($parameters, $object->first_post, $url, $mode));
 				break;
-			case "SAF\\Wiki\\Post" :
+			case self::$namespace . "Post" :
 				self::assignAuthorInPost($object);
 				if(isset($object->author)){
 					$author = $object->author;
@@ -48,6 +48,7 @@ class Forum_Utils
 						= Forum_Url_Utils::getUrl($author_name, Forum_Url_Utils::getBaseUrl("author"));
 				}
 				$parameters["content"] = $object->content;
+				$parameters["date_post"] = date('l j F', $object->date_post);
 				if(strtolower($mode) == "output")
 					$parameters["content"] = Forum_Utils::contentFormatting($parameters["content"]);
 				break;
