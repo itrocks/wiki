@@ -36,7 +36,7 @@ class Forum_Uri_Rewriter implements Plugin
 					$mode = $getters["mode"];
 				}
 				if(strtolower($mode) == "new"){
-					$class_children = Forum_Utils::getNextClass($answer["element"]);
+					$class_children = Forum_Names_Utils::getNextClass($answer["element"]);
 					$short_class_name = Namespaces::shortClassName($class_children);
 					$new_element = new $class_children();
 					$new_element->title = "New " . $short_class_name;

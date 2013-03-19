@@ -1,6 +1,7 @@
 <?php
 namespace SAF\Wiki;
 use SAF\Framework\Dao;
+use SAF\Framework\Names;
 use SAF\Framework\View;
 use SAF\Framework\Namespaces;
 use SAF\Framework\Wiki;
@@ -9,8 +10,7 @@ use SAF\Framework\User;
 class Forum_Utils
 {
 
-	public static $list_class =
-		array("SAF\\Wiki\\Category", "SAF\\Wiki\\Forum", "SAF\\Wiki\\Topic", "SAF\\Wiki\\Post");
+	public static $namespace = "SAF\\Wiki\\";
 
 	//---------------------------------------------------------------------------------- addAttribute
 	/**
@@ -61,7 +61,7 @@ class Forum_Utils
 		$parameters["attributes_number"] = count($parameters["attribute_values"]) + 1;
 		$parameters["buttons"] = Forum_Buttons_Utils::getButtons($object, $base_url, $mode);
 		$parameters["type"] = Namespaces::shortClassName($class_name);
-		$parameters["type_child"] = Namespaces::shortClassName(self::getNextClass($class_name));
+		$parameters["type_child"] = Namespaces::shortClassName(Forum_Names_Utils::getNextClass($class_name));
 		$parameters["id"] = Dao::getObjectIdentifier($object);
 		return $parameters;
 	}
@@ -95,6 +95,7 @@ class Forum_Utils
 		return $element;
 	}
 
+	//-------------------------------------------------------------------------- assignTopicFirstPost
 	/**
 	 * Search and assign to the topic his first post value. Put a new object if the post not found.
 	 * If has already a first post, no change.
@@ -180,26 +181,28 @@ class Forum_Utils
 		$parameters[$title_parent_var_name] = array();
 		$parameters[$title_var_name] = array();
 		$parameters[$value_var_name] = array();
+		$class_name = get_class($object);
+		$next_class = Forum_Names_Utils::getNextClass($class_name);
 		switch(get_class($object)){
-			case "SAF\\Wiki\\Category" :
-				$parameters = self::getAttributeNameCol("Category", $title_parent_var_name, $parameters);
-				$parameters = self::getAttributeNameCol("Forum", $title_var_name, $parameters);
+			case self::$namespace . "Category" :
+				$parameters = self::getAttributeNameCol($class_name, $title_parent_var_name, $parameters);
+				$parameters = self::getAttributeNameCol($next_class, $title_var_name, $parameters);
 				$parameters[$value_var_name][] = array("value" => self::getNbForums($object));
 				$parameters[$value_var_name][] = array("value" => self::getNbTopics($object));
 				$parameters[$value_var_name][] = array("value" => self::getNbPosts($object));
 				break;
-			case "SAF\\Wiki\\Forum" :
-				$parameters = self::getAttributeNameCol("Forum", $title_parent_var_name, $parameters);
-				$parameters = self::getAttributeNameCol("Topic", $title_var_name, $parameters);
+			case self::$namespace . "Forum" :
+				$parameters = self::getAttributeNameCol($class_name, $title_parent_var_name, $parameters);
+				$parameters = self::getAttributeNameCol($next_class, $title_var_name, $parameters);
 				$parameters[$value_var_name][] = array("value" => self::getNbTopics($object));
 				$parameters[$value_var_name][] = array("value" => self::getNbPosts($object));
 				break;
-			case "SAF\\Wiki\\Topic" :
-				$parameters = self::getAttributeNameCol("Forum", $title_parent_var_name, $parameters);
-				$parameters = self::getAttributeNameCol("Post", $title_var_name, $parameters);
+			case self::$namespace . "Topic" :
+				$parameters = self::getAttributeNameCol($class_name, $title_parent_var_name, $parameters);
+				$parameters = self::getAttributeNameCol($next_class, $title_var_name, $parameters);
 				$parameters[$value_var_name][] = array("value" => self::getNbPosts($object));
 				break;
-			case "SAF\\Wiki\\Post" :
+			case self::$namespace . "Post" :
 				break;
 			default:
 				break;
@@ -207,6 +210,11 @@ class Forum_Utils
 		return $parameters;
 	}
 
+	//----------------------------------------------------------------------------------- getNbForums
+	/**
+	 * @param $object object
+	 * @return int
+	 */
 	public static function getNbForums($object)
 	{
 		if(isset($object->nb_forums))
@@ -214,6 +222,11 @@ class Forum_Utils
 		return 0;
 	}
 
+	//----------------------------------------------------------------------------------- getNbTopics
+	/**
+	 * @param $object object
+	 * @return int
+	 */
 	public static function getNbTopics($object)
 	{
 		if(isset($object->nb_topics))
@@ -221,6 +234,11 @@ class Forum_Utils
 		return 0;
 	}
 
+	//----------------------------------------------------------------------------------- getNbPosts
+	/**
+	 * @param $object object
+	 * @return int
+	 */
 	public static function getNbPosts($object)
 	{
 		if(isset($object->nb_posts))
@@ -239,19 +257,19 @@ class Forum_Utils
 	public static function getAttributeNameCol($short_class, $var_name, $parameters)
 	{
 		switch($short_class){
-			case "Category" :
+			case self::$namespace . "Category" :
 				$parameters[$var_name][] = array("value" => "Forums");
 				$parameters[$var_name][] = array("value" => "Topics");
 				$parameters[$var_name][] = array("value" => "Posts");
 				break;
-			case "Forum" :
+			case self::$namespace . "Forum":
 				$parameters[$var_name][] = array("value" => "Topics");
 				$parameters[$var_name][] = array("value" => "Posts");
 				break;
-			case "Topic" :
+			case self::$namespace . "Topic" :
 				$parameters[$var_name][] = array("value" => "Posts");
 				break;
-			case "Post" :
+			case self::$namespace . "Post" :
 				break;
 			default:
 				break;
@@ -266,22 +284,7 @@ class Forum_Utils
 	 */
 	public static function getCategories()
 	{
-		return Dao::readAll("SAF\\Wiki\\Category");
-	}
-
-	//------------------------------------------------------------------------------- getClassInLevel
-	/**
-	 * Return a short class name in function of level.
-	 * @param $level int Current level
-	 * @return string Class name
-	 */
-	public static function getClassInLevel($level)
-	{
-		$level_name = self::getNextClass();
-		for($i=1;$i<=$level;$i++){
-			$level_name = self::getNextClass($level_name);
-		}
-		return Namespaces::shortClassName($level_name);
+		return Dao::readAll(self::$namespace . "Category");
 	}
 
 	//------------------------------------------------------------------------------------ getElement
@@ -298,21 +301,21 @@ class Forum_Utils
 		$item = null;
 		$search = true;
 		switch(get_class($parent)){
-			case "SAF\\Wiki\\Category" :
+			case self::$namespace . "Category" :
 				$item = new Forum();
 				$item->category = $parent;
 				$item->title = $title;
 				break;
-			case "SAF\\Wiki\\Forum" :
+			case self::$namespace . "Forum" :
 				$item = new Topic();
 				$item->forum = $parent;
 				$item->title = $title;
 				break;
-			case "SAF\\Wiki\\Topic" :
+			case self::$namespace . "Topic" :
 				$item = new Post();
 				$search = false;
 				break;
-			case "SAF\\Wiki\\Post" :
+			case self::$namespace . "Post" :
 				$item = $parent;
 				$search = false;
 				break;
@@ -390,7 +393,7 @@ class Forum_Utils
 						$arg = self::setParentObject($arg, $parent);
 					}
 					$answer["element"] = $arg;
-					$answer["path"][self::getClassInLevel($level)] = $arg;
+					$answer["path"][Forum_Names_Utils::getClassInLevel($level)] = $arg;
 					$parent = $arg;
 					$level++;
 				}
@@ -403,7 +406,7 @@ class Forum_Utils
 	{
 		$element = self::getElement($parent, $item, !$answer["lost_chain"]);
 		$answer["element"] = $element;
-		$answer["path"][self::getClassInLevel($level)] = $element;
+		$answer["path"][Forum_Names_Utils::getClassInLevel($level)] = $element;
 		if(self::isNotFound($element))
 			$answer["lost_chain"] = true;
 		return $answer;
@@ -448,44 +451,24 @@ class Forum_Utils
 		}
 	}
 
-	//---------------------------------------------------------------------------------- getNextClass
-	/**
-	 * Return the next class of the object or class name
-	 * @param $class object|string Object or full class name
-	 * @return string The class name.
-	 */
-	public static function getNextClass($class = null)
-	{
-		if($class == null && isset(self::$list_class[0]))
-			return self::$list_class[0];
-		if(is_object($class))
-			$class = get_class($class);
-		$index = array_search($class, self::$list_class);
-		if(isset(self::$list_class[$index+1])){
-			return self::$list_class[$index+1];
-		}
-		return "";
-	}
-
 	//------------------------------------------------------------------------------- getNextElements
 	/**
 	 * Return next elements of an object (the forums of a category, topic of forum, etc.)
-	 * @param $object
-	 * @return null|Category[]|Forum[]|Topic[]|Post[]
+	 * @param $object object The parent object
+	 * @return null|object[]
 	 */
 	public static function getNextElements($object)
 	{
-		switch(get_class($object)){
-			case "SAF\\Wiki\\Category" :
-				return self::getForums($object);
-			case "SAF\\Wiki\\Forum" :
-				return self::getTopics($object);
-			case "SAF\\Wiki\\Topic" :
-				return self::getPosts($object);
-			case "SAF\\Wiki\\Post" :
-				return null;
-			default:
-				return self::getCategories();
+		$class_name = get_class($object);
+		$new_class_name = Forum_Names_Utils::getNextShortClass($class_name);
+		$name = Forum_Names_Utils::getPluralName($new_class_name);
+		$method_name = "get" . $name;
+		if(method_exists(self::$namespace . 'Forum_Utils', $method_name)){
+			return self::$method_name($object);
+		}
+		else {
+			$method_name = "get" . Forum_Names_Utils::getPluralName(Forum_Names_Utils::getFirstClass());
+			return self::$method_name($object);
 		}
 	}
 
@@ -499,28 +482,11 @@ class Forum_Utils
 	{
 		$list_objects = array();
 		switch(get_class($object)){
-			case "SAF\\Wiki\\Topic":
+			case self::$namespace . "Topic":
 				$object = self::assignTopicFirstPost($object);
 				$list_objects[] = $object->first_post;
 		}
 		return $list_objects;
-	}
-
-	//-------------------------------------------------------------------------------- getParentClass
-	/**
-	 * Return the parent class of the object or class name
-	 * @param $class object|string Object or full class name
-	 * @return string The class name.
-	 */
-	public static function getParentClass($class)
-	{
-		if(is_object($class))
-			$class = get_class($class);
-		$index = array_search($class, self::$list_class);
-		if(isset(self::$list_class[$index-1])){
-			return self::$list_class[$index-1];
-		}
-		return "";
 	}
 
 	//------------------------------------------------------------------------------- getParentObject
@@ -545,20 +511,9 @@ class Forum_Utils
 	 */
 	public static function getParentObjectAttribute($object)
 	{
-		$attribute_parent = Forum_Utils::getParentShortClass($object);
+		$attribute_parent = Forum_Names_Utils::getParentShortClass($object);
 		$attribute_parent = strtolower($attribute_parent);
 		return $attribute_parent;
-	}
-
-	//--------------------------------------------------------------------------- getParentShortClass
-	/**
-	 * Return the parent short class name of the object or class name
-	 * @param $class object|string Object or full class name
-	 * @return string The short class name.
-	 */
-	public static function getParentShortClass($class)
-	{
-		return Namespaces::shortClassName(self::getParentClass($class));
 	}
 
 	//-------------------------------------------------------------------------------------- getPosts

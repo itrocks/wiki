@@ -18,9 +18,6 @@ class Post_New_Controller extends List_Controller
 		if(isset($path["Post"])){
 			$post = $path["Post"];
 		}
-		if(isset($path["Topic"])){
-			$post->title = "RE : " . $path["Topic"]->title;
-		}
 		Forum_Controller_Utils::formToObject($post, $form);
 		$parameters = Forum_Utils::generateContent($parameters, $post, $path, "new", 0);
 		return View::run($parameters, $form, $files, "Forum", "edit_post");

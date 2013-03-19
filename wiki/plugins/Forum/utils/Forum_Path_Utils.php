@@ -1,6 +1,7 @@
 <?php
 namespace SAF\Wiki;
 use SAF\Framework\Namespaces;
+use SAF\Framework\Session;
 
 class Forum_Path_Utils
 {
@@ -55,7 +56,7 @@ class Forum_Path_Utils
 	 */
 	public static function getPath()
 	{
-		$forum_path = \SAF\Framework\Session::current()->get("SAF\\Wiki\\Forum_Path");
+		$forum_path = Session::current()->get("SAF\\Wiki\\Forum_Path");
 		if($forum_path != null && is_object($forum_path)){
 			return $forum_path->path;
 		}

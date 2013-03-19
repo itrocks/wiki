@@ -30,10 +30,7 @@ class Update_Nb_Values implements Plugin
 	}
 
 	//--------------------------------------------------------------- afterForumControllerUtilsDelete
-	/**
-	 * @param $joinpoint AopJoinpoint
-	 */
-	public static function afterForumControllerUtilsDelete(AopJoinpoint $joinpoint)
+	public static function afterForumControllerUtilsDelete()
 	{
 		self::updateNbValues();
 	}
@@ -54,10 +51,7 @@ class Update_Nb_Values implements Plugin
 	}
 
 	//---------------------------------------------------------------- afterForumControllerUtilsWrite
-	/**
-	 * @param $joinpoint AopJoinpoint
-	 */
-	public static function afterForumControllerUtilsWrite(AopJoinpoint $joinpoint)
+	public static function afterForumControllerUtilsWrite()
 	{
 		self::updateNbValues();
 	}
@@ -139,7 +133,7 @@ class Update_Nb_Values implements Plugin
 			$number = self::getNumber($class_name);
 			if($number){
 				$class = $class_name;
-				while($class = Forum_Utils::getParentClass($class)){
+				while($class = Forum_Names_Utils::getParentClass($class)){
 					$object = $path[Namespaces::shortClassName($class)];
 					$attribute_number = self::$attributes_number[$key];
 					if(property_exists($object, $attribute_number)){

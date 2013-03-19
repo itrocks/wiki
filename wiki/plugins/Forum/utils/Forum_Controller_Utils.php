@@ -72,7 +72,8 @@ class Forum_Controller_Utils
 
 	//---------------------------------------------------------------------------------- formToObject
 	/**
-	 * Assign form contains to object attributes. If element of the form is an object, assign to the id element.
+	 * Assign form contains to object attributes.
+	 * If element of the form is an object, assign to the id element.
 	 * @param $object object
 	 * @param $form   array
 	 * @return object Return the object filled
@@ -146,7 +147,7 @@ class Forum_Controller_Utils
 	 */
 	public static function getNextOutput(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
-		return self::getOutput($parameters, $form, $files, Forum_Utils::getNextClass($class_name));
+		return self::getOutput($parameters, $form, $files, Forum_Names_Utils::getNextClass($class_name));
 	}
 
 	//------------------------------------------------------------------------------- getParentOutput
@@ -160,7 +161,7 @@ class Forum_Controller_Utils
 	 */
 	public static function getParentOutput(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
-		return self::getOutput($parameters, $form, $files, Forum_Utils::getParentClass($class_name));
+		return self::getOutput($parameters, $form, $files, Forum_Names_Utils::getParentClass($class_name));
 	}
 
 	//----------------------------------------------------------------------------------------- write
@@ -177,7 +178,7 @@ class Forum_Controller_Utils
 	public static function write(Controller_Parameters $parameters, $form, $class_name, $attributes_object = array())
 	{
 		$errors = array();
-		$parent_type = Forum_Utils::getParentShortClass($class_name);
+		$parent_type = Forum_Names_Utils::getParentShortClass($class_name);
 		$short_class_name = Namespaces::shortClassName($class_name);
 		$path = Forum_Path_Utils::getPath();
 		$params = $parameters->getObjects();
@@ -224,7 +225,8 @@ class Forum_Controller_Utils
 
 	//------------------------------------------------------------------------------------- testTitle
 	/**
-	 * Test if the title is correct and if is not exist. This method must be call by write method, if necessary.
+	 * Test if the title is correct and if is not exist.
+	 * This method must be call by write method, if necessary.
 	 * @param $form       array
 	 * @param $object     object
 	 * @return null|string Return a message error or null if no errors.

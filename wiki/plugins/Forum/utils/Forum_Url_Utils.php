@@ -135,7 +135,7 @@ class Forum_Url_Utils {
 			}
 			$url .= $join . $key . "=" . $getter;
 		}
-		$utl = str_replace(" ", "%20;", $url);
+		$url = str_replace(" ", "%20;", $url);
 		return $url;
 	}
 
