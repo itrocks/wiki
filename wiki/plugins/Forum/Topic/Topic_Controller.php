@@ -5,7 +5,6 @@ use SAF\Framework\List_Controller;
 use SAF\Framework\Dao;
 use SAF\Framework\User;
 use SAF\Framework\View;
-use Saf\Framework\Wiki;
 
 class Topic_Controller extends List_Controller
 {
@@ -51,7 +50,7 @@ class Topic_Controller extends List_Controller
 	//--------------------------------------------------------------------------------------- preview
 	public function preview(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
-		$parameters->set("preview", Wiki::textile($form["content"]));
+		$parameters->set("preview", Forum_Utils::contentFormatting($form["content"]));
 		return $this->edit($parameters, $form, $files, $class_name);
 	}
 

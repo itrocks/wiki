@@ -49,7 +49,7 @@ class Forum_Utils
 				}
 				$parameters["content"] = $object->content;
 				if(strtolower($mode) == "output")
-					$parameters["content"] = Wiki::textile($parameters["content"]);
+					$parameters["content"] = Forum_Utils::contentFormatting($parameters["content"]);
 				break;
 			default:
 				$parameters["title"] = "Index";
@@ -105,6 +105,16 @@ class Forum_Utils
 	public static function assignTopicFirstPost($topic)
 	{
 		return self::assignAttributeObjectInElement($topic, "first_post", "SAF\\Wiki\\Post");
+	}
+
+	//----------------------------------------------------------------------------- contentFormatting
+	/**
+	 * Format a string for visualization, with textile.
+	 * @param $content string
+	 * @return string
+	 */
+	public static function contentFormatting($content){
+		return Wiki::textile($content);
 	}
 
 	//------------------------------------------------------------------------------- generateContent
