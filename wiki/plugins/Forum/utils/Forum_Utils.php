@@ -210,21 +210,21 @@ class Forum_Utils
 	public static function getNbForums($object)
 	{
 		if(isset($object->nb_forums))
-			return isset($object->nb_forums);
+			return $object->nb_forums;
 		return 0;
 	}
 
 	public static function getNbTopics($object)
 	{
 		if(isset($object->nb_topics))
-			return isset($object->nb_topics);
+			return $object->nb_topics;
 		return 0;
 	}
 
 	public static function getNbPosts($object)
 	{
 		if(isset($object->nb_posts))
-			return isset($object->nb_posts);
+			return $object->nb_posts;
 		return 0;
 	}
 
@@ -556,7 +556,8 @@ class Forum_Utils
 	 * @param $class object|string Object or full class name
 	 * @return string The short class name.
 	 */
-	public static function getParentShortClass($class){
+	public static function getParentShortClass($class)
+	{
 		return Namespaces::shortClassName(self::getParentClass($class));
 	}
 

@@ -23,7 +23,7 @@ class Forum_Controller_Utils
 			/** @var  $objects object[] */
 			$objects = $parameters->getObjects();
 			Dao::begin();
-			self::delete_objects($objects);
+			self::deleteObjects($objects);
 			Dao::commit();
 			return self::getParentOutput($parameters, $form, $files, $class_name);
 		}
@@ -40,28 +40,31 @@ class Forum_Controller_Utils
 	//-------------------------------------------------------------------------------- delete_objects
 	/**
 	 * Delete a list of objects. If this object have next elements, delete the next elements.
-	 * @param $objects object[]|null List of objects to delete
+	 * @param $objects object[] List of objects to delete
 	 */
-	public static function delete_objects($objects)
+	public static function deleteObjects($objects)
 	{
 		if(isset($objects)){
 			foreach ($objects as $object) {
-				self::delete_object($object);
+				self::deleteObject($object);
 			}
 		}
 	}
 
 	//--------------------------------------------------------------------------------- delete_object
-	public static function delete_object($object)
+	/**
+	 * @param $object object
+	 */
+	public static function deleteObject($object)
 	{
 		if (is_object($object)) {
 			$objects_depending = Forum_Utils::getObjectDepending($object);
 			foreach($objects_depending as $object_depending){
-				self::delete_object($object_depending);
+				self::deleteObject($object_depending);
 			}
 			$objects_child = Forum_Utils::getNextElements($object);
 			if($objects_child != null){
-				self::delete_objects($objects_child);
+				self::deleteObjects($objects_child);
 			}
 			Dao::delete($object);
 		}
@@ -173,7 +176,7 @@ class Forum_Controller_Utils
 	 */
 	public static function write(Controller_Parameters $parameters, $form, $class_name, $attributes_object = array())
 	{
-		$parameters["errors"] = array();
+		$errors = array();
 		$parent_type = Forum_Utils::getParentShortClass($class_name);
 		$short_class_name = Namespaces::shortClassName($class_name);
 		$path = Forum_Path_Utils::getPath();
@@ -195,12 +198,13 @@ class Forum_Controller_Utils
 		Dao::begin();
 		foreach($attributes_object as $attribute => $class_attribute){
 			if(isset($object->$attribute)){
-				Dao::write($object->$attribute);
+				self::writeObject($object->$attribute);
 			}
 		}
 		$object = self::writeObject($object);
 		Dao::commit();
 		$parameters->set($short_class_name, $object);
+		$parameters->set("errors", $errors);
 		Forum_Path::current()->set($short_class_name, Dao::read($object, $class_name));
 		return $parameters;
 	}

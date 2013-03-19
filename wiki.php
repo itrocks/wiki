@@ -39,7 +39,8 @@ $CONFIG["wiki"] = array(
 			'SAF\Wiki\Fix_Link_Url',
 			'SAF\Wiki\Links_Recognition',
 			'SAF\Wiki\Images_Upload',
-			'SAF\Wiki\Forum_Uri_Rewriter'
+			'SAF\Wiki\Forum_Uri_Rewriter',
+			'SAF\Wiki\Update_Nb_Post'
 		)
 	)
 );

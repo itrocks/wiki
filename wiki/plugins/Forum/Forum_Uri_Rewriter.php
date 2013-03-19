@@ -7,6 +7,7 @@ use SAF\Framework\Dao;
 use SAF\Framework\Plugin;
 use SAF\Framework\Reflection_Class;
 use SAF\Framework\Namespaces;
+use SAF\Framework\Session;
 
 class Forum_Uri_Rewriter implements Plugin
 {
@@ -59,8 +60,12 @@ class Forum_Uri_Rewriter implements Plugin
 					$link_read[1] = "list_all";
 				}
 				$link = Forum_Url_Utils::arrayToUri($link_read);
+				$type_lower = strtolower($type);
+				if(isset($arguments[1][$type_lower])){
+					unset($arguments[1][$type_lower]);
+				}
 				$arguments[0] = $link;
-				\SAF\Framework\Session::current()->set(Forum_Path::current(new Forum_Path($answer["path"])));
+				Session::current()->set(Forum_Path::current(new Forum_Path($answer["path"])));
 				$joinpoint->setArguments($arguments);
 			}
 		}
