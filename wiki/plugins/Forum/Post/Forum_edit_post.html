@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>|Topic|</title>
+	<title>|Post|</title>
 </head>
 <body>
 
@@ -15,11 +15,6 @@
 		&raquo;<a href="{link}">{title}</a>
 		<!--path-->
 	</p>
-	<div class="right">
-		<!--general_buttons-->
-		<a class="button trashable {feature.lower} {?class.short}" href="{link}" target="{?target}">|{caption}|</a>
-		<!--general_buttons-->
-	</div>
 	<div class="forum errors">
 		<!--errors-->
 		<p>{value}</p>
@@ -27,19 +22,13 @@
 	</div>
 	<form method="POST">
 		<table>
-			<tr class="forum titre item align_left">
-				<th class="table label"><label for="title">|Title|</label></th>
-				<th><input id="title" name="title" class="autowidth" value="{title}"/></th>
-			</tr>
-			<!--main_post-->
 			<tr>
 				<td class="table label"><label for="content">|Content|</label></td>
 				<td>
 					<p><textarea id="content" class="autoheight autowidth" name="content">{content}</textarea></p>
 				</td>
 			</tr>
-			<!--main_post-->
-			<tr class="forum topic orders">
+			<tr class="forum post orders">
 				<td class="forum align_right" colspan="2">
 					<!--buttons-->
 					<a class="button trashable {feature.lower} {?class.short}" href="{link}" target="{?target}">|{caption}|</a>
@@ -48,6 +37,9 @@
 			</tr>
 		</table>
 	</form>
+	<div class=preview>
+		{preview}
+	</div>
 </div>
 <!--END-->
 

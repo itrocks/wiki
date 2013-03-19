@@ -57,8 +57,14 @@ class Post_Controller extends Output_Controller
 		return Forum_Controller_Utils::delete($parameters, $form, $files, $class_name);
 	}
 
+	//--------------------------------------------------------------------------------------- preview
+	public function preview(Controller_Parameters $parameters, $form, $files, $class_name)
+	{
+	}
+
 	//----------------------------------------------------------------------------------------- quote
-	public function quote(Controller_Parameters $parameters, $form, $files, $class_name){
+	public function quote(Controller_Parameters $parameters, $form, $files, $class_name)
+	{
 		$parameters->set("post", 0);
 		$parameters->set("Post", 0);
 		$post = Forum_Path::current()->get("Post");
@@ -77,7 +83,8 @@ class Post_Controller extends Output_Controller
 	 * @param $object int|object
 	 * @return array
 	 */
-	public function testForm($form, $object){
+	public function testForm($form, $object)
+	{
 		$errors = array();
 		return $errors;
 	}

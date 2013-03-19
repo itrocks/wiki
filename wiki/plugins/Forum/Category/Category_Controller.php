@@ -8,19 +8,11 @@ use SAF\Framework\View;
 
 class Category_Controller extends List_Controller
 {
-	//------------------------------------------------------------------------------------------- run
-	public function run(Controller_Parameters $parameters, $form, $files, $class_name)
-	{
-		return $this->output($parameters, $form, $files, $class_name);
-	}
 
-	//---------------------------------------------------------------------------------------- output
-	public function output(Controller_Parameters $parameters, $form, $files, $class_name)
+	//---------------------------------------------------------------------------------------- delete
+	public function delete(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
-		$parameters = parent::getViewParameters($parameters, $form, $class_name);
-		$path = Forum_Path_Utils::getPath();
-		$parameters = Forum_Utils::generateContent($parameters, "Category", $path, "output", 2);
-		return View::run($parameters, $form, $files, "Forum", "structure_double");
+		return Forum_Controller_Utils::delete($parameters, $form, $files, $class_name);
 	}
 
 	//------------------------------------------------------------------------------------------ edit
@@ -44,6 +36,37 @@ class Category_Controller extends List_Controller
 		return View::run($parameters, $form, $files, "Forum", "structure_double");
 	}
 
+	//---------------------------------------------------------------------------------------- output
+	public function output(Controller_Parameters $parameters, $form, $files, $class_name)
+	{
+		$parameters = parent::getViewParameters($parameters, $form, $class_name);
+		$path = Forum_Path_Utils::getPath();
+		$parameters = Forum_Utils::generateContent($parameters, "Category", $path, "output", 2);
+		return View::run($parameters, $form, $files, "Forum", "structure_double");
+	}
+
+	//------------------------------------------------------------------------------------------- run
+	public function run(Controller_Parameters $parameters, $form, $files, $class_name)
+	{
+		return $this->output($parameters, $form, $files, $class_name);
+	}
+
+	//-------------------------------------------------------------------------------------- testForm
+	/**
+	 * Test the form, and put in array all errors. If there are not errors, array returned is empty.
+	 * @param $form   array
+	 * @param $object int|object
+	 * @return array
+	 */
+	public function testForm($form, $object)
+	{
+		$errors = array();
+		$error = Forum_Controller_Utils::testTitle($form, $object, "SAF\\Wiki\\Category");
+		if($error != null)
+			$errors[] = $error;
+		return $errors;
+	}
+
 	//----------------------------------------------------------------------------------------- write
 	public function write(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
@@ -63,25 +86,5 @@ class Category_Controller extends List_Controller
 		else {
 			return $this->edit($parameters, $form, $files, $class_name);
 		}
-	}
-
-	//---------------------------------------------------------------------------------------- delete
-	public function delete(Controller_Parameters $parameters, $form, $files, $class_name){
-		return Forum_Controller_Utils::delete($parameters, $form, $files, $class_name);
-	}
-
-	//-------------------------------------------------------------------------------------- testForm
-	/**
-	 * Test the form, and put in array all errors. If there are not errors, array returned is empty.
-	 * @param $form   array
-	 * @param $object int|object
-	 * @return array
-	 */
-	public function testForm($form, $object){
-		$errors = array();
-		$error = Forum_Controller_Utils::testTitle($form, $object, "SAF\\Wiki\\Category");
-		if($error != null)
-			$errors[] = $error;
-		return $errors;
 	}
 }

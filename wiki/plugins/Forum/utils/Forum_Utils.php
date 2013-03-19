@@ -111,7 +111,7 @@ class Forum_Utils
 	/**
 	 * Assign the parameter
 	 * @param $parameters   array
-	 * @param $from         null|string|object The class name if the object is on parameters, or the object.
+	 * @param $from         null|string|object The class name if it's on parameters, or the object.
 	 * @param $path         array
 	 * @param $mode         string
 	 * @param $level_number int
@@ -293,7 +293,8 @@ class Forum_Utils
 	 * @param $parent object|null Parent element, as Category, Forum, Topic.
 	 * If the parent is null, the children element is a Category.
 	 * @param $title  string Title of the object
-	 * @param $search_in_dao boolean Determine if search in dao or not, allow get default value when it is at false.
+	 * @param $search_in_dao boolean Determine if search in dao or not,
+	 * allow get default value when it is at false.
 	 * @return object Return the element.
 	 */
 	public static function getElement($parent, $title, $search_in_dao = true)
