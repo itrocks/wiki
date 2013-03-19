@@ -178,9 +178,9 @@ class Forum_Buttons_Utils{
 				);
 				$buttons[] = array(
 					"Preview",
-					Forum_Url_Utils::getUrl($object, $parent_url, array("mode" => "preview")),
+					Forum_Url_Utils::getUrl($object, $parent_url, array("mode" => "preview"), true),
 					"preview",
-					array(Color::of("orange"), "#main")
+					array(Color::of("orange"), ".submit", "#main")
 				);
 				$buttons[] = array(
 					"Back",
@@ -198,6 +198,12 @@ class Forum_Buttons_Utils{
 					"write",
 					array(Color::of("green"), ".submit", "#main")
 				);
+			$buttons[] = array(
+				"Preview",
+				Forum_Url_Utils::getUrl($object, $parent_url, array("mode" => "preview"), true),
+				"preview",
+				array(Color::of("orange"), ".submit", "#main")
+			);
 				$buttons[] = array(
 					"Back",
 					$base_url,

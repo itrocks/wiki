@@ -5,6 +5,7 @@ use SAF\Framework\Output_Controller;
 use SAF\Framework\Dao;
 use SAF\Framework\User;
 use SAF\Framework\View;
+use SAF\Framework\Wiki;
 
 class Post_Controller extends Output_Controller
 {
@@ -36,10 +37,13 @@ class Post_Controller extends Output_Controller
 	public function edit(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
 		$params = parent::getViewParameters($parameters, $form, $class_name);
-		if(!Forum_Utils::hasElementAtAttribute($params["Post"], "topic"))
-			return (new Topic_Controller())->edit($parameters, $form, $files, $class_name);
 		$path = Forum_Path_Utils::getPath();
-		$params = Forum_Utils::generateContent($params, "Post", $path, "edit", 0);
+		if(isset($params["Post"]))
+			$post = $params["Post"];
+		else
+			$post = new Post();
+		Forum_Controller_Utils::formToObject($post, $form);
+		$params = Forum_Utils::generateContent($params, $post, $path, "edit", 0);
 		return View::run($params, $form, $files, "Forum", "edit_post");
 	}
 
@@ -60,6 +64,8 @@ class Post_Controller extends Output_Controller
 	//--------------------------------------------------------------------------------------- preview
 	public function preview(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
+		$parameters->set("preview", Wiki::textile($form["content"]));
+		return $this->edit($parameters, $form, $files, $class_name);
 	}
 
 	//----------------------------------------------------------------------------------------- quote

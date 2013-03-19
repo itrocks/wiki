@@ -5,6 +5,7 @@ use SAF\Framework\List_Controller;
 use SAF\Framework\Dao;
 use SAF\Framework\User;
 use SAF\Framework\View;
+use Saf\Framework\Wiki;
 
 class Topic_Controller extends List_Controller
 {
@@ -47,6 +48,13 @@ class Topic_Controller extends List_Controller
 		}
 	}
 
+	//--------------------------------------------------------------------------------------- preview
+	public function preview(Controller_Parameters $parameters, $form, $files, $class_name)
+	{
+		$parameters->set("preview", Wiki::textile($form["content"]));
+		return $this->edit($parameters, $form, $files, $class_name);
+	}
+
 	//-------------------------------------------------------------------------------------- testForm
 	/**
 	 * Test the form, and put in array all errors. If there are not errors, array returned is empty.
@@ -68,6 +76,9 @@ class Topic_Controller extends List_Controller
 		$parameters = parent::getViewParameters($parameters, $form, $class_name);
 		$path = Forum_Path_Utils::getPath();
 		$parameters = Forum_Utils::generateContent($parameters, "Topic", $path, "edit", 0);
+		$parameters = array_merge($parameters, $form);
+		if(isset($form["content"]))
+			$parameters["main_post"][0]["content"] = $form["content"];
 		return View::run($parameters, $form, $files, "Forum", "edit_topic");
 	}
 
