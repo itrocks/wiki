@@ -80,6 +80,45 @@ class Update_Nb_Values implements Plugin
 		self::addValueToNumber($class_name, -1);
 	}
 
+	//------------------------------------------------------------------- aroundForumUtilsGetNbForums
+	/**
+	 * @param $joinpoint AopJoinpoint
+	 */
+	public static function aroundForumUtilsGetNbForums(AopJoinpoint $joinpoint)
+	{
+		$object = $joinpoint->getArguments()[0];
+		$nb = 0;
+		if(isset($object->nb_forums))
+			$nb = $object->nb_forums;
+		$joinpoint->setReturnedValue($nb);
+	}
+
+	//------------------------------------------------------------------- aroundForumUtilsGetNbTopics
+	/**
+	 * @param $joinpoint AopJoinpoint
+	 */
+	public static function aroundForumUtilsGetNbTopics(AopJoinpoint $joinpoint)
+	{
+		$object = $joinpoint->getArguments()[0];
+		$nb = 0;
+		if(isset($object->nb_topics))
+			$nb = $object->nb_topics;
+		$joinpoint->setReturnedValue($nb);
+	}
+
+	//-------------------------------------------------------------------- aroundForumUtilsGetNbPosts
+	/**
+	 * @param $joinpoint AopJoinpoint
+	 */
+	public static function aroundForumUtilsGetNbPosts(AopJoinpoint $joinpoint)
+	{
+		$object = $joinpoint->getArguments()[0];
+		$nb = 0;
+		if(isset($object->nb_posts))
+			$nb = $object->nb_posts;
+		$joinpoint->setReturnedValue($nb);
+	}
+
 	//------------------------------------------------------------------------------------- getNumber
 	/**
 	 * @param $class_name string
@@ -119,6 +158,18 @@ class Update_Nb_Values implements Plugin
 		Aop::add("after",
 			'SAF\Wiki\Forum_Controller_Utils->deleteObject()',
 			array(__CLASS__, "afterForumControllerUtilsDeleteObject")
+		);
+		Aop::add("around",
+			'SAF\Wiki\Forum_Utils->getNbPosts()',
+			array(__CLASS__, "aroundForumUtilsGetNbPosts")
+		);
+		Aop::add("around",
+			'SAF\Wiki\Forum_Utils->getNbTopics()',
+			array(__CLASS__, "aroundForumUtilsGetNbTopics")
+		);
+		Aop::add("around",
+			'SAF\Wiki\Forum_Utils->getNbForums()',
+			array(__CLASS__, "aroundForumUtilsGetNbForums")
 		);
 	}
 

@@ -111,7 +111,7 @@ class Forum_Utils
 	 */
 	public static function assignTopicFirstPost($topic)
 	{
-		return self::assignAttributeObjectInElement($topic, "first_post", "SAF\\Wiki\\Post");
+		return self::assignAttributeObjectInElement($topic, "first_post", self::$namespace . "Post");
 	}
 
 	//----------------------------------------------------------------------------- contentFormatting
@@ -234,9 +234,7 @@ class Forum_Utils
 	 */
 	public static function getNbForums($object)
 	{
-		if(isset($object->nb_forums))
-			return $object->nb_forums;
-		return 0;
+		return count(self::getNextElements($object));
 	}
 
 	//----------------------------------------------------------------------------------- getNbTopics
@@ -246,9 +244,7 @@ class Forum_Utils
 	 */
 	public static function getNbTopics($object)
 	{
-		if(isset($object->nb_topics))
-			return $object->nb_topics;
-		return 0;
+		return count(self::getNextElements($object));
 	}
 
 	//----------------------------------------------------------------------------------- getNbPosts
@@ -258,9 +254,7 @@ class Forum_Utils
 	 */
 	public static function getNbPosts($object)
 	{
-		if(isset($object->nb_posts))
-			return $object->nb_posts;
-		return 0;
+		return count(self::getNextElements($object));
 	}
 
 	//--------------------------------------------------------------------------- getAttributeNameCol
