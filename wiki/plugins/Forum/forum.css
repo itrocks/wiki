@@ -24,7 +24,7 @@ tr.forum.header {
 table.forum {
 	border-collapse: collapse;
 	border: rgb(146, 13, 13) solid 2px;
-	width: 95%;
+	width: 100%;
 }
 
 td.post.profile {

@@ -33,6 +33,51 @@ class Forum_Buttons_Utils{
 		return Button::newCollection($buttons);
 	}
 
+	//------------------------------------------------------------------------------------ getButtons
+	/**
+	 * Return the bottom buttons corresponding of the type object and the mode
+	 * @param $object   object
+	 * @param $base_url string
+	 * @param $mode     string
+	 * @return Button[]
+	 */
+	public static function getBottomButtons($object, $base_url, $mode)
+	{
+		$buttons = array();
+		switch($mode){
+			case "output":
+			case "" :
+				$buttons = self::getBottomButtonsModeOutput($object, $base_url);
+				break;
+			case "edit":
+			case "new":
+			case "delete":
+				break;
+		}
+		return Button::newCollection($buttons);
+	}
+
+	//-------------------------------------------------------------------- getBottomButtonsModeOutput
+	public static function getBottomButtonsModeOutput($object, $base_url){
+		switch(get_class($object)){
+			case "SAF\\Wiki\\Post":
+				$buttons = self::getButtonsPostModeOutputPublic($object, $base_url);
+				break;
+			case "SAF\\Wiki\\Category":
+				$buttons = self::getButtonsCategoryModeOutputPublic($object, $base_url);
+				break;
+			case "SAF\\Wiki\\Forum":
+				$buttons = self::getButtonsForumModeOutputPublic($object, $base_url);
+				break;
+			case "SAF\\Wiki\\Topic":
+				$buttons = self::getButtonsTopicModeOutputPublic($object, $base_url);
+				break;
+			default:
+				$buttons = self::getButtonsDefaultModeOutput($base_url);
+		}
+		return $buttons;
+	}
+
 	//------------------------------------------------------------------ getButtonsCategoryModeOutput
 	/**
 	 * @param $object   object
@@ -41,13 +86,38 @@ class Forum_Buttons_Utils{
 	 */
 	public static function getButtonsCategoryModeOutput($object, $base_url)
 	{
-		$buttons = array();
+		$buttons_public = self::getButtonsCategoryModeOutputPublic($object, $base_url);
+		$buttons_private = self::getButtonsCategoryModeOutputPrivate($object, $base_url);
+		if(!is_array($buttons_public))	$buttons_public = array();
+		if(!is_array($buttons_private))	$buttons_private = array();
+		return array_merge($buttons_public, $buttons_private);
+	}
+
+	//------------------------------------------------------------ getButtonsCategoryModeOutputPublic
+	/**
+	 * @param $object   object
+	 * @param $base_url string
+	 * @return array
+	 */
+	public static function getButtonsCategoryModeOutputPublic($object, $base_url)
+	{
 		$buttons[] = array(
 			"New forum",
 			Forum_Url_Utils::getUrl("", $base_url, array("mode" => "new")),
 			"new",
 			array(Color::of("green"), "#main")
 		);
+		return $buttons;
+	}
+
+	//----------------------------------------------------------- getButtonsCategoryModeOutputPrivate
+	/**
+	 * @param $object   object
+	 * @param $base_url string
+	 * @return array
+	 */
+	public static function getButtonsCategoryModeOutputPrivate($object, $base_url)
+	{
 		$buttons[] = array(
 			"Edit",
 			Forum_Url_Utils::getUrl("", $base_url, array("mode" => "edit")),
@@ -89,13 +159,38 @@ class Forum_Buttons_Utils{
 	 */
 	public static function getButtonsForumModeOutput($object, $base_url)
 	{
-		$buttons = array();
+		$buttons_public = self::getButtonsForumModeOutputPublic($object, $base_url);
+		$buttons_private = self::getButtonsForumModeOutputPrivate($object, $base_url);
+		if(!is_array($buttons_public))	$buttons_public = array();
+		if(!is_array($buttons_private))	$buttons_private = array();
+		return array_merge($buttons_public, $buttons_private);
+	}
+
+	//--------------------------------------------------------------- getButtonsForumModeOutputPublic
+	/**
+	 * @param $object   object
+	 * @param $base_url string
+	 * @return array
+	 */
+	public static function getButtonsForumModeOutputPublic($object, $base_url)
+	{
 		$buttons[] = array(
 			"New topic",
 			Forum_Url_Utils::getUrl("", $base_url, array("mode" => "new")),
 			"new",
 			array(Color::of("green"), "#main")
 		);
+		return $buttons;
+	}
+
+	//-------------------------------------------------------------- getButtonsForumModeOutputPrivate
+	/**
+	 * @param $object   object
+	 * @param $base_url string
+	 * @return array
+	 */
+	public static function getButtonsForumModeOutputPrivate($object, $base_url)
+	{
 		$buttons[] = array(
 			"Edit",
 			Forum_Url_Utils::getUrl("", $base_url, array("mode" => "edit")),

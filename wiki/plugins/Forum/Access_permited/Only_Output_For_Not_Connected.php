@@ -34,6 +34,7 @@ class Only_Output_For_Not_Connected implements Plugin
 	private static $methods_disable = array(
 		array("Forum_Buttons_Utils", "getButtons"),
 		array("Forum_Utils", "getButtons"),
+		array("Forum_Utils", "getBottomButtons"),
 		array("Forum_Controller_Utils", "delete"),
 		array("Forum_Controller_Utils", "write")
 	);
