@@ -40,7 +40,8 @@ $CONFIG["wiki"] = array(
 			'SAF\Wiki\Links_Recognition',
 			'SAF\Wiki\Images_Upload',
 			'SAF\Wiki\Forum_Uri_Rewriter',
-			'SAF\Wiki\Update_Nb_Values'
+			'SAF\Wiki\Update_Nb_Values',
+			'SAF\Wiki\Only_Output_For_Not_Connected'
 		)
 	)
 );

@@ -2,6 +2,7 @@
 namespace SAF\Wiki;
 use SAF\Framework\Dao;
 use SAF\Framework\Names;
+use SAF\Framework\Search_Object;
 use SAF\Framework\View;
 use SAF\Framework\Namespaces;
 use SAF\Framework\Wiki;
@@ -67,14 +68,16 @@ class Forum_Utils
 		$parameters["attributes_number"] = count($parameters["attribute_values"]) + 1;
 		$parameters["buttons"] = Forum_Buttons_Utils::getButtons($object, $base_url, $mode);
 		$parameters["type"] = Namespaces::shortClassName($class_name);
-		$parameters["type_child"] = Namespaces::shortClassName(Forum_Names_Utils::getNextClass($class_name));
+		$parameters["type_child"] =
+			Namespaces::shortClassName(Forum_Names_Utils::getNextClass($class_name));
 		$parameters["id"] = Dao::getObjectIdentifier($object);
 		return $parameters;
 	}
 
 	public static function assignAuthorInPost($post)
 	{
-		return self::assignAttributeObjectInElement($post, "author", get_class(User::current()));
+		return self::assignAttributeObjectInElement
+			($post, "author", get_class(Search_Object::newInstance("SAF\\Framework\\User")));
 	}
 
 	//---------------------------------------------------------------- assignAttributeObjectInElement
