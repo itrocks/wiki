@@ -49,11 +49,18 @@ class Edition_Reserved_To_Author implements Plugin
 		$parameters = $joinpoint->getArguments()[0];
 		$objects = $parameters->getObjects();
 		$is_process = false;
+		$has_object = false;
 		foreach($objects as $object){
+			$has_object = $has_object || is_object($object);
 			$is_process = self::control($joinpoint, $object);
 			if($is_process)
 				break;
 		}
+		if(!$has_object){
+			$joinpoint->process();
+			$is_process = true;
+		}
+
 		if(!$is_process){
 			$class_name = $joinpoint->getArguments()[3];
 			$path = Forum_Path_Utils::getPath();
@@ -77,7 +84,7 @@ class Edition_Reserved_To_Author implements Plugin
 			switch(get_class($object)){
 				case "SAF\\Wiki\\Post" :
 					Forum_Utils::assignAuthorInPost($object);
-					if(User::current() == $object->author){
+					if(User::current() == $object->author || Forum_Utils::isNotFound($object)){
 						$joinpoint->process();
 						return true;
 					}
