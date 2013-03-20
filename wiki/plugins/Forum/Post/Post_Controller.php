@@ -29,7 +29,7 @@ class Post_Controller extends Output_Controller
 		$path = Forum_Path_Utils::getPath();
 		$topic = $path["Topic"];
 		$parameters = Forum_Utils::generateContent($parameters, $topic, $path, "output", 1);
-		return View::run($parameters, $form, $files, "Forum", "output_topic");
+		return View::run($parameters, $form, $files, "Topic", "output");
 	}
 
 	//------------------------------------------------------------------------------------------ edit
@@ -56,6 +56,7 @@ class Post_Controller extends Output_Controller
 			$form["last_edited_by"] = User::current()->login;
 			$form["last_edited"] = time();
 			$form["nb_edited"] = $object->nb_edited + 1;
+
 		}
 		$parameters = Forum_Controller_Utils::write($parameters, $form, $class_name);
 		return $this->output($parameters, $form, $files, $class_name);
