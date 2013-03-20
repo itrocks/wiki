@@ -251,7 +251,21 @@ class Forum_Buttons_Utils{
 	 */
 	public static function getButtonsPostModeOutput($object, $base_url)
 	{
-		$buttons = array();
+		$buttons_public = self::getButtonsPostModeOutputPublic($object, $base_url);
+		$buttons_private = self::getButtonsPostModeOutputPrivate($object, $base_url);
+		if(!is_array($buttons_public))	$buttons_public = array();
+		if(!is_array($buttons_private))	$buttons_private = array();
+		return array_merge($buttons_public, $buttons_private);
+	}
+
+	//---------------------------------------------------------------- getButtonsPostModeOutputPublic
+	/**
+	 * @param $object   object
+	 * @param $base_url string
+	 * @return array
+	 */
+	public static function getButtonsPostModeOutputPublic($object, $base_url)
+	{
 		$parent_url = Forum_Url_Utils::getParentUrl($base_url);
 		$buttons[] = array(
 			"Quote",
@@ -265,6 +279,18 @@ class Forum_Buttons_Utils{
 			"edit",
 			array(Color::of("green"), "#main")
 		);
+		return $buttons;
+	}
+
+	//--------------------------------------------------------------- getButtonsPostModeOutputPrivate
+	/**
+	 * @param $object   object
+	 * @param $base_url string
+	 * @return array
+	 */
+	public static function getButtonsPostModeOutputPrivate($object, $base_url)
+	{
+		$parent_url = Forum_Url_Utils::getParentUrl($base_url);
 		if(!Forum_Utils::hasElementAtAttribute($object, "topic"))
 			$object = "";
 		$buttons[] = array(
@@ -290,12 +316,38 @@ class Forum_Buttons_Utils{
 	 */
 	public static function getButtonsTopicModeOutput($object, $base_url)
 	{
+		$buttons_public = self::getButtonsTopicModeOutputPublic($object, $base_url);
+		$buttons_private = self::getButtonsTopicModeOutputPrivate($object, $base_url);
+		if(!is_array($buttons_public))	$buttons_public = array();
+		if(!is_array($buttons_private))	$buttons_private = array();
+		return array_merge($buttons_public, $buttons_private);
+	}
+
+	//--------------------------------------------------------------------- getButtonsTopicModeOutput
+	/**
+	 * @param $object   object
+	 * @param $base_url string
+	 * @return array
+	 */
+	public static function getButtonsTopicModeOutputPublic($object, $base_url)
+	{
 		$buttons[] = array(
 			"Reply",
 			Forum_Url_Utils::getUrl("", $base_url, array("mode" => "new")),
 			"new",
 			array(Color::of("green"), "#main")
 		);
+		return $buttons;
+	}
+
+	//--------------------------------------------------------------------- getButtonsTopicModeOutput
+	/**
+	 * @param $object   object
+	 * @param $base_url string
+	 * @return array
+	 */
+	public static function getButtonsTopicModeOutputPrivate($object, $base_url)
+	{
 		$buttons[] = array(
 			"Edit",
 			Forum_Url_Utils::getUrl("", $base_url, array("mode" => "edit")),

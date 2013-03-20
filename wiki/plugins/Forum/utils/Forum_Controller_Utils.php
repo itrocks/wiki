@@ -241,7 +241,7 @@ class Forum_Controller_Utils
 			$class_name = get_class($object);
 			$search = new $class_name();
 			$search->title = $form["title"];
-			Forum_Utils::setParentObject($search, Forum_Utils::getParentObject($object));
+			$search = Forum_Utils::setParentObject($search, Forum_Utils::getParentObject($object));
 			if(!Forum_Utils::isNotFound(Forum_Utils::getParentObject($search)))
 				$search = Dao::searchOne($search);
 			if($search != null && Dao::getObjectIdentifier($search) != $object_identifier)

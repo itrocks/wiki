@@ -87,16 +87,19 @@ class Forum_Utils
 	 * @param $element
 	 * @param $attribute
 	 * @param $class_name
+	 * @param $initialize_value boolean True if the value must be initialize by new object if not found,
+	 * false esle.
 	 * @return mixed
 	 */
-	public static function assignAttributeObjectInElement($element, $attribute, $class_name)
+	public static function assignAttributeObjectInElement
+	($element, $attribute, $class_name, $initialize_value = true)
 	{
 		$attribute_id = "id_" . $attribute;
 		if($element->$attribute == null){
 			$object = null;
 			if(isset($element->$attribute_id))
 				$object = Dao::read($element->$attribute_id, $class_name);
-			if($object == null){
+			if($object == null && $initialize_value){
 				$object = new $class_name();
 				unset($element->$attribute_id);
 			}
@@ -507,15 +510,17 @@ class Forum_Utils
 
 	//------------------------------------------------------------------------------- getParentObject
 	/**
-	 * Change the refer to the parent object.
 	 * @param $object object The object
 	 * @return object Return the parent object
 	 */
 	public static function getParentObject($object)
 	{
 		$attribute_parent = self::getParentObjectAttribute($object);
-		if(property_exists($object, $attribute_parent))
+		if(property_exists($object, $attribute_parent)){
+			$object = self::assignAttributeObjectInElement
+				($object, $attribute_parent, Forum_Names_Utils::getParentClass($object), false);
 			return $object->$attribute_parent;
+		}
 		return null;
 	}
 

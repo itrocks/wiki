@@ -41,7 +41,8 @@ $CONFIG["wiki"] = array(
 			'SAF\Wiki\Images_Upload',
 			'SAF\Wiki\Forum_Uri_Rewriter',
 			'SAF\Wiki\Update_Nb_Values',
-			'SAF\Wiki\Only_Output_For_Not_Connected'
+			'SAF\Wiki\Only_Output_For_Not_Connected',
+			'SAF\Wiki\Edition_Reserved_To_Author'
 		)
 	)
 );

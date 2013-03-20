@@ -49,21 +49,18 @@ class Only_Output_For_Not_Connected implements Plugin
 			$joinpoint->process();
 		}
 		else {
-			/** @var  $params Controller_Parameters */
-			$params = $joinpoint->getArguments()[0];
-			$parameters = Forum_Controller_Utils::getViewParameters($params, $joinpoint->getArguments()[3]);
+			$parameters = $joinpoint->getArguments()[0];
+			$class_name = $joinpoint->getArguments()[3];
+			$parameters = Forum_Controller_Utils::getViewParameters($parameters, $class_name);
 			$path = Forum_Path_Utils::getPath();
 			$parameters = Forum_Path_Utils::addPathAttribute($parameters, $path);
-			$parameters["title"] = "Access denied";
 			$parameters["message"] =
 				"You have not access to this part of the forum because you're not connected";
 			$base_url = Forum_Url_Utils::getBaseUrl($path);
 			if($parameters["mode"] == "new")
 				$base_url = Forum_Url_Utils::getParentUrl($base_url);
-			$parameters["buttons"] = Button::newCollection(
-				array(array("Back", $base_url,	"back", "#main"))
-			);
-			$view = View::run($parameters, array(), array(), 'Forum', 'write_message');
+			$parameters["link"] = $base_url;
+			$view = View::run($parameters, array(), array(), 'Access', 'denied');
 			$joinpoint->setReturnedValue($view);
 		}
 	}
