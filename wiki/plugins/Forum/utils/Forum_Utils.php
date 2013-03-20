@@ -48,9 +48,14 @@ class Forum_Utils
 						= Forum_Url_Utils::getUrl($author_name, Forum_Url_Utils::getBaseUrl("author"));
 				}
 				$parameters["content"] = $object->content;
-				$parameters["date_post"] = date('l j F', $object->date_post);
+				$parameters["date_post"] = date('H:i:s l j F', $object->date_post);
 				if(strtolower($mode) == "output")
 					$parameters["content"] = Forum_Utils::contentFormatting($parameters["content"]);
+				if($object->nb_edited){
+					$parameters["nb_edited"] = $object->nb_edited;
+					$parameters["last_edited_by"] = $object->last_edited_by;
+					$parameters["last_edited"] = date('l j F \|\o\n\| H:i:s', $object->last_edited);
+				}
 				break;
 			default:
 				$parameters["title"] = "Index";
@@ -67,7 +72,8 @@ class Forum_Utils
 		return $parameters;
 	}
 
-	public static function assignAuthorInPost($post){
+	public static function assignAuthorInPost($post)
+	{
 		return self::assignAttributeObjectInElement($post, "author", get_class(User::current()));
 	}
 
@@ -478,10 +484,11 @@ class Forum_Utils
 		if(method_exists(self::$namespace . 'Forum_Utils', $method_name)){
 			return self::$method_name($object);
 		}
-		else {
+		else if($object == null){
 			$method_name = "get" . Forum_Names_Utils::getPluralName(Forum_Names_Utils::getFirstClass());
 			return self::$method_name($object);
 		}
+		return null;
 	}
 
 	//---------------------------------------------------------------------------- getObjectDepending

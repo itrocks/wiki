@@ -45,8 +45,18 @@ class Post_Controller extends Output_Controller
 	//----------------------------------------------------------------------------------------- write
 	public function write(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
-		$form["author"] = User::current();
-		$form["date_post"] = time();
+		//TODO : test the Post value, when it possible without launch exceptions.
+		$nb_params = $parameters->count();
+		if($nb_params == 2){
+			$form["author"] = User::current();
+			$form["date_post"] = time();
+		}
+		else {
+			$object = $parameters->getObject("Post");
+			$form["last_edited_by"] = User::current()->login;
+			$form["last_edited"] = time();
+			$form["nb_edited"] = $object->nb_edited + 1;
+		}
 		$parameters = Forum_Controller_Utils::write($parameters, $form, $class_name);
 		return $this->output($parameters, $form, $files, $class_name);
 	}

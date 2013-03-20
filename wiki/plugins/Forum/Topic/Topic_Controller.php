@@ -21,7 +21,7 @@ class Topic_Controller extends List_Controller
 		$parameters["mode"] = "output";
 		$path = Forum_Path_Utils::getPath();
 		$parameters = Forum_Utils::generateContent($parameters, "Topic", $path, "output", 1);
-		return View::run($parameters, $form, $files, "Forum", "output_topic");
+		return View::run($parameters, $form, $files, "Topic", "output");
 	}
 
 	//----------------------------------------------------------------------------------------- write
