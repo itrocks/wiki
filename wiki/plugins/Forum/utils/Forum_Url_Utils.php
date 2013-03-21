@@ -113,6 +113,8 @@ class Forum_Url_Utils {
 	{
 		if($base_url == null)
 			$base_url = self::getBaseUrl();
+		if($rest = substr($base_url, strlen($base_url) - 1, 1) != "/")
+			$base_url .= "/";
 		$url = $base_url;
 		if(is_object($element)){
 			if(isset($element->title) && !$is_secure){
