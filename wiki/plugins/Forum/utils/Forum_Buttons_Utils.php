@@ -6,32 +6,6 @@ use SAF\Framework\Color;
 
 class Forum_Buttons_Utils{
 
-	//------------------------------------------------------------------------------------ getButtons
-	/**
-	 * Return the buttons corresponding of the type object and the mode
-	 * @param $object   object
-	 * @param $base_url string
-	 * @param $mode     string
-	 * @return Button[]
-	 */
-	public static function getButtons($object, $base_url, $mode)
-	{
-		$buttons = array();
-		switch($mode){
-			case "output":
-			case "" :
-				$buttons = self::getButtonsModeOutput($object, $base_url);
-				break;
-			case "edit":
-			case "new":
-				$buttons = self::getButtonsModeEdit($object, $base_url);
-				break;
-			case "delete":
-				$buttons = self::getButtonsModeDelete($object, $base_url);
-				break;
-		}
-		return Button::newCollection($buttons);
-	}
 
 	//------------------------------------------------------------------------------------ getButtons
 	/**
@@ -76,6 +50,33 @@ class Forum_Buttons_Utils{
 				$buttons = self::getButtonsDefaultModeOutput($base_url);
 		}
 		return $buttons;
+	}
+
+	//------------------------------------------------------------------------------------ getButtons
+	/**
+	 * Return the buttons corresponding of the type object and the mode
+	 * @param $object   object
+	 * @param $base_url string
+	 * @param $mode     string
+	 * @return Button[]
+	 */
+	public static function getButtons($object, $base_url, $mode)
+	{
+		$buttons = array();
+		switch($mode){
+			case "output":
+			case "" :
+				$buttons = self::getButtonsModeOutput($object, $base_url);
+				break;
+			case "edit":
+			case "new":
+				$buttons = self::getButtonsModeEdit($object, $base_url);
+				break;
+			case "delete":
+				$buttons = self::getButtonsModeDelete($object, $base_url);
+				break;
+		}
+		return Button::newCollection($buttons);
 	}
 
 	//------------------------------------------------------------------ getButtonsCategoryModeOutput

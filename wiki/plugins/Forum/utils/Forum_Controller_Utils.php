@@ -178,11 +178,19 @@ class Forum_Controller_Utils
 	public static function write(Controller_Parameters $parameters, $form, $class_name, $attributes_object = array())
 	{
 		$errors = array();
-		$parent_type = Forum_Names_Utils::getParentShortClass($class_name);
 		$short_class_name = Namespaces::shortClassName($class_name);
-		$path = Forum_Path_Utils::getPath();
 		$params = $parameters->getObjects();
 		$object = reset($params);
+		$object = self::writeCompleteObject($object, $form, $class_name, $attributes_object);
+		$parameters->set($short_class_name, $object);
+		$parameters->set("errors", $errors);
+		Forum_Path::current()->set($short_class_name, Dao::read($object, $class_name));
+		return $parameters;
+	}
+
+	public static function writeCompleteObject($object, $form, $class_name, $attributes_object){
+		$parent_type = Forum_Names_Utils::getParentShortClass($class_name);
+		$path = Forum_Path_Utils::getPath();
 		if(!is_object($object)){
 			$object = new $class_name();
 		}
@@ -196,6 +204,10 @@ class Forum_Controller_Utils
 				$object->$attribute = Forum_Controller_Utils::formToObject($object->$attribute, $form);
 			}
 		}
+		return self::writeCompleteObjectDao($object, $attributes_object);
+	}
+
+	public static function writeCompleteObjectDao($object, $attributes_object){
 		Dao::begin();
 		foreach($attributes_object as $attribute => $class_attribute){
 			if(isset($object->$attribute)){
@@ -204,10 +216,7 @@ class Forum_Controller_Utils
 		}
 		$object = self::writeObject($object);
 		Dao::commit();
-		$parameters->set($short_class_name, $object);
-		$parameters->set("errors", $errors);
-		Forum_Path::current()->set($short_class_name, Dao::read($object, $class_name));
-		return $parameters;
+		return $object;
 	}
 
 	//----------------------------------------------------------------------------------- writeObject
