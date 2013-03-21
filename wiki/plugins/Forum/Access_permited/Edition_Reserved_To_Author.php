@@ -93,6 +93,9 @@ class Edition_Reserved_To_Author implements Plugin
 					Forum_Utils::assignTopicFirstPost($object);
 					return self::control($joinpoint, $object->first_post);
 					break;
+				default :
+					$joinpoint->process();
+					return true;
 			}
 		}
 		return false;
