@@ -8,27 +8,6 @@ use SAF\Framework\Dao;
 class Forum_Search_List_Controller extends List_Controller
 {
 
-	//------------------------------------------------------------------------------ $page_class_name
-	/**
-	 * The class name of the objects in which the search should be performed.
-	 * @var string
-	 */
-	private static $page_class_name = 'SAF\Wiki\Post';
-
-	//-------------------------------------------------------------------------------- $page_var_name
-	/**
-	 * The name attribute of the objects in which the search should be performed.
-	 * @var string
-	 */
-	private static $page_var_name = "title";
-
-	//-------------------------------------------------------------------------------- $page_var_text
-	/**
-	 * The content attribute of the objects in which the search should be performed.
-	 * @var string
-	 */
-	private static $page_var_text = "content";
-
 	//------------------------------------------------------------------------------------------- run
 	/**
 	 * The controller search and print results if $form["search"] exist,

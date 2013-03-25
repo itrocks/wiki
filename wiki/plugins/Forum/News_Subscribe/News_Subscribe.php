@@ -84,10 +84,10 @@ class News_Subscribe implements Plugin
 				foreach($results as $result){
 					$result = Forum_Utils::assignAttributeObjectInElement
 						($result, "user", get_class(Search_Object::newInstance("SAF\\Framework\\User")));
-					/*mail(
+					mail(
 						$result->user->email, $subject,
 						$view, $headers
-					);*/
+					);
 				}
 			}
 		}

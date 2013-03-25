@@ -89,7 +89,7 @@ class Forum_Utils
 	 * @param $attribute
 	 * @param $class_name
 	 * @param $initialize_value boolean True if the value must be initialize by new object if not found,
-	 * false esle.
+	 * false else.
 	 * @return mixed
 	 */
 	public static function assignAttributeObjectInElement

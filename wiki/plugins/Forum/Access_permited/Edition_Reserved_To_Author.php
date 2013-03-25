@@ -2,7 +2,6 @@
 namespace SAF\Wiki;
 use AopJoinpoint;
 use SAF\Framework\Aop;
-use SAF\Framework\Button;
 use SAF\Framework\Plugin;
 use SAF\Framework\Dao;
 use SAF\Framework\Controller_Parameters;
@@ -44,7 +43,6 @@ class Edition_Reserved_To_Author implements Plugin
 	 */
 	public static function aroundControlWithControllerParameters(AopJoinpoint $joinpoint)
 	{
-		$user = User::current();
 		/** @var $parameters Controller_Parameters */
 		$parameters = $joinpoint->getArguments()[0];
 		$objects = $parameters->getObjects();
