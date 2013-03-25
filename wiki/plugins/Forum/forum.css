@@ -56,3 +56,27 @@ tr.forum.titre.item {
 .edited {
 	font-size: 12px;
 }
+
+.marge {
+	margin-left: 5em;
+}
+
+.checklist {
+	font-size: 11px;
+	border: 1px #999999;
+	background-color: #fbf9ee;
+	width: 50%;
+	max-height: 300px;
+	overflow:auto;
+}
+
+.no_form{
+	border: 0;
+	width: 0;
+	white-space:nowrap
+}
+
+.checklist_title {
+	font-size: 13px;
+	font-weight : bold;
+}

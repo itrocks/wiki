@@ -60,10 +60,6 @@ class Forum_Uri_Rewriter implements Plugin
 					$link_read[1] = "list_all";
 				}
 				$link = Forum_Url_Utils::arrayToUri($link_read);
-				$type_lower = strtolower($type);
-				if(isset($arguments[1][$type_lower])){
-					unset($arguments[1][$type_lower]);
-				}
 				$arguments[0] = $link;
 				Session::current()->set(Forum_Path::current(new Forum_Path($answer["path"])));
 				$joinpoint->setArguments($arguments);

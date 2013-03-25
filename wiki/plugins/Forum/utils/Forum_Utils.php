@@ -207,7 +207,7 @@ class Forum_Utils
 		$parameters[$value_var_name] = array();
 		$class_name = get_class($object);
 		$next_class = Forum_Names_Utils::getNextClass($class_name);
-		switch(get_class($object)){
+		switch($class_name){
 			case self::$namespace . "Category" :
 				$parameters = self::getAttributeNameCol($class_name, $title_parent_var_name, $parameters);
 				$parameters = self::getAttributeNameCol($next_class, $title_var_name, $parameters);
@@ -267,14 +267,14 @@ class Forum_Utils
 	//--------------------------------------------------------------------------- getAttributeNameCol
 	/**
 	 * Assign columns names in parameters.
-	 * @param $short_class string The short class name, as Category, Forum, Topic or Post
+	 * @param $class_name string The short class name, as Category, Forum, Topic or Post
 	 * @param $var_name string The var name used for parameters.
 	 * @param $parameters array The parameters where put
 	 * @return mixed parameters
 	 */
-	public static function getAttributeNameCol($short_class, $var_name, $parameters)
+	public static function getAttributeNameCol($class_name, $var_name, $parameters)
 	{
-		switch($short_class){
+		switch($class_name){
 			case self::$namespace . "Category" :
 				$parameters[$var_name][] = array("value" => "Forums");
 				$parameters[$var_name][] = array("value" => "Topics");
