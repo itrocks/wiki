@@ -166,24 +166,8 @@ class Search_List_Controller extends List_Controller
 		$searchResult = array();
 		foreach($tab as $element){
 			$object->$var = "%" . $element . "%";
-			$searchResult = $this->mergeArray($searchResult, Dao::search($object));
+			$searchResult = array_merge($searchResult, Dao::search($object));
 		}
 		return $searchResult;
 	}
-
-	/**
-	 * Merge two array without duplicate value.
-	 * @param $array1 array
-	 * @param $array2 array
-	 * @return array The result of the merge.
-	 */
-	public function mergeArray($array1, $array2)
-	{
-		foreach($array2 as $element){
-			if(!in_array($element, $array1))
-				$array1[] = $element;
-		}
-		return $array1;
-	}
-
 }
