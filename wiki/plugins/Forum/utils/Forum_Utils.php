@@ -55,7 +55,7 @@ class Forum_Utils
 				if($object->nb_edited){
 					$parameters["nb_edited"] = $object->nb_edited;
 					$parameters["last_edited_by"] = $object->last_edited_by;
-					$parameters["last_edited"] = date('l j F \|\o\n\| H:i:s', $object->last_edited);
+					$parameters["last_edited"] = self::getDate($object->last_edited);
 				}
 				break;
 			default:
@@ -65,7 +65,7 @@ class Forum_Utils
 		if($object && isset($object->title))
 			$parameters["title"] = $object->title;
 		$parameters = self::getAttributeCol($object, $parameters);
-		$parameters["attributes_number"] = count($parameters["attribute_values"]) + 1;
+		$parameters["attributes_number"] = count($parameters["attribute_values"]) + 2;
 		$parameters["buttons"] = Forum_Buttons_Utils::getButtons($object, $base_url, $mode);
 		$parameters["bottom_buttons"] = Forum_Buttons_Utils::getBottomButtons($object, $base_url, $mode);
 		$parameters["type"] = Namespaces::shortClassName($class_name);
@@ -209,6 +209,7 @@ class Forum_Utils
 		$next_class = Forum_Names_Utils::getNextClass($class_name);
 		switch($class_name){
 			case self::$namespace . "Category" :
+				/** @var $object Category */
 				$parameters = self::getAttributeNameCol($class_name, $title_parent_var_name, $parameters);
 				$parameters = self::getAttributeNameCol($next_class, $title_var_name, $parameters);
 				$parameters[$value_var_name][] = array("value" => self::getNbForums($object));
@@ -216,14 +217,18 @@ class Forum_Utils
 				$parameters[$value_var_name][] = array("value" => self::getNbPosts($object));
 				break;
 			case self::$namespace . "Forum" :
+				/** @var $object Forum */
 				$parameters = self::getAttributeNameCol($class_name, $title_parent_var_name, $parameters);
 				$parameters = self::getAttributeNameCol($next_class, $title_var_name, $parameters);
+				$parameters[$value_var_name][] = array("value" => self::getLastPostAttribute($object));
 				$parameters[$value_var_name][] = array("value" => self::getNbTopics($object));
 				$parameters[$value_var_name][] = array("value" => self::getNbPosts($object));
 				break;
 			case self::$namespace . "Topic" :
+				/** @var $object Topic */
 				$parameters = self::getAttributeNameCol($class_name, $title_parent_var_name, $parameters);
 				$parameters = self::getAttributeNameCol($next_class, $title_var_name, $parameters);
+				$parameters[$value_var_name][] = array("value" => self::getLastPostAttribute($object));
 				$parameters[$value_var_name][] = array("value" => self::getNbPosts($object));
 				break;
 			case self::$namespace . "Post" :
@@ -232,36 +237,6 @@ class Forum_Utils
 				break;
 		}
 		return $parameters;
-	}
-
-	//----------------------------------------------------------------------------------- getNbForums
-	/**
-	 * @param $object object
-	 * @return int
-	 */
-	public static function getNbForums($object)
-	{
-		return count(self::getNextElements($object));
-	}
-
-	//----------------------------------------------------------------------------------- getNbTopics
-	/**
-	 * @param $object object
-	 * @return int
-	 */
-	public static function getNbTopics($object)
-	{
-		return count(self::getNextElements($object));
-	}
-
-	//----------------------------------------------------------------------------------- getNbPosts
-	/**
-	 * @param $object object
-	 * @return int
-	 */
-	public static function getNbPosts($object)
-	{
-		return count(self::getNextElements($object));
 	}
 
 	//--------------------------------------------------------------------------- getAttributeNameCol
@@ -281,10 +256,12 @@ class Forum_Utils
 				$parameters[$var_name][] = array("value" => "Posts");
 				break;
 			case self::$namespace . "Forum":
+				$parameters[$var_name][] = array("value" => "Last post");
 				$parameters[$var_name][] = array("value" => "Topics");
 				$parameters[$var_name][] = array("value" => "Posts");
 				break;
 			case self::$namespace . "Topic" :
+				$parameters[$var_name][] = array("value" => "Last post");
 				$parameters[$var_name][] = array("value" => "Posts");
 				break;
 			case self::$namespace . "Post" :
@@ -303,6 +280,10 @@ class Forum_Utils
 	public static function getCategories()
 	{
 		return Dao::readAll(self::$namespace . "Category");
+	}
+
+	public static function getDate($time = null){
+		return date('j-m-y H:i', ($time !== null ? $time : time()));
 	}
 
 	//------------------------------------------------------------------------------------ getElement
@@ -446,6 +427,54 @@ class Forum_Utils
 		return $forums;
 	}
 
+	//----------------------------------------------------------------------------------- getLastPost
+	/**
+	 * Return the last post.
+	 * @param $object object
+	 * @return Post
+	 */
+	public static function getLastPost($object){
+		switch(get_class($object)){
+			case self::$namespace . "Topic":
+				/** @var $object Topic  */
+				$posts = self::getPosts($object);
+				$last_post = end($posts);
+				if(!isset($last_post) || $last_post === false){
+					$last_post = self::assignTopicFirstPost($object)->first_post;
+				}
+				return $last_post;
+			case self::$namespace . "Forum":
+				/** @var $object Forum  */
+				$topics = self::getTopics($object);
+				/** @var $last_post Post */
+				$last_post = null;
+				foreach($topics as $topic){
+					$post = self::getLastPost($topic);
+					if(isset($post->date_post) &&
+						$post->date_post > ($last_post != null ? $last_post->date_post : 0))
+						$last_post = $post;
+				}
+				return $last_post;
+		}
+		return new Post();
+	}
+
+	//-------------------------------------------------------------------------- getLastPostAttribute
+	/**
+	 * Return the text field of last post attribute.
+	 * @param $object object
+	 * @return string
+	 */
+	public static function getLastPostAttribute($object){
+		$last_post = self::getLastPost($object);
+		if(is_object($last_post)){
+			$date = self::getDate($last_post->date_post);
+			$last_post = self::assignAuthorInPost($last_post);
+			return $date . " |by| " . $last_post->author->login;
+		}
+		return "";
+	}
+
 	//---------------------------------------------------------------------------------- getLevelName
 	/**
 	 * Return a name for a block's level
@@ -468,6 +497,36 @@ class Forum_Utils
 			default:
 				return "level" . $level;
 		}
+	}
+
+	//----------------------------------------------------------------------------------- getNbForums
+	/**
+	 * @param $object object
+	 * @return int
+	 */
+	public static function getNbForums($object)
+	{
+		return count(self::getNextElements($object));
+	}
+
+	//----------------------------------------------------------------------------------- getNbTopics
+	/**
+	 * @param $object object
+	 * @return int
+	 */
+	public static function getNbTopics($object)
+	{
+		return count(self::getNextElements($object));
+	}
+
+	//----------------------------------------------------------------------------------- getNbPosts
+	/**
+	 * @param $object object
+	 * @return int
+	 */
+	public static function getNbPosts($object)
+	{
+		return count(self::getNextElements($object));
 	}
 
 	//------------------------------------------------------------------------------- getNextElements
