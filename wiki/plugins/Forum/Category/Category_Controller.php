@@ -41,8 +41,8 @@ class Category_Controller extends List_Controller
 	{
 		$parameters = parent::getViewParameters($parameters, $form, $class_name);
 		$path = Forum_Path_Utils::getPath();
-		$parameters = Forum_Utils::generateContent($parameters, "Category", $path, "output", 2);
-		return View::run($parameters, $form, $files, "Forum", "structure_double");
+		$parameters = Forum_Utils::generateContent($parameters, "Category", $path, "output", 1);
+		return View::run($parameters, $form, $files, "Forum", "structure_simple");
 	}
 
 	//------------------------------------------------------------------------------------------- run

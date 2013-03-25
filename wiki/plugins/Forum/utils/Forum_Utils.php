@@ -251,18 +251,18 @@ class Forum_Utils
 	{
 		switch($class_name){
 			case self::$namespace . "Category" :
-				$parameters[$var_name][] = array("value" => "Forums");
-				$parameters[$var_name][] = array("value" => "Topics");
-				$parameters[$var_name][] = array("value" => "Posts");
+				$parameters[$var_name][] = "Forums";
+				$parameters[$var_name][] = "Topics";
+				$parameters[$var_name][] = "Posts";
 				break;
 			case self::$namespace . "Forum":
-				$parameters[$var_name][] = array("value" => "Last post");
-				$parameters[$var_name][] = array("value" => "Topics");
-				$parameters[$var_name][] = array("value" => "Posts");
+				$parameters[$var_name][] = "Last post";
+				$parameters[$var_name][] = "Topics";
+				$parameters[$var_name][] = "Posts";
 				break;
 			case self::$namespace . "Topic" :
-				$parameters[$var_name][] = array("value" => "Last post");
-				$parameters[$var_name][] = array("value" => "Posts");
+				$parameters[$var_name][] = "Last post";
+				$parameters[$var_name][] = "Posts";
 				break;
 			case self::$namespace . "Post" :
 				break;
@@ -282,6 +282,12 @@ class Forum_Utils
 		return Dao::readAll(self::$namespace . "Category");
 	}
 
+	//--------------------------------------------------------------------------------------- getDate
+	/**
+	 * Return timestamp put in parameters to default forum display format.
+	 * @param $time int|null
+	 * @return string The date formatted
+	 */
 	public static function getDate($time = null){
 		return date('j-m-y H:i', ($time !== null ? $time : time()));
 	}
