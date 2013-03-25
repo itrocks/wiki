@@ -45,9 +45,7 @@ class Post_Controller extends Output_Controller
 	//----------------------------------------------------------------------------------------- write
 	public function write(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
-		//TODO : test the Post value, when it possible without launch exceptions.
-		$nb_params = $parameters->count();
-		if($nb_params == 2){
+		if(!$this->isModification($parameters)){
 			$form["author"] = User::current();
 			$form["date_post"] = time();
 		}
@@ -60,6 +58,11 @@ class Post_Controller extends Output_Controller
 		}
 		$parameters = Forum_Controller_Utils::write($parameters, $form, $class_name);
 		return $this->output($parameters, $form, $files, $class_name);
+	}
+
+	//-------------------------------------------------------------------------------- isModification
+	public function isModification(Controller_Parameters $parameters){
+		return $parameters->getRawParameter("Post") != null;
 	}
 
 	//---------------------------------------------------------------------------------------- delete
