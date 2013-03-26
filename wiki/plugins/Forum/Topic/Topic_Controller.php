@@ -32,7 +32,7 @@ class Topic_Controller extends List_Controller
 		if(count($form) > 0){
 			$errors = $this->testForm($form, end($path));
 			if(count($errors) == 0){
-				$form["author"] = User::current();
+				$form = (new Post_Controller())->getFormAdditionalParameters($parameters, $form);
 				$attributes = array("first_post" => "SAF\\Wiki\\Post");
 				$parameters = Forum_Controller_Utils::write($parameters, $form, $class_name, $attributes);
 				$is_written = true;
