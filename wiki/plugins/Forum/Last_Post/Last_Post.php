@@ -65,7 +65,7 @@ class Last_Post implements Plugin
 					$element = $path[$short_class_name];
 				else
 					$element = Forum_Utils::getParentObject($element);
-				if(property_exists($element, $attribute_last_post)){
+				if(isset($element) && property_exists($element, $attribute_last_post)){
 					if(Forum_Utils::isEqualAttributeAndObject($element, $attribute_last_post, $object)){
 						$items = Forum_Utils::getNextElements($element);
 						if(get_class($object) == Forum_Utils::$namespace . "Forum"){

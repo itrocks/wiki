@@ -185,11 +185,14 @@ class Update_Nb_Values implements Plugin
 			if($number){
 				$class = $class_name;
 				while($class = Forum_Names_Utils::getParentClass($class)){
-					$object = $path[Namespaces::shortClassName($class)];
-					$attribute_number = self::$attributes_number[$key];
-					if(property_exists($object, $attribute_number)){
-						$object->$attribute_number += $number;
-						Dao::write($object);
+					$index = Namespaces::shortClassName($class);
+					if(isset($path[$index])){
+						$object = $path[$index];
+						$attribute_number = self::$attributes_number[$key];
+						if(isset($object) && property_exists($object, $attribute_number)){
+							$object->$attribute_number += $number;
+							Dao::write($object);
+						}
 					}
 				}
 				self::$numbers[$class_name] = 0;
