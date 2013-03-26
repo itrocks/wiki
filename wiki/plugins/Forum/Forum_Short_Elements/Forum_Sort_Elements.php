@@ -5,7 +5,7 @@ use SAF\Framework\Aop;
 use SAF\Framework\Plugin;
 use SAF\Framework\Dao;
 
-class Forum_Short_Elements implements Plugin
+class Forum_Sort_Elements implements Plugin
 {
 
 	//--------------------------------------------------------- afterForumUtilsGetForumsAndCategories
@@ -38,13 +38,13 @@ class Forum_Short_Elements implements Plugin
 			if(!isset($b->last_post->date_post) && !isset($a->last_post->date_post))
 				return 0;
 			if(!isset($a->last_post->date_post))
-				return -1;
+				return 1;
 			if(!isset($b->last_post->date_post))
-				return 1;
-			if($a->last_post->date_post < $b->last_post->date_post)
 				return -1;
-			if($a->last_post->date_post > $b->last_post->date_post)
+			if($a->last_post->date_post < $b->last_post->date_post)
 				return 1;
+			if($a->last_post->date_post > $b->last_post->date_post)
+				return -1;
 			return 0;
 		};
 		$topics = $joinpoint->getReturnedValue();
