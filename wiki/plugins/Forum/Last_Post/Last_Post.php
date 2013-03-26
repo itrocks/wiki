@@ -14,9 +14,12 @@ class Last_Post implements Plugin
 	{
 		$object = $joinpoint->getArguments()[0];
 		$is_new = false;
-		if(is_object($object)
-			&& get_class($object) == Forum_Utils::$namespace . "Post"
-			&& Forum_Utils::isNotFound($object)){
+		$class = get_class($object);
+		if(
+			is_object($object)
+			&& ($class == Forum_Utils::$namespace . "Post" || $class == Forum_Utils::$namespace . "Topic")
+			&& Forum_Utils::isNotFound($object)
+		){
 			$is_new = true;
 		}
 		$joinpoint->process();
@@ -119,7 +122,7 @@ class Last_Post implements Plugin
 	public static function register()
 	{
 		Aop::add("around",
-			'SAF\Wiki\Forum_Controller_Utils->writeObject()',
+			'SAF\Wiki\Forum_Controller_Utils->writeCompleteObjectDao()',
 			array(__CLASS__, "aroundForumControllerUtilsWriteObject")
 		);
 		Aop::add("around",
@@ -140,6 +143,16 @@ class Last_Post implements Plugin
 		if($object){
 			$class = Forum_Utils::$namespace . "Post";
 			$element = $object;
+			// special case: first post of a topic
+			$class_topic = Forum_Utils::$namespace . "Topic";
+			if(get_class($object) == $class_topic){
+				$topic = Forum_Utils::assignTopicFirstPost($object);
+				$object = $topic->first_post;
+				Forum_Utils::setObjectAttribute($topic, $attribute_last_post, $object);
+				Dao::write($topic);
+				$element = $topic;
+				$class = $class_topic;
+			}
 			while($class = Forum_Names_Utils::getParentClass($class)){
 				$short_class_name = Namespaces::shortClassName($class);
 				if(isset($path[$short_class_name]))
