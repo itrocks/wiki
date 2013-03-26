@@ -74,7 +74,8 @@ class Forum_Uri_Rewriter implements Plugin
 	 * @param $getters array
 	 * @return array
 	 */
-	public static function cleanGetters($getters){
+	public static function cleanGetters($getters)
+	{
 		foreach($getters as $key => $getter){
 			switch(strtolower($key)){
 				case "post":

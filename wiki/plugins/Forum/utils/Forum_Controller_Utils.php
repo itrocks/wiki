@@ -145,9 +145,11 @@ class Forum_Controller_Utils
 	 * @param $class_name string
 	 * @return string
 	 */
-	public static function getNextOutput(Controller_Parameters $parameters, $form, $files, $class_name)
-	{
-		return self::getOutput($parameters, $form, $files, Forum_Names_Utils::getNextClass($class_name));
+	public static function getNextOutput(
+		Controller_Parameters $parameters, $form, $files, $class_name
+	)	{
+		return
+			self::getOutput($parameters, $form, $files, Forum_Names_Utils::getNextClass($class_name));
 	}
 
 	//------------------------------------------------------------------------------- getParentOutput
@@ -159,9 +161,11 @@ class Forum_Controller_Utils
 	 * @param $class_name string
 	 * @return string
 	 */
-	public static function getParentOutput(Controller_Parameters $parameters, $form, $files, $class_name)
-	{
-		return self::getOutput($parameters, $form, $files, Forum_Names_Utils::getParentClass($class_name));
+	public static function getParentOutput(
+		Controller_Parameters $parameters, $form, $files, $class_name
+	)	{
+		return
+			self::getOutput($parameters, $form, $files, Forum_Names_Utils::getParentClass($class_name));
 	}
 
 	//----------------------------------------------------------------------------------------- write
@@ -175,8 +179,9 @@ class Forum_Controller_Utils
 	 * array("attribute_name" => "object_full_class_name")
 	 * @return Controller_Parameters Return the parameters updated
 	 */
-	public static function write(Controller_Parameters $parameters, $form, $class_name, $attributes_object = array())
-	{
+	public static function write(
+		Controller_Parameters $parameters, $form, $class_name, $attributes_object = array()
+	)	{
 		$errors = array();
 		$short_class_name = Namespaces::shortClassName($class_name);
 		$params = $parameters->getObjects();

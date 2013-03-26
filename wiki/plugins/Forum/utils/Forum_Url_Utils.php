@@ -3,7 +3,8 @@ namespace SAF\Wiki;
 use SAF\Framework\Dao;
 use SAF\Framework\Namespaces;
 
-class Forum_Url_Utils {
+class Forum_Url_Utils
+{
 	//------------------------------------------------------------------------------------ arrayToUri
 	/**
 	 * @param $array string[]
@@ -35,7 +36,8 @@ class Forum_Url_Utils {
 	 * @param $element string
 	 * @return string
 	 */
-	public static function encodeUrlElement($element){
+	public static function encodeUrlElement($element)
+	{
 		$element = rawurlencode(strtolower($element));
 		//accents
 		$pattern = array(

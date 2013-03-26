@@ -87,7 +87,8 @@ class Last_Post implements Plugin
 	 * Use this if you think the last_post attributes are not right.
 	 * Warning : much access of Dao.
 	 */
-	public static function recalculate(){
+	public static function recalculate()
+	{
 		foreach(Forum_Utils::getCategories() as $category){
 			foreach(Forum_Utils::getForums($category) as $forum){
 				$posts_forum = array();

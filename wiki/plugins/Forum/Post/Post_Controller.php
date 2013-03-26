@@ -61,7 +61,8 @@ class Post_Controller extends Output_Controller
 	}
 
 	//-------------------------------------------------------------------------------- isModification
-	public function isModification(Controller_Parameters $parameters){
+	public function isModification(Controller_Parameters $parameters)
+	{
 		return $parameters->getRawParameter("Post") != null;
 	}
 

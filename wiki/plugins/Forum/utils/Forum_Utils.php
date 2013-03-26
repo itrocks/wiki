@@ -127,7 +127,8 @@ class Forum_Utils
 	 * @param $content string
 	 * @return string
 	 */
-	public static function contentFormatting($content){
+	public static function contentFormatting($content)
+	{
 		return Wiki::textile($content);
 	}
 
@@ -288,7 +289,8 @@ class Forum_Utils
 	 * @param $time int|null
 	 * @return string The date formatted
 	 */
-	public static function getDate($time = null){
+	public static function getDate($time = null)
+	{
 		return date('j-m-y H:i', ($time !== null ? $time : time()));
 	}
 
@@ -439,7 +441,8 @@ class Forum_Utils
 	 * @param $object object
 	 * @return Post
 	 */
-	public static function getLastPost($object){
+	public static function getLastPost($object)
+	{
 		switch(get_class($object)){
 			case self::$namespace . "Topic":
 				/** @var $object Topic  */
@@ -471,7 +474,8 @@ class Forum_Utils
 	 * @param $object object
 	 * @return string
 	 */
-	public static function getLastPostAttribute($object){
+	public static function getLastPostAttribute($object)
+	{
 		$last_post = self::getLastPost($object);
 		if(is_object($last_post)){
 			$date = self::getDate($last_post->date_post);
@@ -674,7 +678,8 @@ class Forum_Utils
 	 * @param $object         object The object to compare.
 	 * @return bool
 	 */
-	public static function isEqualAttributeAndObject($source, $attribute_name, $object){
+	public static function isEqualAttributeAndObject($source, $attribute_name, $object)
+	{
 		$id = Dao::getObjectIdentifier($object);
 		$id_attribute_name = "id_" . $attribute_name;
 		return isset($source->$attribute_name)
@@ -702,7 +707,8 @@ class Forum_Utils
 	 * @param $new_object object
 	 * @return object
 	 */
-	public static function setObjectAttribute($source, $attribute, $new_object){
+	public static function setObjectAttribute($source, $attribute, $new_object)
+	{
 		if(property_exists($source, $attribute)){
 			$attribute_id = "id_" . $attribute;
 			$source->$attribute = $new_object;

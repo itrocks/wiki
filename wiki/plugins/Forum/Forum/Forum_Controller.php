@@ -54,7 +54,8 @@ class Forum_Controller extends Output_Controller
 	}
 
 	//---------------------------------------------------------------------------------------- delete
-	public function delete(Controller_Parameters $parameters, $form, $files, $class_name){
+	public function delete(Controller_Parameters $parameters, $form, $files, $class_name)
+	{
 		return Forum_Controller_Utils::delete($parameters, $form, $files, $class_name);
 	}
 
@@ -65,7 +66,8 @@ class Forum_Controller extends Output_Controller
 	 * @param $object int|object
 	 * @return array
 	 */
-	public function testForm($form, $object){
+	public function testForm($form, $object)
+	{
 		$errors = array();
 		$error = Forum_Controller_Utils::testTitle($form, $object, "SAF\\Wiki\\Forum");
 		if($error != null)

@@ -58,7 +58,8 @@ class News_Subscribe implements Plugin
 	/**
 	 * @param $joinpoint AopJoinpoint
 	 */
-	public static function preventSubscribe(AopJoinpoint $joinpoint){
+	public static function preventSubscribe(AopJoinpoint $joinpoint)
+	{
 		$object = $joinpoint->getArguments()[0];
 		if(is_object($object)){
 			$class_name = get_class($object);

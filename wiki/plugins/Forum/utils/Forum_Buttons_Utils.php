@@ -4,7 +4,8 @@ use SAF\Framework\Dao;
 use SAF\Framework\Button;
 use SAF\Framework\Color;
 
-class Forum_Buttons_Utils{
+class Forum_Buttons_Utils
+{
 
 
 	//------------------------------------------------------------------------------------ getButtons
@@ -32,7 +33,8 @@ class Forum_Buttons_Utils{
 	}
 
 	//-------------------------------------------------------------------- getBottomButtonsModeOutput
-	public static function getBottomButtonsModeOutput($object, $base_url){
+	public static function getBottomButtonsModeOutput($object, $base_url)
+	{
 		switch(get_class($object)){
 			case "SAF\\Wiki\\Post":
 				$buttons = self::getButtonsPostModeOutputPublic($object, $base_url);

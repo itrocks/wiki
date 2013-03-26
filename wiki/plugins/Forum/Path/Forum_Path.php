@@ -37,7 +37,8 @@ class Forum_Path
 	 * @param $index string The index, generally the short class name of the object.
 	 * @param $value object The object of this level.
 	 */
-	public function set($index, $value){
+	public function set($index, $value)
+	{
 		$this->path[$index] = $value;
 	}
 
@@ -47,7 +48,8 @@ class Forum_Path
 	 * @param $index string The index, generally the short class name of the object.
 	 * @return null|object
 	 */
-	public function get($index){
+	public function get($index)
+	{
 		if(isset($this->path[$index]))
 			return $this->path[$index];
 		return null;

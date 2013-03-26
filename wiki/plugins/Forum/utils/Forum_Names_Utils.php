@@ -3,7 +3,8 @@ namespace SAF\Wiki;
 use SAF\Framework\Namespaces;
 
 
-class Forum_Names_Utils {
+class Forum_Names_Utils
+{
 	public static $list_class =
 		array("SAF\\Wiki\\Category", "SAF\\Wiki\\Forum", "SAF\\Wiki\\Topic", "SAF\\Wiki\\Post");
 	public static $class_attributes =
@@ -18,7 +19,8 @@ class Forum_Names_Utils {
 	 * Return the first class name
 	 * @return string A full class name
 	 */
-	public static function getFirstClass(){
+	public static function getFirstClass()
+	{
 		if(isset(self::$list_class[0]))
 			return self::$list_class[0];
 		return "";
@@ -29,7 +31,8 @@ class Forum_Names_Utils {
 	 * Return the first class name
 	 * @return string A short class name
 	 */
-	public static function getFirstShortClass(){
+	public static function getFirstShortClass()
+	{
 		return Namespaces::shortClassName(self::getFirstClass());
 	}
 
@@ -58,7 +61,8 @@ class Forum_Names_Utils {
 	 * @param $class object|string Object or full class name
 	 * @return string The short class name.
 	 */
-	public static function getNextShortClass($class = null){
+	public static function getNextShortClass($class = null)
+	{
 		return Namespaces::shortClassName(self::getNextClass($class));
 	}
 

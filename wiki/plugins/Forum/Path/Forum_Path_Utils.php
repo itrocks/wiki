@@ -13,7 +13,8 @@ class Forum_Path_Utils
 	 * @param $class_name string|object
 	 * @return array
 	 */
-	public static function stopInLevel($path, $class_name){
+	public static function stopInLevel($path, $class_name)
+	{
 		$path_stopped = array();
 		if(is_object($class_name))
 			$class_name = get_class($class_name);
