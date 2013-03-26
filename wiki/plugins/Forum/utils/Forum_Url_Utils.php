@@ -58,6 +58,27 @@ class Forum_Url_Utils
 		return $element;
 	}
 
+	//--------------------------------------------------------------------------------------- findUrl
+	/**
+	 * Find the url corresponding of the object, use if the destination object is not sur
+	 * @param $object
+	 * @param $use_anchor bool
+	 * @return mixed|string
+	 */
+	public static function findUrl($object, $use_anchor = false)
+	{
+		$tab[] = $object;
+		$parent = $object;
+		while(($parent = Forum_Utils::getParentObject($parent)) != null){
+			$tab[] = $parent;
+		}
+		$tab = array_reverse($tab);
+		if($use_anchor)
+			return self::getUrl("", self::getBaseUrl($tab), array(), false, $object);
+		else
+			return self::getBaseUrl($tab);
+	}
+
 	//------------------------------------------------------------------------------------ getBaseUrl
 	/**
 	 * Create a basic URL. If elements are passed in parameters, try to add this elements after.

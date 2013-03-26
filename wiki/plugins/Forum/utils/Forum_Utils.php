@@ -93,9 +93,9 @@ class Forum_Utils
 	 * false else.
 	 * @return mixed
 	 */
-	public static function assignAttributeObjectInElement
-	($element, $attribute, $class_name, $initialize_value = true)
-	{
+	public static function assignAttributeObjectInElement(
+		$element, $attribute, $class_name, $initialize_value = true
+	)	{
 		$attribute_id = "id_" . $attribute;
 		if($element->$attribute == null){
 			$object = null;
@@ -151,8 +151,7 @@ class Forum_Utils
 		$mode,
 		$level_number = 1,
 		$level_max = -1
-	)
-	{
+	)	{
 		if($from != null && !is_object($from)){
 			if(isset($parameters[$from]))
 				$from = $parameters[$from];
@@ -222,7 +221,7 @@ class Forum_Utils
 				/** @var $object Forum */
 				$parameters = self::getAttributeNameCol($class_name, $title_parent_var_name, $parameters);
 				$parameters = self::getAttributeNameCol($next_class, $title_var_name, $parameters);
-				$parameters[$value_var_name][] = array("value" => self::getLastPostAttribute($object));
+				$parameters[$value_var_name][] = self::getLastPostAttribute($object);
 				$parameters[$value_var_name][] = array("value" => self::getNbTopics($object));
 				$parameters[$value_var_name][] = array("value" => self::getNbPosts($object));
 				break;
@@ -230,7 +229,7 @@ class Forum_Utils
 				/** @var $object Topic */
 				$parameters = self::getAttributeNameCol($class_name, $title_parent_var_name, $parameters);
 				$parameters = self::getAttributeNameCol($next_class, $title_var_name, $parameters);
-				$parameters[$value_var_name][] = array("value" => self::getLastPostAttribute($object));
+				$parameters[$value_var_name][] = self::getLastPostAttribute($object);
 				$parameters[$value_var_name][] = array("value" => self::getNbPosts($object));
 				break;
 			case self::$namespace . "Post" :
@@ -473,7 +472,7 @@ class Forum_Utils
 	/**
 	 * Return the text field of last post attribute.
 	 * @param $object object
-	 * @return string
+	 * @return array
 	 */
 	public static function getLastPostAttribute($object)
 	{
@@ -481,7 +480,9 @@ class Forum_Utils
 		if(is_object($last_post)){
 			$date = self::getDate($last_post->date_post);
 			$last_post = self::assignAuthorInPost($last_post);
-			return $date . " |by| " . $last_post->author->login;
+			$link = Forum_Url_Utils::findUrl($last_post);
+			return
+				array("label" => $date,"value" => " |by| " . $last_post->author->login, "link" => $link);
 		}
 		return "";
 	}

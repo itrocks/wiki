@@ -45,7 +45,7 @@ $CONFIG["wiki"] = array(
 			'SAF\Wiki\Edition_Reserved_To_Author',
 			'SAF\Wiki\News_Subscribe',
 			'SAF\Wiki\Last_Post',
-			'SAF\Wiki\Forum_Short_Elements'
+			'SAF\Wiki\Forum_Sort_Elements'
 		)
 	)
 );
