@@ -480,9 +480,9 @@ class Forum_Utils
 		if(is_object($last_post)){
 			$date = self::getDate($last_post->date_post);
 			$last_post = self::assignAuthorInPost($last_post);
-			$link = Forum_Url_Utils::findUrl($last_post);
+			$link = Forum_Url_Utils::findUrl($last_post, true);
 			return
-				array("label" => $date,"value" => " |by| " . $last_post->author->login, "link" => $link);
+				array("label" => $date, "value" => " |by| " . $last_post->author->login, "link" => $link);
 		}
 		return "";
 	}

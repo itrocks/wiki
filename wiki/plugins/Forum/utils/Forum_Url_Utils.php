@@ -67,16 +67,16 @@ class Forum_Url_Utils
 	 */
 	public static function findUrl($object, $use_anchor = false)
 	{
-		$tab[] = $object;
+		$tab[] = array();
 		$parent = $object;
 		while(($parent = Forum_Utils::getParentObject($parent)) != null){
 			$tab[] = $parent;
 		}
 		$tab = array_reverse($tab);
 		if($use_anchor)
-			return self::getUrl("", self::getBaseUrl($tab), array(), false, $object);
+			return self::getUrl($object, self::getBaseUrl($tab), array(), false, $object);
 		else
-			return self::getBaseUrl($tab);
+			return self::getUrl($object, self::getBaseUrl($tab));
 	}
 
 	//------------------------------------------------------------------------------------ getBaseUrl
@@ -154,7 +154,7 @@ class Forum_Url_Utils
 			}
 		}
 		if($element != null && count($element))
-			$url .= self::encodeUrlElement($element) . "/";
+			$url .= self::encodeUrlElement($element);
 		$is_first = true;
 		foreach($getters as $key => $getter){
 			$join = "&";
