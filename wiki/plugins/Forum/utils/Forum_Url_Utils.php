@@ -105,14 +105,18 @@ class Forum_Url_Utils
 	//------------------------------------------------------------------------------- getUrl
 	/**
 	 * Form an url, an put in right format.
-	 * @param $element string|object The element destination for the url
-	 * @param $base_url null|string The base url, if not indicated or null, use getBaseUrl()
-	 * @param $getters array
-	 * @param $is_secure boolean For edit/delete or other operation which change the state of the object, use the id reference if is_secure is true.
+	 * @param $element    string|object The element destination for the url
+	 * @param $base_url   null|string The base url, if not indicated or null, use getBaseUrl()
+	 * @param $getters    array
+	 * @param $is_secure  boolean For edit/delete or other operation which change the state of the object, use the id reference if is_secure is true.
+	 * @param $anchor     string|object
 	 * @return mixed The url
 	 */
-	public static function getUrl($element, $base_url = null, $getters = array(), $is_secure = false)
-	{
+	public static function getUrl(
+		$element, $base_url = null, $getters = array(), $is_secure = false, $anchor = null
+	)	{
+		if(isset($anchor) && is_object($anchor))
+			$anchor = Dao::getObjectIdentifier($anchor);
 		if($base_url == null)
 			$base_url = self::getBaseUrl();
 		if($rest = substr($base_url, strlen($base_url) - 1, 1) != "/")
@@ -123,8 +127,8 @@ class Forum_Url_Utils
 				$element = $element->title;
 			}
 			else {
-				$getters[strtolower(Namespaces::shortClassName(get_class($element)))] =
-					Dao::getObjectIdentifier($element);
+				$identifier = Dao::getObjectIdentifier($element);
+				$getters[strtolower(Namespaces::shortClassName(get_class($element)))] =	$identifier;
 				$element = "";
 			}
 		}
@@ -139,6 +143,8 @@ class Forum_Url_Utils
 			}
 			$url .= $join . $key . "=" . $getter;
 		}
+		if(isset($anchor) && $anchor != "")
+			$url .= "#" . $anchor;
 		$url = str_replace(" ", "%20;", $url);
 		return $url;
 	}

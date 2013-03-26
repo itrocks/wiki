@@ -65,6 +65,7 @@ class Forum_Utils
 		if($object && isset($object->title))
 			$parameters["title"] = $object->title;
 		$parameters = self::getAttributeCol($object, $parameters);
+		$parameters["id"] = Dao::getObjectIdentifier($object);
 		$parameters["attributes_number"] = count($parameters["attribute_values"]) + 2;
 		$parameters["buttons"] = Forum_Buttons_Utils::getButtons($object, $base_url, $mode);
 		$parameters["bottom_buttons"] = Forum_Buttons_Utils::getBottomButtons($object, $base_url, $mode);

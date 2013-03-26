@@ -171,7 +171,8 @@ class Forum_Search_Advanced_Controller extends Output_Controller
 			}
 			$forum = Forum_Utils::getParentObject($topic);
 			$category = Forum_Utils::getParentObject($forum);
-			$url = Forum_Url_Utils::getBaseUrl($category, $forum, $topic, $object);
+			$url = Forum_Url_Utils::getBaseUrl($category, $forum, $topic);
+			$url = Forum_Url_Utils::getUrl("", $url, array(), false, $object);
 			$params["link"] = $url;
 			$params["title"] = $topic->title;
 			$attributes_values = array(substr($content, 0, 100) . "...");
