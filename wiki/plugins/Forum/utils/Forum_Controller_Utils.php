@@ -251,7 +251,8 @@ class Forum_Controller_Utils
 			$search = new $class_name();
 			$search->title = $form["title"];
 			$search = Forum_Utils::setParentObject($search, Forum_Utils::getParentObject($object));
-			if(!Forum_Utils::isNotFound(Forum_Utils::getParentObject($search)))
+			if(!Forum_Utils::isNotFound(Forum_Utils::getParentObject($search))
+				|| Forum_Utils::getParentObject($search) == null)
 				$search = Dao::searchOne($search);
 			if($search != null && Dao::getObjectIdentifier($search) != $object_identifier)
 				$error = "This title exist, please choose another title.";
