@@ -665,6 +665,24 @@ class Forum_Utils
 		return true;
 	}
 
+	//--------------------------------------------------------------------- isEqualAttributeAndObject
+	/**
+	 * Test if an object in source at the attribute name has the same id
+	 * as the second object in parameters.
+	 * @param $source         object The source object, must have the attribute_name
+	 * @param $attribute_name string The attribute name of the object to test from the source object.
+	 * @param $object         object The object to compare.
+	 * @return bool
+	 */
+	public static function isEqualAttributeAndObject($source, $attribute_name, $object){
+		$id = Dao::getObjectIdentifier($object);
+		$id_attribute_name = "id_" . $attribute_name;
+		return isset($source->$attribute_name)
+			&& $id == Dao::getObjectIdentifier($source->$attribute_name)
+			|| isset($source->$id_attribute_name)
+			&& $id == $source->$id_attribute_name;
+	}
+
 	//------------------------------------------------------------------------------------ isNotFound
 	/**
 	 * Test if an object is not found when it has search.
@@ -677,6 +695,22 @@ class Forum_Utils
 		return !isset($identifier);
 	}
 
+	//---------------------------------------------------------------------------- setObjectAttribute
+	/**
+	 * @param $source     object
+	 * @param $attribute  string
+	 * @param $new_object object
+	 * @return object
+	 */
+	public static function setObjectAttribute($source, $attribute, $new_object){
+		if(property_exists($source, $attribute)){
+			$attribute_id = "id_" . $attribute;
+			$source->$attribute = $new_object;
+			unset($source->$attribute_id);
+		}
+		return $source;
+	}
+
 	//------------------------------------------------------------------------------- setParentObject
 	/**
 	 * Change the refer to the parent object.
@@ -687,8 +721,7 @@ class Forum_Utils
 	public static function setParentObject($object, $parent)
 	{
 		$attribute_parent = self::getParentObjectAttribute($object);
-		if(property_exists($object, $attribute_parent))
-			$object->$attribute_parent = $parent;
+		self::setObjectAttribute($object, $attribute_parent, $parent);
 		return $object;
 	}
 
