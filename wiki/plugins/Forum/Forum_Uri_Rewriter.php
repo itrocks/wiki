@@ -61,10 +61,30 @@ class Forum_Uri_Rewriter implements Plugin
 				}
 				$link = Forum_Url_Utils::arrayToUri($link_read);
 				$arguments[0] = $link;
+				$arguments[1] = self::cleanGetters($getters);
 				Session::current()->set(Forum_Path::current(new Forum_Path($answer["path"])));
 				$joinpoint->setArguments($arguments);
 			}
 		}
+	}
+
+	//---------------------------------------------------------------------------------- cleanGetters
+	/**
+	 * Clean getters, remove the objects id put in parameters.
+	 * @param $getters array
+	 * @return array
+	 */
+	public static function cleanGetters($getters){
+		foreach($getters as $key => $getter){
+			switch(strtolower($key)){
+				case "post":
+				case "topic":
+				case "forum":
+				case "category":
+					unset($getters[$key]);
+			}
+		}
+		return $getters;
 	}
 
 	/**
