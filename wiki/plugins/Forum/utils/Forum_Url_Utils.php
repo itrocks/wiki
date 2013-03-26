@@ -69,6 +69,13 @@ class Forum_Url_Utils
 	{
 		$tab[] = array();
 		$parent = $object;
+		if(get_class($object) == Forum_Utils::$namespace . "Post"
+		&& !Forum_Utils::hasElementAtAttribute($object, "topic")){
+			$search = new Topic();
+			$search->first_post = $object;
+			$parent = Dao::searchOne($search);
+			$tab[] = $parent;
+		}
 		while(($parent = Forum_Utils::getParentObject($parent)) != null){
 			$tab[] = $parent;
 		}
