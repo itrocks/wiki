@@ -67,6 +67,8 @@ class Update_Nb_Values implements Plugin
 			$class = get_class($object);
 			if(array_search($class, self::$class_names) !== false && Forum_Utils::isNotFound($object)){
 				self::incrementNumber($class);
+				if($class == Forum_Utils::$namespace . "Topic")
+					self::incrementNumber(Forum_Names_Utils::getNextClass($class));
 			}
 		}
 	}
@@ -138,6 +140,31 @@ class Update_Nb_Values implements Plugin
 	public static function incrementNumber($class_name)
 	{
 		self::addValueToNumber($class_name, 1);
+	}
+
+	//----------------------------------------------------------------------------------- recalculate
+	/**
+	 * Recalculate all nb champs.
+	 * Use this if you think the counter is false.
+	 * Warning : much access of Dao.
+	 */
+	public static function recalculate()
+	{
+		foreach(Forum_Utils::getCategories() as $category){
+			foreach(Forum_Utils::getForums($category) as $forum){
+				$nb_posts_forum = 0;
+				$nb_topics_forum = 0;
+				foreach(Forum_Utils::getTopics($forum) as $topic){
+					$topic->nb_posts = count(Forum_Utils::getPosts($topic)) + 1;
+					$nb_posts_forum = $topic->nb_posts;
+					$nb_topics_forum++;
+					Dao::write($topic);
+				}
+				$forum->nb_posts = $nb_posts_forum;
+				$forum->nb_topics = $nb_topics_forum;
+				Dao::write($forum);
+			}
+		}
 	}
 
 	//-------------------------------------------------------------------------------------- register

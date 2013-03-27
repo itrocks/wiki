@@ -122,17 +122,26 @@ class Forum_Controller_Utils
 	{
 		if(is_object($class_name))
 			$class_name = get_class($class_name);
+		$controller = self::getController($class_name);
+		$output = "output";
+		if($controller != "" && method_exists($controller, $output))
+			return (new $controller())->$output($parameters, $form, $files, $class_name);
+		else
+			return (new Category_Controller())->list_all($parameters, $form, $files, $class_name);
+	}
+
+	public static function getController($class_name){
 		switch(Namespaces::shortClassName($class_name)){
 			case "Category":
-				return (new Category_Controller())->output($parameters, $form, $files, $class_name);
+				return Forum_Utils::$namespace . "Category_Controller";
 			case "Forum":
-				return (new Forum_Controller())->output($parameters, $form, $files, $class_name);
+				return Forum_Utils::$namespace . "Forum_Controller";
 			case "Topic":
-				return (new Topic_Controller())->output($parameters, $form, $files, $class_name);
+				return Forum_Utils::$namespace . "Topic_Controller";
 			case "Post":
-				return (new Post_Controller())->output($parameters, $form, $files, $class_name);
+				return Forum_Utils::$namespace . "Post_Controller";
 			default:
-				return (new Category_Controller())->list_all($parameters, $form, $files, $class_name);
+				return "";
 		}
 	}
 
@@ -186,10 +195,16 @@ class Forum_Controller_Utils
 		$short_class_name = Namespaces::shortClassName($class_name);
 		$params = $parameters->getObjects();
 		$object = reset($params);
-		$object = self::writeCompleteObject($object, $form, $class_name, $attributes_object);
-		$parameters->set($short_class_name, $object);
+		$return = self::writeCompleteObject($object, $form, $class_name, $attributes_object);
+		if(is_array($return)){
+			$errors = $return;
+		}
+		else {
+			$parameters->set($short_class_name, $return);
+			Forum_Path::current()->set($short_class_name, Dao::read($return, $class_name));
+		}
 		$parameters->set("errors", $errors);
-		Forum_Path::current()->set($short_class_name, Dao::read($object, $class_name));
+
 		return $parameters;
 	}
 
@@ -209,19 +224,10 @@ class Forum_Controller_Utils
 				$object->$attribute = Forum_Controller_Utils::formToObject($object->$attribute, $form);
 			}
 		}
-		return self::writeCompleteObjectDao($object, $attributes_object);
-	}
-
-	public static function writeCompleteObjectDao($object, $attributes_object){
 		Dao::begin();
-		foreach($attributes_object as $attribute => $class_attribute){
-			if(isset($object->$attribute)){
-				self::writeObject($object->$attribute);
-			}
-		}
-		$object = self::writeObject($object);
+		$return = self::writeObject($object);
 		Dao::commit();
-		return $object;
+		return $return;
 	}
 
 	//----------------------------------------------------------------------------------- writeObject
@@ -231,36 +237,35 @@ class Forum_Controller_Utils
 	 */
 	public static function writeObject($object)
 	{
-		$parent_object = Forum_Utils::getParentObject($object);
-		if(isset($parent_object) && Forum_Utils::isNotFound($parent_object))
-			self::writeObject($parent_object);
-		return Dao::write($object);
+		$return = Dao::write($object);
+		if(!$return)
+			$return = array("The object have not be write.");
+		return $return;
 	}
 
 	//------------------------------------------------------------------------------------- testTitle
 	/**
 	 * Test if the title is correct and if is not exist.
 	 * This method must be call by write method, if necessary.
-	 * @param $form       array
 	 * @param $object     object
 	 * @return null|string Return a message error or null if no errors.
 	 */
-	public static function testTitle($form, $object)
+	public static function testTitle($object)
 	{
 		$error = null;
 		$object_identifier = Dao::getObjectIdentifier($object);
 		// The title must be valid
-		if(isset($form["title"]) && strlen($form["title"]) >= 3){
+		if(isset($object->title) && strlen($object->title) >= 3){
 			// The title must be unique
 			$class_name = get_class($object);
 			$search = new $class_name();
-			$search->title = $form["title"];
+			$search->title = $object->title;
 			$search = Forum_Utils::setParentObject($search, Forum_Utils::getParentObject($object));
 			if(!Forum_Utils::isNotFound(Forum_Utils::getParentObject($search))
 				|| Forum_Utils::getParentObject($search) == null)
 				$search = Dao::searchOne($search);
 			if($search != null && Dao::getObjectIdentifier($search) != $object_identifier)
-				$error = "This title exist, please choose another title.";
+				$error = "This title " . $object->title . " exist, please choose another title.";
 		}
 		else {
 			$error = "The title must contain at least 3 characters.";

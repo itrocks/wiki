@@ -9,7 +9,7 @@ use SAF\Framework\Namespaces;
 class Last_Post implements Plugin
 {
 
-	//---------------------------------------------------------------- afterForumControllerUtilsWrite
+	//--------------------------------------------------------- aroundForumControllerUtilsWriteObject
 	public static function aroundForumControllerUtilsWriteObject(AopJoinpoint $joinpoint)
 	{
 		$object = $joinpoint->getArguments()[0];
@@ -23,7 +23,7 @@ class Last_Post implements Plugin
 			$is_new = true;
 		}
 		$joinpoint->process();
-		if($is_new)
+		if($is_new && !is_array($joinpoint->getReturnedValue()))
 			self::updateLastPost($object);
 	}
 
@@ -122,7 +122,7 @@ class Last_Post implements Plugin
 	public static function register()
 	{
 		Aop::add("around",
-			'SAF\Wiki\Forum_Controller_Utils->writeCompleteObjectDao()',
+			'SAF\Wiki\Forum_Controller_Utils->writeObject()',
 			array(__CLASS__, "aroundForumControllerUtilsWriteObject")
 		);
 		Aop::add("around",
