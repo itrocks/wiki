@@ -9,77 +9,27 @@ use SAF\Framework\Namespaces;
 class Update_Nb_Values implements Plugin
 {
 
-	private static $class_names = array("SAF\\Wiki\\Post", "SAF\\Wiki\\Topic");
-
-	private static $attributes_number = array("nb_posts", "nb_topics");
-
-	private static $numbers = array();
-
-	//------------------------------------------------------------------------------ addValueToNumber
-	/**
-	 * Add a value of a number case. If the case not exist in tab, create this with $value to default.
-	 * @param $class_name string
-	 * @param $value      int Positive or Negative value
-	 */
-	public static function addValueToNumber($class_name, $value)
-	{
-		$previous_value = 0;
-		if(isset(self::$numbers[$class_name]))
-			$previous_value = self::$numbers[$class_name];
-		self::$numbers[$class_name] = $previous_value + $value;
-	}
-
-	//--------------------------------------------------------------- afterForumControllerUtilsDelete
-	public static function afterForumControllerUtilsDelete()
-	{
-		self::updateNbValues();
-	}
-
-	//--------------------------------------------------------- afterForumControllerUtilsDeleteObject
+	//-------------------------------------------------------- aroundForumControllerUtilsDeleteObject
 	/**
 	 * @param $joinpoint AopJoinpoint
 	 */
-	public static function afterForumControllerUtilsDeleteObject(AopJoinpoint $joinpoint)
+	public static function aroundForumControllerUtilsDeleteObject(AopJoinpoint $joinpoint)
 	{
-		$object = $joinpoint->getArguments()[0];
-		if(is_object($object)){
-			$class = get_class($object);
-			if(array_search($class, self::$class_names) !== false){
-				self::decrementNumber($class);
-			}
-		}
+		self::updateNbValues($joinpoint, -1);
 	}
 
-	//---------------------------------------------------------------- afterForumControllerUtilsWrite
-	public static function afterForumControllerUtilsWrite()
-	{
-		self::updateNbValues();
-	}
-
-	//--------------------------------------------------------- beforeForumControllerUtilsWriteObject
+	//--------------------------------------------------------- aroundForumControllerUtilsWriteObject
 	/**
 	 * @param $joinpoint AopJoinpoint
 	 */
-	public static function beforeForumControllerUtilsWriteObject(AopJoinpoint $joinpoint)
+	public static function aroundForumControllerUtilsWriteObject(AopJoinpoint $joinpoint)
 	{
 		$object = $joinpoint->getArguments()[0];
-		if(is_object($object)){
-			$class = get_class($object);
-			if(array_search($class, self::$class_names) !== false && Forum_Utils::isNotFound($object)){
-				self::incrementNumber($class);
-				if($class == Forum_Utils::$namespace . "Topic")
-					self::incrementNumber(Forum_Names_Utils::getNextClass($class));
-			}
+		if(Forum_Utils::isNotFound($object)){
+			self::updateNbValues($joinpoint, +1);
+		} else {
+			$joinpoint->process();
 		}
-	}
-
-	//------------------------------------------------------------------------------- decrementNumber
-	/**
-	 * @param $class_name string
-	 */
-	public static function decrementNumber($class_name)
-	{
-		self::addValueToNumber($class_name, -1);
 	}
 
 	//------------------------------------------------------------------- aroundForumUtilsGetNbForums
@@ -121,27 +71,6 @@ class Update_Nb_Values implements Plugin
 		$joinpoint->setReturnedValue($nb);
 	}
 
-	//------------------------------------------------------------------------------------- getNumber
-	/**
-	 * @param $class_name string
-	 * @return int
-	 */
-	public static function getNumber($class_name)
-	{
-		if(isset(self::$numbers[$class_name]))
-			return self::$numbers[$class_name];
-		return 0;
-	}
-
-	//------------------------------------------------------------------------------- incrementNumber
-	/**
-	 * @param $class_name string
-	 */
-	public static function incrementNumber($class_name)
-	{
-		self::addValueToNumber($class_name, 1);
-	}
-
 	//----------------------------------------------------------------------------------- recalculate
 	/**
 	 * Recalculate all nb champs.
@@ -170,21 +99,13 @@ class Update_Nb_Values implements Plugin
 	//-------------------------------------------------------------------------------------- register
 	public static function register()
 	{
-		Aop::add("before",
+		Aop::add("around",
 			'SAF\Wiki\Forum_Controller_Utils->writeObject()',
-			array(__CLASS__, "beforeForumControllerUtilsWriteObject")
+			array(__CLASS__, "aroundForumControllerUtilsWriteObject")
 		);
-		Aop::add("after",
-			'SAF\Wiki\Forum_Controller_Utils->write()',
-			array(__CLASS__, "afterForumControllerUtilsWrite")
-		);
-		Aop::add("after",
-			'SAF\Wiki\Forum_Controller_Utils->delete()',
-			array(__CLASS__, "afterForumControllerUtilsDelete")
-		);
-		Aop::add("after",
+		Aop::add("around",
 			'SAF\Wiki\Forum_Controller_Utils->deleteObject()',
-			array(__CLASS__, "afterForumControllerUtilsDeleteObject")
+			array(__CLASS__, "aroundForumControllerUtilsDeleteObject")
 		);
 		Aop::add("around",
 			'SAF\Wiki\Forum_Utils->getNbPosts()',
@@ -200,31 +121,57 @@ class Update_Nb_Values implements Plugin
 		);
 	}
 
-	//--------------------------------------------------------------------------- updateNbPostsValues
+	//-------------------------------------------------------------------------------- updateNbValues
 	/**
-	 * Updates numbers of elements values, with the tab of number and the path in session.
+	 * @param $joinpoint AopJoinpoint
+	 * @param $change int
 	 */
-	public static function updateNbValues()
+	public static function updateNbValues(AopJoinpoint $joinpoint, $change)
 	{
-		$path = Forum_Path_Utils::getPath();
-		foreach(self::$class_names as $key => $class_name){
-			$number = self::getNumber($class_name);
-			if($number){
-				$class = $class_name;
-				while($class = Forum_Names_Utils::getParentClass($class)){
-					$index = Namespaces::shortClassName($class);
-					if(isset($path[$index])){
-						$object = $path[$index];
-						$attribute_number = self::$attributes_number[$key];
-						if(isset($object) && property_exists($object, $attribute_number)){
-							$object->$attribute_number += $number;
-							Dao::write($object);
+		$arguments = $joinpoint->getArguments();
+		$object = $arguments[0];
+		$object_to_update = array();
+		$update_attributes = array();
+		if(is_object($object)){
+			$class = get_class($object);
+			if($class == Forum_Utils::$namespace . "Post"){
+				$update_attributes[] = "nb_posts";
+			}
+			else if($class == Forum_Utils::$namespace . "Topic"){
+				$update_attributes[] = "nb_posts";
+				$update_attributes[] = "nb_topics";
+				$object->nb_posts = $object->nb_posts + $change;
+			}
+			$parent = $object;
+			if(count($update_attributes) > 0){
+				while(($parent = Forum_Utils::getParentObject($parent)) != null){
+					if(!Forum_Utils::isNotFound($parent)){
+						$object_to_update[] = $parent;
+					}
+					else {
+						foreach($update_attributes as $attribute){
+							if(property_exists($parent, $attribute)){
+								$parent->$attribute = $parent->$attribute + $change;
+							}
 						}
 					}
 				}
-				self::$numbers[$class_name] = 0;
 			}
 		}
-		self::$numbers = array();
+		$arguments[0] = $object;
+		$joinpoint->setArguments($arguments);
+		$joinpoint->process();
+		foreach($object_to_update as $object){
+			$object = Dao::read(Dao::getObjectIdentifier($object), get_class($object));
+			$one_exist = false;
+			foreach($update_attributes as $attribute){
+				if(property_exists($object, $attribute)){
+					$object->$attribute = $object->$attribute + $change;
+					$one_exist = true;
+				}
+			}
+			if($one_exist && !Forum_Utils::isNotFound($object))
+				Dao::write($object);
+		}
 	}
 }

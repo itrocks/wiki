@@ -12,7 +12,8 @@ class Last_Post implements Plugin
 	//--------------------------------------------------------- aroundForumControllerUtilsWriteObject
 	public static function aroundForumControllerUtilsWriteObject(AopJoinpoint $joinpoint)
 	{
-		$object = $joinpoint->getArguments()[0];
+		$arguments = $joinpoint->getArguments();
+		$object = $arguments[0];
 		$is_new = false;
 		$class = get_class($object);
 		if(
@@ -23,8 +24,9 @@ class Last_Post implements Plugin
 			$is_new = true;
 		}
 		$joinpoint->process();
-		if($is_new && !is_array($joinpoint->getReturnedValue()))
+		if($is_new && !is_array($joinpoint->getReturnedValue())){
 			self::updateLastPost($object);
+		}
 	}
 
 	//------------------------------------------------------------------- aroundForumUtilsGetLastPost
@@ -49,35 +51,35 @@ class Last_Post implements Plugin
 	public static function aroundForumControllerUtilsDeleteObject(AopJoinpoint $joinpoint)
 	{
 		$object = $joinpoint->getArguments()[0];
-		if(get_class($object) == Forum_Utils::$namespace . "Post")
-			$object = clone $object;
-		else
-			$object = null;
+		$needUpdate = array();
+		if(get_class($object) == Forum_Utils::$namespace . "Post"){
+			$topic = Forum_Utils::getParentObject($object);
+			$needUpdate[] = $topic;
+			$needUpdate[] = Forum_Utils::getParentObject($topic);
+		} else if (get_class($object) == Forum_Utils::$namespace . "Topic"){
+			$needUpdate[] = Forum_Utils::getParentObject($object);
+		}
 		$joinpoint->process();
-		if(isset($object)){
-			$path = Forum_Path_Utils::getPath();
-			$attribute_last_post = "last_post";
-			$class = Forum_Utils::$namespace . "Post";
-			$element = $object;
-			while($class = Forum_Names_Utils::getParentClass($class)){
-				$short_class_name = Namespaces::shortClassName($class);
-				if(isset($path[$short_class_name]))
-					$element = $path[$short_class_name];
-				else
-					$element = Forum_Utils::getParentObject($element);
-				if(isset($element) && property_exists($element, $attribute_last_post)){
-					if(Forum_Utils::isEqualAttributeAndObject($element, $attribute_last_post, $object)){
-						$items = Forum_Utils::getNextElements($element);
-						if(get_class($object) == Forum_Utils::$namespace . "Forum"){
-							$tmp_tab = array();
-							foreach($items as $item){
-								$tmp_tab = array_merge($tmp_tab, Forum_Utils::getPosts($item));
-							}
-							$items = $tmp_tab;
+		if(count($needUpdate) > 0){
+			$attribute_name = "last_post";
+			foreach($needUpdate as $element){
+				if(!Forum_Utils::isNotFound($element)){
+					$element = Dao::read(Dao::getObjectIdentifier($element), get_class($element));
+					if(property_exists($element, $attribute_name)){
+						$list_posts = Forum_Utils::getNextElements($element);
+						$last_post = null;
+						if(get_class($element) == Forum_Utils::$namespace . "Forum"){
+							$last_post = reset($list_posts)->$attribute_name;
 						}
-						$last_post = end($items);
-						Forum_Utils::setObjectAttribute($element, $attribute_last_post, $last_post);
-						Dao::write($element);
+						else if($last_post == false && get_class($element) == Forum_Utils::$namespace . "Topic"){
+							$last_post = end($list_posts);
+							if($last_post == false)
+								$last_post = Forum_Utils::assignTopicFirstPost($element)->first_post;
+						}
+						if(!Forum_Utils::isNotFound($last_post)){
+							Forum_Utils::setObjectAttribute($element, $attribute_name, $last_post);
+							Dao::write($element);
+						}
 					}
 				}
 			}
@@ -138,28 +140,18 @@ class Last_Post implements Plugin
 	//-------------------------------------------------------------------------------- updateLastPost
 	public static function updateLastPost($object)
 	{
-		$path = Forum_Path_Utils::getPath();
 		$attribute_last_post = "last_post";
 		if($object){
-			$class = Forum_Utils::$namespace . "Post";
-			$element = $object;
 			// special case: first post of a topic
 			$class_topic = Forum_Utils::$namespace . "Topic";
 			if(get_class($object) == $class_topic){
 				$topic = Forum_Utils::assignTopicFirstPost($object);
 				$object = $topic->first_post;
-				Forum_Utils::setObjectAttribute($topic, $attribute_last_post, $object);
-				Dao::write($topic);
-				$element = $topic;
-				$class = $class_topic;
 			}
-			while($class = Forum_Names_Utils::getParentClass($class)){
-				$short_class_name = Namespaces::shortClassName($class);
-				if(isset($path[$short_class_name]))
-					$element = $path[$short_class_name];
-				else
-					$element = Forum_Utils::getParentObject($element);
-				if(property_exists($element, $attribute_last_post)){
+			$element = $object;
+			while(($element = Forum_Utils::getParentObjectSome($element)) != null){
+				if(property_exists($element, $attribute_last_post) && !Forum_Utils::isNotFound($element)){
+					$element = Dao::read(Dao::getObjectIdentifier($element), get_class($element));
 					Forum_Utils::setObjectAttribute($element, $attribute_last_post, $object);
 					Dao::write($element);
 				}
