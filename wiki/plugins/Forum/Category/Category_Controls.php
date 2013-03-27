@@ -5,7 +5,7 @@ use SAF\Framework\Aop;
 use \AopJoinpoint;
 
 
-class Topic_controls implements Plugin{
+class Category_Controls implements Plugin{
 
 	public static function register()
 	{
@@ -22,7 +22,7 @@ class Topic_controls implements Plugin{
 	public static function aroundForumControllerUtilsWriteCompleteObject(AopJoinpoint $joinpoint){
 		$object = $joinpoint->getArguments()[0];
 		$errors = array();
-		if(is_object($object) && get_class($object) == Forum_Utils::$namespace . "Topic"){
+		if(is_object($object) && get_class($object) == Forum_Utils::$namespace . "Category"){
 			$errors = self::testObject($object);
 		}
 		if(count($errors) == 0){
@@ -45,8 +45,6 @@ class Topic_controls implements Plugin{
 		$error = Forum_Controller_Utils::testTitle($object);
 		if($error != null)
 			$errors[] = $error;
-		$errorsContent = Post_controls::testObject($object->first_post);
-		$errors = array_merge($errors, $errorsContent);
 		return $errors;
 	}
 }

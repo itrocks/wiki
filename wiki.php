@@ -46,9 +46,10 @@ $CONFIG["wiki"] = array(
 			'SAF\Wiki\News_Subscribe',
 			'SAF\Wiki\Last_Post',
 			'SAF\Wiki\Forum_Sort_Elements',
-			'SAF\Wiki\Topic_controls',
-			'SAF\Wiki\Forum_controls',
-			'SAF\Wiki\Category_controls'
+			'SAF\Wiki\Topic_Controls',
+			'SAF\Wiki\Forum_Controls',
+			'SAF\Wiki\Category_Controls',
+			'SAF\Wiki\Ascent_Controls'
 		)
 	)
 );

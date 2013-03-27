@@ -265,10 +265,10 @@ class Forum_Controller_Utils
 				|| Forum_Utils::getParentObject($search) == null)
 				$search = Dao::searchOne($search);
 			if($search != null && Dao::getObjectIdentifier($search) != $object_identifier)
-				$error = "This title " . $object->title . " exist, please choose another title.";
+				$error = "This title '" . $object->title . "' exist, please choose another title.";
 		}
 		else {
-			$error = "The title must contain at least 3 characters.";
+			$error = "The title '" . $object->title . "' must contain at least 3 characters.";
 		}
 		return $error;
 	}

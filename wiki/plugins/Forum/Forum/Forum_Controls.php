@@ -5,7 +5,7 @@ use SAF\Framework\Aop;
 use \AopJoinpoint;
 
 
-class Post_controls implements Plugin{
+class Forum_Controls implements Plugin{
 
 	public static function register()
 	{
@@ -22,7 +22,7 @@ class Post_controls implements Plugin{
 	public static function aroundForumControllerUtilsWriteCompleteObject(AopJoinpoint $joinpoint){
 		$object = $joinpoint->getArguments()[0];
 		$errors = array();
-		if(is_object($object) && get_class($object) == Forum_Utils::$namespace . "Post"){
+		if(is_object($object) && get_class($object) == Forum_Utils::$namespace . "Forum"){
 			$errors = self::testObject($object);
 		}
 		if(count($errors) == 0){
@@ -42,8 +42,9 @@ class Post_controls implements Plugin{
 	public static function testObject($object)
 	{
 		$errors = array();
-		if(!isset($object) || strlen($object->content) < 3)
-			$errors[] = "The message must contain at least 3 characters.";
+		$error = Forum_Controller_Utils::testTitle($object);
+		if($error != null)
+			$errors[] = $error;
 		return $errors;
 	}
 }
