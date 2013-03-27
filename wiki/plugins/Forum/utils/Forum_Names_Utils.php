@@ -114,4 +114,25 @@ class Forum_Names_Utils
 		}
 		return Namespaces::shortClassName($level_name);
 	}
+
+	//------------------------------------------------------------------------------------- isAParent
+	/**
+	 * Test if a object or class is a parent of the element.
+	 * @param $element  object
+	 * @param $parent   object
+	 * @return bool Return true if the parent attribute is a parent of the element, false else,
+	 * false if an object is not in forum's hierarchy.
+	 */
+	public static function isAParent($element, $parent){
+		if(is_object($element))
+			$element = get_class($element);
+		if(is_object($parent))
+			$parent = get_class($parent);
+
+		$index_element = array_search($element, self::$list_class);
+		$index_parent = array_search($parent, self::$list_class);
+		if($index_element === false || $index_parent === false)
+			return false;
+		return $index_parent < $index_element;
+	}
 }

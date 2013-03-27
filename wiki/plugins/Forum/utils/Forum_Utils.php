@@ -67,8 +67,12 @@ class Forum_Utils
 		$parameters = self::getAttributeCol($object, $parameters);
 		$parameters["id"] = Dao::getObjectIdentifier($object);
 		$parameters["attributes_number"] = count($parameters["attribute_values"]) + 2;
-		$parameters["buttons"] = Forum_Buttons_Utils::getButtons($object, $base_url, $mode);
-		$parameters["bottom_buttons"] = Forum_Buttons_Utils::getBottomButtons($object, $base_url, $mode);
+		if(isset($object))
+			$parent_url = Forum_Url_Utils::getParentUrl($base_url);
+		else
+			$parent_url = $base_url;
+		$parameters["buttons"] = Forum_Buttons_Utils::getButtons($object, $parent_url, $mode);
+		$parameters["bottom_buttons"] = Forum_Buttons_Utils::getBottomButtons($object, $parent_url, $mode);
 		$parameters["type"] = Namespaces::shortClassName($class_name);
 		$parameters["type_child"] =
 			Namespaces::shortClassName(Forum_Names_Utils::getNextClass($class_name));
@@ -96,8 +100,8 @@ class Forum_Utils
 	public static function assignAttributeObjectInElement(
 		$element, $attribute, $class_name, $initialize_value = true
 	)	{
-		$attribute_id = "id_" . $attribute;
 		if($element->$attribute == null){
+			$attribute_id = "id_" . $attribute;
 			$object = null;
 			if(isset($element->$attribute_id))
 				$object = Dao::read($element->$attribute_id, $class_name);
@@ -397,11 +401,25 @@ class Forum_Utils
 					$level++;
 				}
 				else if(is_object($arg)){
+					if(!isset($parent) || Forum_Names_Utils::isAParent($arg, $parent)){
+						$parent_calibration = $parent;
+						$child = $arg;
+						$objects_child = array();
+						while(get_class($child) != Forum_Names_Utils::getNextClass($parent_calibration)){
+							$child = Forum_Utils::getParentObjectSome($child);
+							$objects_child[] = $child;
+							$level++;
+						}
+						$objects_child = array_reverse($objects_child);
+						foreach($objects_child as $object){
+							$answer["path"][Namespaces::shortClassName(get_class($object))] = $object;
+						}
+					}
 					if(self::isEmpty($arg)){
 						$arg = self::setParentObject($arg, $parent);
 					}
 					$answer["element"] = $arg;
-					$answer["path"][Forum_Names_Utils::getClassInLevel($level)] = $arg;
+					$answer["path"][Namespaces::shortClassName(get_class($arg))] = $arg;
 					$parent = $arg;
 					$level++;
 				}
@@ -582,6 +600,7 @@ class Forum_Utils
 
 	//------------------------------------------------------------------------------- getParentObject
 	/**
+	 * Return the parent object if exist.
 	 * @param $object object The object
 	 * @return object Return the parent object
 	 */
@@ -607,6 +626,29 @@ class Forum_Utils
 		$attribute_parent = Forum_Names_Utils::getParentShortClass($object);
 		$attribute_parent = strtolower($attribute_parent);
 		return $attribute_parent;
+	}
+
+	//--------------------------------------------------------------------------- getParentObjectSome
+	/**
+	 * Get the parent object, search in particular case or initialize value,
+	 * but make sure to return an object, except if the object is at the root or not recognize.
+	 * @param $object object The object
+	 * @return object Return the parent object
+	 */
+	public static function getParentObjectSome($object)
+	{
+		$parent_object = self::getParentObject($object);
+		if(!isset($parent_object) && get_class($object) == self::$namespace . "Post"){
+			$search = new Topic();
+			$search->first_post = $object;
+			$parent_object = Dao::searchOne($search);
+		}
+		if(!isset($parent_object)){
+			$parent_class = Forum_Names_Utils::getParentClass($object);
+			if($parent_class != "")
+				$parent_object = new $parent_class();
+		}
+		return $parent_object;
 	}
 
 	//-------------------------------------------------------------------------------------- getPosts
