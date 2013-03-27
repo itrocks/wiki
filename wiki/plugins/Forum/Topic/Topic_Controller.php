@@ -27,19 +27,14 @@ class Topic_Controller extends List_Controller
 	//----------------------------------------------------------------------------------------- write
 	public function write(Controller_Parameters $parameters, $form, $files, $class_name)
 	{
-		$is_written = false;
-		$path = Forum_Path_Utils::getPath();
+		$errors = array("Error");
 		if(count($form) > 0){
-			$errors = $this->testForm($form, end($path));
-			if(count($errors) == 0){
-				$form = (new Post_Controller())->getFormAdditionalParameters($parameters, $form);
-				$attributes = array("first_post" => "SAF\\Wiki\\Post");
-				$parameters = Forum_Controller_Utils::write($parameters, $form, $class_name, $attributes);
-				$is_written = true;
-			}
-			$parameters->set("errors", $errors);
+			$form = (new Post_Controller())->getFormAdditionalParameters($parameters, $form);
+			$attributes = array("first_post" => "SAF\\Wiki\\Post");
+			$parameters = Forum_Controller_Utils::write($parameters, $form, $class_name, $attributes);
+			$errors = $parameters->getRawParameter("errors");
 		}
-		if($is_written){
+		if(count($errors) == 0){
 			return $this->output($parameters, array(), $files, $class_name);
 		}
 		else {
@@ -52,22 +47,6 @@ class Topic_Controller extends List_Controller
 	{
 		$parameters->set("preview", Forum_Utils::contentFormatting($form["content"]));
 		return $this->edit($parameters, $form, $files, $class_name);
-	}
-
-	//-------------------------------------------------------------------------------------- testForm
-	/**
-	 * Test the form, and put in array all errors. If there are not errors, array returned is empty.
-	 * @param $form   array
-	 * @param $object int|object
-	 * @return array
-	 */
-	public function testForm($form, $object)
-	{
-		$errors = array();
-		$error = Forum_Controller_Utils::testTitle($form, $object, "SAF\\Wiki\\Topic");
-		if($error != null)
-			$errors[] = $error;
-		return $errors;
 	}
 
 	//------------------------------------------------------------------------------------------ edit

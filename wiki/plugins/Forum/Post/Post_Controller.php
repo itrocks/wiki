@@ -47,7 +47,13 @@ class Post_Controller extends Output_Controller
 	{
 		$form = $this->getFormAdditionalParameters($parameters, $form);
 		$parameters = Forum_Controller_Utils::write($parameters, $form, $class_name);
-		return $this->output($parameters, $form, $files, $class_name);
+		$errors = $parameters->getRawParameter("errors");
+		if(count($errors) == 0){
+			return $this->output($parameters, array(), $files, $class_name);
+		}
+		else {
+			return $this->edit($parameters, $form, $files, $class_name);
+		}
 	}
 
 	//------------------------------------------------------------------- getFormAdditionalParameters

@@ -61,7 +61,7 @@ class News_Subscribe implements Plugin
 	public static function preventSubscribe(AopJoinpoint $joinpoint)
 	{
 		$object = $joinpoint->getArguments()[0];
-		if(is_object($object)){
+		if(is_object($object) && !Forum_Utils::isNotFound($object)){
 			$class_name = get_class($object);
 			$parent = Forum_utils::getParentObject($object);
 			$search = new Subscribe();
@@ -85,10 +85,10 @@ class News_Subscribe implements Plugin
 				foreach($results as $result){
 					$result = Forum_Utils::assignAttributeObjectInElement
 						($result, "user", get_class(Search_Object::newInstance("SAF\\Framework\\User")));
-					mail(
+					/*mail(
 						$result->user->email, $subject,
 						$view, $headers
-					);
+					);*/
 				}
 			}
 		}
