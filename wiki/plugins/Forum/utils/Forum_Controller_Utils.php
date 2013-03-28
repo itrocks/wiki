@@ -130,6 +130,12 @@ class Forum_Controller_Utils
 			return (new Category_Controller())->list_all($parameters, $form, $files, $class_name);
 	}
 
+	//--------------------------------------------------------------------------------- getController
+	/**
+	 * Return the string full class name controller of a data class.
+	 * @param $class_name string
+	 * @return string
+	 */
 	public static function getController($class_name){
 		switch(Namespaces::shortClassName($class_name)){
 			case "Category":

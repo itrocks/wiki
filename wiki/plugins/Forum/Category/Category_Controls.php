@@ -15,7 +15,7 @@ class Category_Controls implements Plugin{
 		);
 	}
 
-	//------------------------------------------------------- ForumControllerUtilsWriteCompleteObject
+	//------------------------------------------------- aroundForumControllerUtilsWriteCompleteObject
 	/**
 	 * @param $joinpoint AopJoinpoint
 	 */
@@ -33,9 +33,9 @@ class Category_Controls implements Plugin{
 		}
 	}
 
-	//-------------------------------------------------------------------------------------- testForm
+	//------------------------------------------------------------------------------------ testObject
 	/**
-	 * Test the form, and put in array all errors. If there are not errors, array returned is empty.
+	 * Test the object, and put in array all errors. If there are not errors, array returned is empty.
 	 * @param $object object
 	 * @return array
 	 */
