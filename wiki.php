@@ -49,7 +49,8 @@ $CONFIG["wiki"] = array(
 			'SAF\Wiki\Topic_Controls',
 			'SAF\Wiki\Forum_Controls',
 			'SAF\Wiki\Category_Controls',
-			'SAF\Wiki\Ascent_Controls'
+			'SAF\Wiki\Ascent_Controls',
+			'SAF\Wiki\ReadOrNotRead'
 		)
 	)
 );

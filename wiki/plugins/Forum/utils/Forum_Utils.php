@@ -62,10 +62,8 @@ class Forum_Utils
 				$parameters["title"] = "Index";
 				break;
 		}
-		if($object && isset($object->title))
-			$parameters["title"] = $object->title;
+		$parameters["title"] = self::getTitle($object);
 		$parameters = self::getAttributeCol($object, $parameters);
-		$parameters["id"] = Dao::getObjectIdentifier($object);
 		$parameters["attributes_number"] = count($parameters["attribute_values"]) + 2;
 		if(isset($object))
 			$parent_url = Forum_Url_Utils::getParentUrl($base_url);
@@ -80,6 +78,11 @@ class Forum_Utils
 		return $parameters;
 	}
 
+	//---------------------------------------------------------------------------- assignAuthorInPost
+	/**
+	 * @param $post Post
+	 * @return mixed
+	 */
 	public static function assignAuthorInPost($post)
 	{
 		return self::assignAttributeObjectInElement
@@ -124,6 +127,16 @@ class Forum_Utils
 	public static function assignTopicFirstPost($topic)
 	{
 		return self::assignAttributeObjectInElement($topic, "first_post", self::$namespace . "Post");
+	}
+
+	//-------------------------------------------------------------------------- assignTopicFirstPost
+	/**
+	 * @param $object object An object.
+	 * @return Topic Return the topic with his last post
+	 */
+	public static function assignLastPost($object)
+	{
+		return self::assignAttributeObjectInElement($object, "last_post", self::$namespace . "Post");
 	}
 
 	//----------------------------------------------------------------------------- contentFormatting
@@ -664,6 +677,18 @@ class Forum_Utils
 		/** @var $forums Post[] */
 		$forums = Dao::search($search);
 		return $forums;
+	}
+
+	//-------------------------------------------------------------------------------------- getTitle
+	/**
+	 * @param $object object
+	 * @return mixed
+	 */
+	public static function getTitle($object){
+		if(isset($object->title))
+			return $object->title;
+		else
+			return "";
 	}
 
 	//------------------------------------------------------------------------------------- getTopics
