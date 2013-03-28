@@ -57,7 +57,7 @@ class Forum_Path_Utils
 	 */
 	public static function getPath()
 	{
-		$forum_path = Session::current()->get("SAF\\Wiki\\Forum_Path");
+		$forum_path = Session::current()->get(Forum_Utils::$namespace . "Forum_Path");
 		if($forum_path != null && is_object($forum_path)){
 			return $forum_path->path;
 		}

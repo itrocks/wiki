@@ -37,8 +37,9 @@ class Last_Post implements Plugin
 	{
 		$object = $joinpoint->getArguments()[0];
 		$return = null;
-		$object =
-			Forum_Utils::assignAttributeObjectInElement($object, "last_post", "SAF\\Wiki\\Post", false);
+		$object =	Forum_Utils::assignAttributeObjectInElement(
+			$object, "last_post", Forum_Utils::$namespace . "Post", false
+		);
 		if(isset($object->last_post))
 			$return = $object->last_post;
 		$joinpoint->setReturnedValue($return);

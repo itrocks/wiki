@@ -33,7 +33,7 @@ class ReadOrNotRead implements Plugin{
 	 */
 	public static function afterForumUtilsGetTitle(AopJoinpoint $joinpoint){
 		$object = $joinpoint->getArguments()[0];
-		if(isset($object)){
+		if(isset($object) && !Forum_Utils::isNotFound($object)){
 			$class = get_class($object);
 			if($class == Forum_Utils::$namespace . "Topic"){
 				$user = User::current();

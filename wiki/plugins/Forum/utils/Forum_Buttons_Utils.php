@@ -36,16 +36,16 @@ class Forum_Buttons_Utils
 	public static function getBottomButtonsModeOutput($object, $base_url)
 	{
 		switch(get_class($object)){
-			case "SAF\\Wiki\\Post":
+			case Forum_Utils::$namespace . "Post":
 				$buttons = self::getButtonsPostModeOutputPublic($object, $base_url);
 				break;
-			case "SAF\\Wiki\\Category":
+			case Forum_Utils::$namespace . "Category":
 				$buttons = self::getButtonsCategoryModeOutputPublic($object, $base_url);
 				break;
-			case "SAF\\Wiki\\Forum":
+			case Forum_Utils::$namespace . "Forum":
 				$buttons = self::getButtonsForumModeOutputPublic($object, $base_url);
 				break;
-			case "SAF\\Wiki\\Topic":
+			case Forum_Utils::$namespace . "Topic":
 				$buttons = self::getButtonsTopicModeOutputPublic($object, $base_url);
 				break;
 			default:
@@ -220,7 +220,7 @@ class Forum_Buttons_Utils
 	{
 		$buttons = array();
 		switch(get_class($object)){
-			case "SAF\\Wiki\\Post":
+			case Forum_Utils::$namespace . "Post":
 				$buttons[] = array(
 					"Confirm",
 					Forum_Url_Utils::getUrl($object, $base_url, array("mode" => "delete"), true),
@@ -234,9 +234,9 @@ class Forum_Buttons_Utils
 					array(Color::of("red"), "#main")
 				);
 				break;
-			case "SAF\\Wiki\\Category":
-			case "SAF\\Wiki\\Forum":
-			case "SAF\\Wiki\\Topic":
+			case Forum_Utils::$namespace . "Category":
+			case Forum_Utils::$namespace . "Forum":
+			case Forum_Utils::$namespace . "Topic":
 				$buttons[] = array(
 					"Confirm",
 					Forum_Url_Utils::getUrl($object, $base_url, array("mode" => "delete"), true),
@@ -265,7 +265,7 @@ class Forum_Buttons_Utils
 	{
 		$buttons = array();
 		switch(get_class($object)){
-			case "SAF\\Wiki\\Post":
+			case Forum_Utils::$namespace . "Post":
 				$buttons[] = array(
 					"Submit",
 					Forum_Url_Utils::getUrl($object, $base_url,	array("mode" => "write"),	true),
@@ -285,9 +285,9 @@ class Forum_Buttons_Utils
 					array(Color::of("red"), "#main")
 				);
 				break;
-			case "SAF\\Wiki\\Category":
-			case "SAF\\Wiki\\Forum":
-			case "SAF\\Wiki\\Topic":
+			case Forum_Utils::$namespace . "Category":
+			case Forum_Utils::$namespace . "Forum":
+			case Forum_Utils::$namespace . "Topic":
 				$buttons[] = array(
 					"Write",
 					Forum_Url_Utils::getUrl($object, $base_url, array("mode" => "write"), true),
@@ -321,16 +321,16 @@ class Forum_Buttons_Utils
 	public static function getButtonsModeOutput($object, $base_url)
 	{
 		switch(get_class($object)){
-			case "SAF\\Wiki\\Post":
+			case Forum_Utils::$namespace . "Post":
 				$buttons = self::getButtonsPostModeOutput($object, $base_url);
 				break;
-			case "SAF\\Wiki\\Category":
+			case Forum_Utils::$namespace . "Category":
 				$buttons = self::getButtonsCategoryModeOutput($object, $base_url);
 				break;
-			case "SAF\\Wiki\\Forum":
+			case Forum_Utils::$namespace . "Forum":
 			$buttons = self::getButtonsForumModeOutput($object, $base_url);
 				break;
-			case "SAF\\Wiki\\Topic":
+			case Forum_Utils::$namespace . "Topic":
 				$buttons = self::getButtonsTopicModeOutput($object, $base_url);
 				break;
 			default:

@@ -80,14 +80,14 @@ class Edition_Reserved_To_Author implements Plugin
 	{
 		if(is_object($object)){
 			switch(get_class($object)){
-				case "SAF\\Wiki\\Post" :
+				case Forum_Utils::$namespace . "Post" :
 					Forum_Utils::assignAuthorInPost($object);
 					if(User::current() == $object->author || Forum_Utils::isNotFound($object)){
 						$joinpoint->process();
 						return true;
 					}
 					break;
-				case "SAF\\Wiki\\Topic" :
+				case Forum_Utils::$namespace . "Topic" :
 					Forum_Utils::assignTopicFirstPost($object);
 					return self::control($joinpoint, $object->first_post);
 					break;

@@ -30,7 +30,7 @@ class Topic_Controller extends List_Controller
 		$errors = array("Error");
 		if(count($form) > 0){
 			$form = (new Post_Controller())->getFormAdditionalParameters($parameters, $form);
-			$attributes = array("first_post" => "SAF\\Wiki\\Post");
+			$attributes = array("first_post" => Forum_Utils::$namespace . "Post");
 			$parameters = Forum_Controller_Utils::write($parameters, $form, $class_name, $attributes);
 			$errors = $parameters->getRawParameter("errors");
 		}

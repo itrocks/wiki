@@ -42,7 +42,7 @@ class Forum_Search_Advanced_Controller extends Output_Controller
 		if(count($locations) == 0)
 			return true;
 		foreach($locations as $location){
-			$new_locations[] = Dao::read($location, "SAF\\Wiki\\Forum");
+			$new_locations[] = Dao::read($location, Forum_Utils::$namespace . "Forum");
 		}
 		return $new_locations;
 	}
@@ -154,7 +154,7 @@ class Forum_Search_Advanced_Controller extends Output_Controller
 	{
 		foreach($search as $object){
 			$params = array();
-			if(get_class($object) == "SAF\\Wiki\\Topic"){
+			if(get_class($object) == Forum_Utils::$namespace . "Topic"){
 				$topic = $object;
 				$topic = Forum_Utils::assignTopicFirstPost($topic);
 				$content = $topic->first_post->content;
@@ -181,8 +181,11 @@ class Forum_Search_Advanced_Controller extends Output_Controller
 			$parameters["topics"][] = $params;
 		}
 		$attributes_values = array("preview");
-		$parameters = Forum_Utils::getAttributeNameCol("SAF\\Wiki\\Topic", "attribute_titles", $parameters);
-		$parameters["attribute_titles"] = array_merge($attributes_values, $parameters["attribute_titles"]);
+		$parameters = Forum_Utils::getAttributeNameCol(
+			Forum_Utils::$namespace . "Topic", "attribute_titles", $parameters
+		);
+		$parameters["attribute_titles"] =
+			array_merge($attributes_values, $parameters["attribute_titles"]);
 		return $parameters;
 	}
 
@@ -279,7 +282,7 @@ class Forum_Search_Advanced_Controller extends Output_Controller
 					if(isset($author))
 						$filter["id_author"] = Dao::getObjectIdentifier($author);
 					$filter["content"] = $search_value;
-					$return = Dao::select("SAF\\Wiki\\Post", array("id"), $filter);
+					$return = Dao::select(Forum_Utils::$namespace . "Post", array("id"), $filter);
 					if(isset($return)){
 						/** @var  $return Default_List_Data */
 						foreach($return->elements as $row){
@@ -316,7 +319,9 @@ class Forum_Search_Advanced_Controller extends Output_Controller
 					foreach($results as $post){
 						if($post->id_topic != 0){
 							$post =
-								Forum_Utils::assignAttributeObjectInElement($post, "topic", "SAF\\Wiki\\Topic");
+								Forum_Utils::assignAttributeObjectInElement(
+									$post, "topic", Forum_Utils::$namespace . "Topic"
+								);
 							foreach($locations as $location){
 								if($post->topic->id_forum	== Dao::getObjectIdentifier($location))
 									$searched[] = $post;
@@ -330,7 +335,7 @@ class Forum_Search_Advanced_Controller extends Output_Controller
 					if(isset($author))
 						$filter["id_author"] = Dao::getObjectIdentifier($author);
 					$filter["content"] = $search_value;
-					$return = Dao::select("SAF\\Wiki\\Post", array("id"), $filter);
+					$return = Dao::select(Forum_Utils::$namespace . "Post", array("id"), $filter);
 					if(isset($return)){
 						/** @var  $return Default_List_Data */
 						foreach($return->elements as $row){
