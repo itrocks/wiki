@@ -2,9 +2,9 @@
 namespace SAF\Wiki;
 use AopJoinpoint;
 use SAF\Framework\Aop;
+use SAF\Framework\Namespaces;
 use SAF\Framework\Plugin;
 use SAF\Framework\Dao;
-use SAF\Framework\Namespaces;
 
 class Last_Post implements Plugin
 {
@@ -125,15 +125,15 @@ class Last_Post implements Plugin
 	public static function register()
 	{
 		Aop::add("around",
-			'SAF\Wiki\Forum_Controller_Utils->writeObject()',
+			Forum_Utils::$namespace . 'Forum_Controller_Utils->writeObject()',
 			array(__CLASS__, "aroundForumControllerUtilsWriteObject")
 		);
 		Aop::add("around",
-			'SAF\Wiki\Forum_Controller_Utils->deleteObject()',
+			Forum_Utils::$namespace . 'Forum_Controller_Utils->deleteObject()',
 			array(__CLASS__, "aroundForumControllerUtilsDeleteObject")
 		);
 		Aop::add("around",
-			'SAF\Wiki\Forum_Utils->getLastPost()',
+			Forum_Utils::$namespace . 'Forum_Utils->getLastPost()',
 			array(__CLASS__, "aroundForumUtilsGetLastPost")
 		);
 	}
@@ -152,9 +152,11 @@ class Last_Post implements Plugin
 			$element = $object;
 			while(($element = Forum_Utils::getParentObjectSome($element)) != null){
 				if(property_exists($element, $attribute_last_post) && !Forum_Utils::isNotFound($element)){
-					$element = Dao::read(Dao::getObjectIdentifier($element), get_class($element));
+					$class = get_class($element);
+					$element = Dao::read(Dao::getObjectIdentifier($element), $class);
 					Forum_Utils::setObjectAttribute($element, $attribute_last_post, $object);
 					Dao::write($element);
+					Forum_Path::current()->set(Namespaces::shortClassName($class), $element);
 				}
 			}
 		}

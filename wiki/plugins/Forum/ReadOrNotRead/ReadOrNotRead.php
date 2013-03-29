@@ -10,18 +10,17 @@ use SAF\Framework\User;
 /**
  * Class ReadOrNotRead
  * Without acls
- * @package SAF\Wiki
  */
 class ReadOrNotRead implements Plugin{
 
 	public static function register()
 	{
 		Aop::add("after",
-			'SAF\Wiki\Forum_Utils->getTitle()',
+			Forum_Utils::$namespace . 'Forum_Utils->getTitle()',
 			array(__CLASS__, "afterForumUtilsGetTitle")
 		);
 		Aop::add("after",
-			'SAF\Wiki\Topic_Controller->output()',
+			Forum_Utils::$namespace . 'Topic_Controller->output()',
 			array(__CLASS__, "afterTopicControllerOutput")
 		);
 	}
@@ -31,7 +30,8 @@ class ReadOrNotRead implements Plugin{
 	 * Control if read or not read
 	 * @param $joinpoint AopJoinpoint
 	 */
-	public static function afterForumUtilsGetTitle(AopJoinpoint $joinpoint){
+	public static function afterForumUtilsGetTitle(AopJoinpoint $joinpoint)
+	{
 		$object = $joinpoint->getArguments()[0];
 		if(isset($object) && !Forum_Utils::isNotFound($object)){
 			$class = get_class($object);
@@ -69,10 +69,14 @@ class ReadOrNotRead implements Plugin{
 	 * Write that last read.
 	 * @param $joinpoint AopJoinpoint
 	 */
-	public static function afterTopicControllerOutput(AopJoinpoint $joinpoint){
+	public static function afterTopicControllerOutput(AopJoinpoint $joinpoint)
+	{
 		/** @var $parameters Controller_Parameters */
 		$parameters = $joinpoint->getArguments()[0];
 		$object = $parameters->getObject("Topic");
+		if(!isset($object)){
+			$object = Forum_Path::current()->get("Topic");
+		}
 		if(isset($object)){
 			$user = User::current();
 			$last_post = Forum_Utils::assignLastPost($object)->last_post;
@@ -86,7 +90,7 @@ class ReadOrNotRead implements Plugin{
 				}
 				$read = $search;
 			}
-			$read->last_post = $last_post;
+			Forum_Utils::setObjectAttribute($read, "last_post", $last_post);
 			Dao::write($read);
 		}
 	}
