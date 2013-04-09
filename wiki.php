@@ -1,20 +1,20 @@
 <?php
 
-//--------------------------------------------------------------------------------------- wiki
+//-------------------------------------------------------------------------------------------- wiki
 $CONFIG["wiki"] = array(
 	"app" => "Wiki",
 	"extends" => "framework",
+	'SAF\Framework\Builder' => array(
+		'SAF\Framework\User' => 'SAF\Wiki\Wiki_User'
+	),
 	'SAF\Framework\Dao' => array(
 		"user"     => "wiki",
 		"password" => "cd93Rjfz4",
 		"database" => "wiki"
 	),
-	'SAF\Framework\Builder' => array(
-		'SAF\Framework\User' => 'SAF\Wiki\Wiki_User'
-	),
 	'SAF\Framework\Menu' => array(
 		"Disconnect" => array(
-			"/User/login" => "Log in",
+			"/User/login"    => "Log in",
 			"/User/register" => "Sign in"
 		),
 		"Connect" => array(
