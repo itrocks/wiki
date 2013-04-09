@@ -50,9 +50,7 @@ class Fix_Link_Url implements Plugin
 			return "href=\"" . $matches[1] .  "\"";
 		}
 		else {
-			return "href=\"http://" . $_SERVER["HTTP_HOST"]
-				. str_replace(".php", "", $_SERVER["SCRIPT_NAME"])
-				. "/". $matches[1] . "\"";
+			return "href=\"" . "/". $matches[1] . "\"";
 		}
 	}
 
