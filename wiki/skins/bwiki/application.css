@@ -71,4 +71,11 @@ a {
 .field {
 	color: rgb(66, 66, 75);
 	font-size: 22px;
+	position: static;
+}
+
+textarea {
+	height: 600px;
+	position: absolute;
+	width: 80%;
 }
