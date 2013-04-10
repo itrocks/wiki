@@ -1,5 +1,6 @@
 <!doctype html>
 <html>
+
 <head>
 	<title></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -38,24 +39,21 @@
 		@import "../plugins/Forum/forum.css";
 	</style>
 </head>
+
 <body>
-	<div id="popup" class="popup draggable"></div>
-	<div class="application top left">
-		<a class="bappli logo" href="http://www.bappli.com" target="_blank" title="www.bappli.com">
-			B-Wiki
-		</a>
-		<div class="left" id="messages"></div>
-	</div>
-	<div class="clear"></div>
-	<div class="left">
+
+	<a class="bappli logo" href="http://www.bappli.com" title="www.bappli.com">
+		B-Wiki
+	</a>
+
+	<div class="top">
 		{/Menu/output}
-		{/Search/output}
-		<div id="left_menu" class="application left_menu output">
-			{/Left_menu}
-		</div>
 	</div>
-	<div id="main" class="application center">
-				{@content}
+
+	<div class="main">
+		{/Search/output}
+		<div class="summary">{/Special:Menu}</div>
+		{@content}
 	</div>
 
 </body>

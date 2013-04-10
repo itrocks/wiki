@@ -13,12 +13,22 @@ $CONFIG["wiki"] = array(
 		"database" => "wiki"
 	),
 	'SAF\Framework\Menu' => array(
-		"Disconnect" => array(
+		"Disconnected" => array(
 			"/User/login"    => "Log in",
 			"/User/register" => "Sign in"
 		),
-		"Connect" => array(
+		"Connected" => array(
 			"/User/disconnect" => "Log out"
+		),
+		"Output" => array(
+			"/Page/new"    => "New page",
+			"/{page}/edit" => "Edit"
+		),
+		"Edit" => array(
+			"/{page}/save"   => "Save page",
+			"/{page}"        => "Cancel",
+			"/{page}/delete" => "Delete",
+			"/Images/upload" => "Images upload"
 		)
 	),
 	'SAF\Framework\View' => array(

@@ -7,10 +7,10 @@
 <body>
 
 <!--BEGIN-->
-<div class="right window">
-	<form method="POST" action="{action_url}">
-		<input id="search" name="search" type="text" value="{previous_search}"/><br/>
-		<input type="submit" value="|search|"/>
+<div class="search">
+	<form method="POST" action="/Search">
+		<input name="search" value="{?text}"><br>
+		<input type="submit" value="|Search|">
 	</form>
 </div>
 <!--END-->
