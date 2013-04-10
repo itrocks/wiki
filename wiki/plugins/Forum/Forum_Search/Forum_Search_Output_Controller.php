@@ -27,9 +27,7 @@ class Forum_Search_Output_Controller extends Output_Controller
 	{
 		$parameters = parent::getViewParameters($parameters, $form, $class_name);
 		$parameters["previous_search"] = "";
-		$parameters["action_url"] = "http://" . $_SERVER["HTTP_HOST"]
-			. str_replace(".php", "", $_SERVER["SCRIPT_NAME"])
-			. "/Forum_Search";
+		$parameters["action_url"] = "/Forum_Search";
 		if(Search::current()){
 			$parameters["previous_search"] = Search::current()->search;
 		}

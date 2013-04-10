@@ -94,9 +94,7 @@ class Forum_Url_Utils
 	 */
 	public static function getBaseUrl()
 	{
-		$base = "http://" . $_SERVER["HTTP_HOST"]
-			. str_replace(".php", "", $_SERVER["SCRIPT_NAME"])
-			. "/Forum/";
+		$base = "/Forum/";
 		if(func_get_args()){
 			foreach(func_get_args() as $arg){
 				if(is_array($arg)){

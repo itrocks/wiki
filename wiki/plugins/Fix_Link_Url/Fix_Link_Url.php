@@ -6,7 +6,7 @@ use SAF\Framework\Plugin;
 
 /**
  * Fix urls build by Textile.
- * Build urls as : http://server_name/script_name/url
+ * Build urls as : /url
  */
 class Fix_Link_Url implements Plugin
 {
