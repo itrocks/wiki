@@ -46,14 +46,18 @@
 		B-Wiki
 	</a>
 
-	<div class="top">
-		{/Menu/output}
-	</div>
+	<div class="application window">
+
+	<div class="menu">{/Menu/output}</div>
 
 	<div class="main">
-		{/Search/output}
-		<div class="summary">{/Special:Menu}</div>
+		<div class="side">
+			<div class="search">{/Search/output}</div>
+			<div class="page">{/Special:Menu}</div>
+		</div>
 		{@content}
+	</div>
+
 	</div>
 
 </body>

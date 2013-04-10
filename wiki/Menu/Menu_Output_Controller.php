@@ -61,7 +61,7 @@ class Menu_Output_Controller implements Feature_Controller
 			$this->deleteBlock($menu, "Disconnected");
 			// a page is opened
 			$page = Page::current();
-			if ($page) {
+			if ($page || (Uri_Rewriter::$feature == "new")) {
 				// remove output / edit menus blocks, depending on current running feature
 				$this->deleteBlock($menu,
 					((Uri_Rewriter::$feature == "edit") || (Uri_Rewriter::$feature == "new"))

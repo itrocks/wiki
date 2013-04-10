@@ -11,21 +11,16 @@
 <body>
 
 <!--BEGIN-->
-<div class="application menu menu_add output">
-	<!--general_buttons-->
-	<a class="button trashable {feature.lower} {?class.short}" href="{link}" target="{?target}">|{caption}|</a>
-	<!--general_buttons-->
-</div>
-<div class="window modifiable trashable {@feature.lower}" id="/{@class.short}<!--id-->/{id}<!--id-->/{@feature}">
-	<div class="fieldset">
+
+	<div class="page" id="/{@class.short}<!--id-->/{id}<!--id-->/{@feature}">
 		<!--@properties-->
 		<div class="field {getType.isMultiple}" id="{name}">
 			<div class="value">{value}</div>
 		</div>
 		<!--@properties-->
+		<hr/>
 	</div>
-	<hr/>
-</div>
+
 <!--END-->
 
 </body>
