@@ -4,6 +4,7 @@ use AopJoinpoint;
 use SAF\Framework\Aop;
 use SAF\Framework\Builder;
 use SAF\Framework\Dao;
+use SAF\Framework\Loc;
 use SAF\Framework\Plugin;
 
 class Uri_Rewriter implements Plugin
@@ -19,7 +20,7 @@ class Uri_Rewriter implements Plugin
 
 	//-------------------------------------------------------------------------------- $features_list
 	public static $features_list = array(
-		"edit", "output", "new", "delete", "included"
+		"delete", "edit", "include", "new", "output", "write"
 	);
 
 	//---------------------------------------------------------------------------------- $ignore_list
@@ -28,8 +29,7 @@ class Uri_Rewriter implements Plugin
 	 * @var string[]
 	 */
 	public static $ignore_list = array(
-		"Menu", "User", "Page", "Search", "Content", "Upload", "Images_Upload",
-		"uploaded_img", "Forum", "Category", "Post", "Topic", "Forum_Search"
+		"Images", "Menu", "Page", "Search", "User"
 	);
 
 	//------------------------------------------------------------------------------------ arrayToUri
@@ -64,7 +64,7 @@ class Uri_Rewriter implements Plugin
 		$arguments = $joinpoint->getArguments();
 		$link = $arguments[0];
 		if (!$link || ($link == "/")) {
-			$link = "/Accueil";
+			$link = "/" . Loc::tr("Home");
 		}
 		$page_class = 'SAF\Wiki\Page';
 		$parameters = self::uriToArray($link);
@@ -78,14 +78,7 @@ class Uri_Rewriter implements Plugin
 				$parameters[0] = $page_class;
 				$parameters[1] = $feature;
 			}
-			elseif (
-				$parameters && count($parameters)
-				&& !(
-					$parameters
-					&& (count($parameters) > 1)
-					&& ((strtolower($parameters[1]) == "write") || is_numeric($parameters[1]))
-				)
-			) {
+			elseif ($parameters && count($parameters)) {
 				if (@class_exists($page_class)) {
 					$name = trim(str_replace("_", " ", $parameters[0]));
 					/** @var $page_search Page */

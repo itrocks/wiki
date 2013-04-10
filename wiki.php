@@ -14,10 +14,12 @@ $CONFIG["wiki"] = array(
 	),
 	'SAF\Framework\Menu' => array(
 		"Disconnected" => array(
+			"/|Home|"        => "Home",
 			"/User/login"    => "Log in",
 			"/User/register" => "Sign in"
 		),
 		"Connected" => array(
+			"/|Home|"          => "Home",
 			"/User/disconnect" => "Log out"
 		),
 		"Output" => array(
@@ -25,10 +27,10 @@ $CONFIG["wiki"] = array(
 			"/{page}/edit" => "Edit"
 		),
 		"Edit" => array(
-			"/{page}/save"   => "Save page",
-			"/{page}"        => "Cancel",
-			"/{page}/delete" => "Delete",
-			"/Images/upload" => "Images upload"
+			"/{page}/write?#page_edit" => "Save page",
+			"/{page}"                  => "Cancel",
+			"/{page}/delete"           => "Delete",
+			"/Images/upload"           => "Images upload"
 		)
 	),
 	'SAF\Framework\View' => array(
