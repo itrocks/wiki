@@ -32,11 +32,16 @@ class Menu_Output_Controller implements Feature_Controller
 	 * @param Menu $menu
 	 * @param Page $page
 	 */
-	private function replacePage(Menu $menu, Page $page)
+	private function replacePage(Menu $menu, $page)
 	{
 		foreach ($menu->blocks as $block) {
 			foreach ($block->items as $item) {
-				$item->link = str_replace("{page}", $page->name, $item->link);
+				if (isset($page)) {
+					$item->link = str_replace("{page}", $page->name, $item->link);
+				}
+				elseif (strpos($item->link, "{page}")) {
+					$item->link = "";
+				}
 			}
 		}
 	}

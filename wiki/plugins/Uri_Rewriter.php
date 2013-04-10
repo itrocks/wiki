@@ -114,6 +114,11 @@ class Uri_Rewriter implements Plugin
 				self::$feature = $feature;
 			}
 		}
+		else {
+			if (isset($parameters[1]) && $parameters[1] == "new") {
+				self::$feature = $parameters[1];
+			}
+		}
 	}
 
 	//------------------------------------------------------------------------------------- isFeature
