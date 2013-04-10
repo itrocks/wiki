@@ -92,7 +92,7 @@ div#name.field {
 	clear: both;
 }
 
-.menu_left .window{
+.left_menu .window{
 	background-color: rgb(255, 255, 255);
 	border-width: 1px 1px medium;
 	border-style: inset;

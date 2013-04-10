@@ -23,7 +23,7 @@ class Forum_Uri_Rewriter implements Plugin
 		$link_read = array();
 		if ($link) {
 			$str = Forum_Url_Utils::uriToArray($link);
-			if(strtolower($str[0]) == "forum" && (!isset($str[1]) || !is_numeric($str[1]))){
+			if($str && strtolower($str[0]) == "forum" && (!isset($str[1]) || !is_numeric($str[1]))){
 				$getters = $joinpoint->getArguments()[1];
 				$params = array();
 				for($i = 1; $i < count($str); $i++){
