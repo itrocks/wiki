@@ -101,10 +101,10 @@ class Uri_Rewriter implements Plugin
 						$parameters[0] = $page_class;
 						$parameters[1] = $feature;
 					}
+					self::$feature = $feature;
 				}
 				$arguments[0] = self::arrayToUri($parameters);
 				$joinpoint->setArguments($arguments);
-				self::$feature = $feature;
 			}
 		}
 		else {

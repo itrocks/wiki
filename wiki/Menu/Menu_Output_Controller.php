@@ -40,7 +40,7 @@ class Menu_Output_Controller implements Feature_Controller
 					$item->link = str_replace("{page}", $page->name, $item->link);
 				}
 				elseif (strpos($item->link, "{page}")) {
-					$item->link = "";
+					$item->link = str_replace("{page}", "Page", $item->link);
 				}
 			}
 		}
