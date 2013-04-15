@@ -1,2 +1,2 @@
 #!/bin/bash
-unison ./ ../saf/ -prefer ./ -batch -fastcheck true -times -group -owner -repeat 1 -path config.php -path index.php -path framework
+unison ./ ../saf/ -prefer ../saf/ -batch -fastcheck true -times -group -owner -repeat 3 -path config.php -path index.php -path framework
