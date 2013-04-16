@@ -29,7 +29,7 @@ class Uri_Rewriter implements Plugin
 	 * @var string[]
 	 */
 	public static $ignore_list = array(
-		"Images", "Menu", "Page", "Search", "User"
+		"Images_Upload", "Menu", "Page", "Search", "User"
 	);
 
 	//------------------------------------------------------------------------------------ arrayToUri
@@ -83,7 +83,7 @@ class Uri_Rewriter implements Plugin
 					$name = trim(str_replace("_", " ", $parameters[0]));
 					/** @var $page_search Page */
 					$page_search = Builder::create($page_class);
-					$page_search->name = $name;
+					$page_search->name = ($name == "Left menu") ? Loc::tr($name) : $name;
 					/** @var $page Page */
 					$page = Dao::searchOne($page_search, $page_class);
 					if ($page) {

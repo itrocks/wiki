@@ -9,6 +9,7 @@ class Image_Wiki_Link_Parse implements Plugin
 	//----------------------------------------------------------------------------- beforeWikiTextile
 	/**
 	 * Read the text in parameter, and parse wiki format link to the textile link.
+	 *
 	 * @param $joinpoint AopJoinpoint
 	 */
 	public static function beforeWikiTextile(AopJoinpoint $joinpoint)
@@ -23,6 +24,7 @@ class Image_Wiki_Link_Parse implements Plugin
 	//------------------------------------------------------------------------------------- parseLink
 	/**
 	 * Parse wiki's links in a text to replace by textile's links.
+	 *
 	 * @param $text string The string to parse.
 	 * @return string The parsed string
 	 */
@@ -39,12 +41,13 @@ class Image_Wiki_Link_Parse implements Plugin
 	//------------------------------------------------------------------------------------ formatLink
 	/**
 	 * Replace in write format, it's a callable for preg_replace_callback.
+	 *
 	 * @param $matches string[]
 	 * @return string
 	 */
 	static function formatLink($matches)
 	{
-		return "!" . $matches[1] . "." . $matches[2] . "!";
+		return "!/" . $matches[1] . "." . $matches[2] . "!";
 	}
 
 	//-------------------------------------------------------------------------------------- register

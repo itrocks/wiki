@@ -16,12 +16,13 @@ class Images_Upload_Controller implements Feature_Controller
 	//---------------------------------------------------------------------------------------- upload
 	/**
 	 * Upload an image passed by forms.
+	 *
 	 * @param $parameters Controller_Parameters
 	 * @param $form       array
 	 * @param $files      array
 	 * @return mixed
 	 */
-	public function upload(Controller_Parameters $parameters, $form, $files)
+	public function runUpload(Controller_Parameters $parameters, $form, $files)
 	{
 		if(isset($files['image'])){
 			$image = $files['image'];

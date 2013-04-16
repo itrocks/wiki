@@ -30,7 +30,7 @@ $CONFIG["wiki"] = array(
 			"/{page}/write?#page_edit" => "Save page",
 			"/{page}"                  => "Cancel",
 			"/{page}/delete"           => "Delete",
-			"/Images/upload"           => "Images upload"
+			"/Images_Upload"           => array("Images upload", "#images_upload")
 		)
 	),
 	'SAF\Framework\View' => array(
@@ -48,7 +48,7 @@ $CONFIG["wiki"] = array(
 			'SAF\Wiki\Image_Wiki_Link_Parse',
 			'SAF\Wiki\Parse_Wiki_Link',
 			'SAF\Wiki\Change_Name_Page_Refactor',
-			'SAF\Wiki\Fix_Link_Url',
+			//'SAF\Wiki\Fix_Link_Url',
 			'SAF\Wiki\Links_Recognition',
 			'SAF\Wiki\Images_Upload',
 			'SAF\Wiki\Forum_Uri_Rewriter',
