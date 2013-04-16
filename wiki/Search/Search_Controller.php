@@ -105,30 +105,31 @@ class Search_Controller implements Class_Controller
 		return $count;
 	}
 
-	//----------------------------------------------------------------------------- exactlyNameSearch
+	//------------------------------------------------------------------------------- exactNameSearch
 	/**
-	 * Search in databases if an object have this exactly name.
+	 * Search in databases if an object have this exact name.
+	 *
 	 * @param $search_text string The search word.
 	 * @return array
 	 */
-	private function exactlyNameSearch($search_text)
+	private function exactNameSearch($search_text)
 	{
-		// exactly name search
+		// exact name search
 		$page_var_name = self::$page_var_name;
 		$object = Builder::create(self::$page_class_name);
 		$object->$page_var_name = $search_text;
-		$exactly_name = Dao::searchOne($object);
+		$exact_name = Dao::searchOne($object);
 		// search
 		$content = array();
-		if (isset($exactly_name)) {
+		if (isset($exact_name)) {
 			$content[] = array(
 				"occurrence" => "",
-				"label"      => "A page have this exactly name",
-				"name"       => $exactly_name,
-				"link"       => str_replace(" ", "_", $exactly_name)
+				"label"      => "A page have this exact name",
+				"name"       => $exact_name,
+				"link"       => str_replace(" ", "_", $exact_name)
 			);
 		}
-		return array("title" => "Exactly name", "content" => $content);
+		return array("title" => "Exact name", "content" => $content);
 	}
 
 	//------------------------------------------------------------------------------------------- run
@@ -196,7 +197,7 @@ class Search_Controller implements Class_Controller
 		$search = Builder::Create('SAF\Wiki\Search');
 		$result = array();
 		if (!empty($search_text)) {
-			$result[] = $this->exactlyNameSearch($search_text);
+			$result[] = $this->exactNameSearch($search_text);
 			$result[] = $this->approximateNameSearch($search_text);
 			$result[] = $this->contentSearch($search_text);
 			$search->text = $search_text;
