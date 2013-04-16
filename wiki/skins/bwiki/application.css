@@ -24,7 +24,6 @@ a {
 /* Application window */
 
 .application.window {
-	background-color: rgb(255, 255, 255);
 	display: table;
 	width: 100%;
 }
@@ -37,7 +36,6 @@ a {
 	border-color: rgb(151, 151, 102);
 	border-style: solid;
 	display: table-row;
-	font-size: 75%;
 }
 
 .menu a {
@@ -54,28 +52,69 @@ a {
 	width: 1%;
 }
 
+/* Main page organization */
+
 .main {
 	display: table-row;
 }
 
-.main .side {
+.main .side,
+.main .window {
 	display: table-cell;
+	position: relative;
 }
 
-.main .page {
-	display: table-cell;
+/* Search widget */
+
+.side .search {
 }
 
-/* Page form fields */
+/* Left menu widget */
 
-.field {
-	color: rgb(66, 66, 75);
-	font-size: 22px;
-	position: static;
+.side .page .window.page {
+	width: 90%;
 }
 
-textarea {
-	height: 600px;
+/* Page display */
+
+.window.page {
+	background-color: white;
 	position: absolute;
+	padding: 4px;
 	width: 80%;
+}
+.window.page h2.window.title,
+.window.page .general.buttons,
+.window.page .field .label {
+	display: none;
+}
+
+.window.page .field.name .value {
+	font-size: 1.5em;
+	font-weight: bold;
+}
+
+/* Page edit components */
+
+.window.page .field.name .value input {
+	font-size: 1.1em;
+	position: relative;
+	width: 80%;
+}
+
+.window.page .field.text .value textarea {
+	height: 600px;
+	position: relative;
+	width: 100%;
+}
+
+/* Image upload popup */
+
+#images_upload {
+	background-color: white;
+	border: 1px solid black;
+	position: absolute;
+	left: 100px;
+	top: 80px;
+	z-index: 1;
 }
