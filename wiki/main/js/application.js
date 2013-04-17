@@ -6,6 +6,7 @@ $("document").ready(function()
 
 		this.aform();
 		this.xtarget({ url_append: "as_widget=1" });
+		this.in("textarea").presstab();
 
 	});
 
