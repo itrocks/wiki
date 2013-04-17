@@ -56,7 +56,7 @@ class Parse_Wiki_Link implements Plugin
 					$length --;
 				}
 				// parse link : replace [A link] with "A link":/A_link
-				elseif (($j = strpos($text, "]", $i)) !== false) {
+				elseif (($text[$i] != "]") && ($j = strpos($text, "]", $i)) !== false) {
 					$uri = substr($text, $i, $j - $i);
 					$length -= (strlen($uri) + 2);
 					$uri = "\"" . $uri . "\"" . ":" . str_replace(" ", "_", $uri);
