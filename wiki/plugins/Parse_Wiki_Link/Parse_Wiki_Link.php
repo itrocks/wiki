@@ -32,37 +32,42 @@ class Parse_Wiki_Link implements Plugin
 	public static function beforeWikiTextile(AopJoinpoint $joinpoint)
 	{
 		$arguments = $joinpoint->getArguments();
-		$text = $arguments[0];
-		$text = self::parseLink($text);
-		$arguments[0] = $text;
+		$arguments[0] = self::parseWikiLinks($arguments[0]);
 		$joinpoint->setArguments($arguments);
 	}
 
 	//------------------------------------------------------------------------------------- parseLink
 	/**
-	 * Parse wiki's links in a text to replace by textile's links.
+	 * Parse [Wiki links] and replace then with "Wiki links":/Wiki_links
+	 *
 	 * @param $text string The string to parse.
 	 * @return string The parsed string
 	 */
-	static function parseLink($text)
+	private static function parseWikiLinks($text)
 	{
-		$callback = function($matches) {
-			return self::formatLink($matches);
-		};
-		$text = preg_replace_callback("#\[\[(.+)\]\]#", $callback, $text);
-		$text = preg_replace_callback("#\[(.+)\]#", $callback, $text);
+		$i = 0;
+		$length = strlen($text);
+		while (($i < $length) && (($i = strpos($text, "[", $i)) !== false)) {
+			$i++;
+			if (($i < $length)) {
+				// escape with [[ => [ without parsing
+				if ($text[$i] == "[") {
+					$text = substr($text, 0, $i) . substr($text, $i + 1);
+					$length --;
+				}
+				// parse link : replace [A link] with "A link":/A_link
+				elseif (($j = strpos($text, "]", $i)) !== false) {
+					$uri = substr($text, $i, $j - $i);
+					$length -= (strlen($uri) + 2);
+					$uri = "\"" . $uri . "\"" . ":" . str_replace(" ", "_", $uri);
+					$uri_length = strlen($uri);
+					$length += $uri_length;
+					$text = substr($text, 0, $i - 1) . $uri . substr($text, $j + 1);
+					$i += $uri_length;
+				}
+			}
+		}
 		return $text;
-	}
-
-	//------------------------------------------------------------------------------------ formatLink
-	/**
-	 * Replace in write format, it's a callable for preg_replace_callback.
-	 * @param $matches string[]
-	 * @return string
-	 */
-	static function formatLink($matches)
-	{
-		return "\"" . $matches[1]. "\"" . ":/" . str_replace(" ", "_", $matches[1]);
 	}
 
 	//-------------------------------------------------------------------------------------- register
