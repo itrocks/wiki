@@ -1,4 +1,6 @@
 <?php
+global $pwd;
+include_once "pwd.php";
 
 //-------------------------------------------------------------------------------------------- wiki
 $CONFIG["wiki"] = array(
@@ -9,7 +11,7 @@ $CONFIG["wiki"] = array(
 	),
 	'SAF\Framework\Dao' => array(
 		"user"     => "saf-wiki",
-		"password" => "cd93Rjfz4",
+		"password" => $pwd["saf-wiki"],
 		"database" => "saf-wiki"
 	),
 	'SAF\Framework\Menu' => array(

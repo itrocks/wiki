@@ -5,6 +5,7 @@
 /.project
 /framework
 /phpdoc
+/wiki/uploaded_img
 /index.php
 /config.php
-/wiki/uploaded_img
+/pwd.php
