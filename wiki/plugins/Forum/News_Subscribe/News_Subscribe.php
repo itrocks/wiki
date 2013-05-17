@@ -84,7 +84,7 @@ class News_Subscribe implements Plugin
 				ini_set("sendmail_from", $email_from);
 				foreach($results as $result){
 					$result = Forum_Utils::assignAttributeObjectInElement
-						($result, "user", get_class(Search_Object::newInstance("SAF\\Framework\\User")));
+						($result, "user", get_class(Search_Object::create("SAF\\Framework\\User")));
 					/*mail(
 						$result->user->email, $subject,
 						$view, $headers

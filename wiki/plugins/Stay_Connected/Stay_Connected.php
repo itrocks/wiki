@@ -21,7 +21,7 @@ class Stay_Connected implements Plugin
 		$checkbox_result = !empty($joinpoint->getArguments()[1]["stay_connected"]);
 		if ($checkbox_result) {
 			/** @var $user \SAF\Framework\User */
-			$user = Search_Object::newInstance('SAF\Framework\User');
+			$user = Search_Object::create('SAF\Framework\User');
 			$user = Session::current()->get(get_class($user));
 			if (isset($user)) {
 				$user_name = $user->login;
@@ -49,7 +49,7 @@ class Stay_Connected implements Plugin
 		$content_title = self::generateNameCookie($user->login);
 		if(isset($_COOKIE[$content_title])){
 			$hash = $_COOKIE[$content_title];
-			$connection_cookie = Search_Object::newInstance('SAF\Wiki\Connection_Cookie');
+			$connection_cookie = Search_Object::create('SAF\Wiki\Connection_Cookie');
 			$connection_cookie->user = $user;
 			$connection_cookie->hash = $hash;
 			$connection_cookie = Dao::searchOne($connection_cookie);
@@ -78,7 +78,7 @@ class Stay_Connected implements Plugin
 	public static function beforeMainControllerRun()
 	{
 		/** @var $user \SAF\Framework\User */
-		$user = Search_Object::newInstance('SAF\Framework\User');
+		$user = Search_Object::create('SAF\Framework\User');
 		if (!Session::current() || !Session::current()->get(get_class($user))) {
 			$user_name_title = self::generateNameCookie("user_name");
 			$user_name = null;
@@ -92,7 +92,7 @@ class Stay_Connected implements Plugin
 					$user = Dao::searchOne($user);
 					if (isset($user)) {
 						/** @var $connection_cookie \SAF\Wiki\Connection_Cookie */
-						$connection_cookie = Search_Object::newInstance('SAF\Wiki\Connection_Cookie');
+						$connection_cookie = Search_Object::create('SAF\Wiki\Connection_Cookie');
 						$connection_cookie->user = $user;
 						/** @var $list_connection_cookie Connection_Cookie[] */
 						$list_connection_cookie = Dao::search($connection_cookie);
@@ -217,7 +217,7 @@ class Stay_Connected implements Plugin
 	private static function registerHashInDao($user, $content_key, $random_var)
 	{
 		/** @var $connection_cookie Connection_Cookie */
-		$connection_cookie = Search_Object::newInstance('SAF\Wiki\Connection_Cookie');
+		$connection_cookie = Search_Object::create('SAF\Wiki\Connection_Cookie');
 		$connection_cookie->user = $user;
 		$connection_cookie->hash = $content_key;
 		$connection_cookie->random_var = $random_var;

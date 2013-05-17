@@ -28,14 +28,14 @@ class Email_Confirmation_Register implements Plugin
 	 */
 	public static function afterUserAuthenticationRegister(AopJoinpoint $joinpoint)
 	{
-		$user = Search_Object::newInstance('SAF\Framework\User');
+		$user = Search_Object::create('SAF\Framework\User');
 		$form = $joinpoint->getArguments()[0];
 		$user->login = $form["login"];
 		$user = Dao::searchOne($user);
 		if ($user) {
 			$key = self::generateKey();
 			$link = self::generateActivationLink($key);
-			$email_confirm = Search_Object::newInstance('SAF\Wiki\Email_Confirmation');
+			$email_confirm = Search_Object::create('SAF\Wiki\Email_Confirmation');
 			$email_confirm->user = $user;
 			$email_confirm->link = $key;
 			Dao::write($email_confirm);
@@ -78,7 +78,7 @@ class Email_Confirmation_Register implements Plugin
 	public static function afterUserAuthenticationLogin(AopJoinpoint $joinpoint)
 	{
 		$user = $joinpoint->getReturnedValue();
-		$email_confirm = Search_Object::newInstance('SAF\Wiki\Email_Confirmation');
+		$email_confirm = Search_Object::create('SAF\Wiki\Email_Confirmation');
 		$email_confirm->user = $user;
 		$is_not_validate = Dao::search($email_confirm);
 		if ($is_not_validate) {

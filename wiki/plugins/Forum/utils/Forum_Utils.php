@@ -86,7 +86,7 @@ class Forum_Utils
 	public static function assignAuthorInPost($post)
 	{
 		return self::assignAttributeObjectInElement
-			($post, "author", get_class(Search_Object::newInstance("SAF\\Framework\\User")));
+			($post, "author", get_class(Search_Object::create("SAF\\Framework\\User")));
 	}
 
 	//---------------------------------------------------------------- assignAttributeObjectInElement

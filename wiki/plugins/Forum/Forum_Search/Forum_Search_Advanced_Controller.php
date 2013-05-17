@@ -257,7 +257,7 @@ class Forum_Search_Advanced_Controller extends Output_Controller
 		$list_search = array();
 		$author = null;
 		if($search_author){
-			$author = Search_Object::newInstance("SAF\\Framework\\User");
+			$author = Search_Object::create("SAF\\Framework\\User");
 			$author->login = $search_author;
 			$author = Dao::searchOne($author);
 			if(!$author)

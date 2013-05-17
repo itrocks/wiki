@@ -36,7 +36,7 @@ class Change_Name_Page_Refactor implements Plugin
 	 */
 	public static function beforeDefaultWriteControllerRun(AopJoinpoint $joinpoint)
 	{
-		$page_object = Search_Object::newInstance(self::$page_class_name);
+		$page_object = Search_Object::create(self::$page_class_name);
 		$class = get_class($page_object);
 		/** @var $parameters Controller_Parameters */
 		$parameters = $joinpoint->getArguments()[0];
@@ -101,7 +101,7 @@ class Change_Name_Page_Refactor implements Plugin
 	 */
 	public static function replaceInContent($old_string, $new_string, $class_name, $var_text)
 	{
-		$object_search = Search_Object::newInstance($class_name);
+		$object_search = Search_Object::create($class_name);
 		$object_search->$var_text = "%" . $old_string . "%";
 		$pages = Dao::search($object_search);
 		foreach ($pages as $page) {
