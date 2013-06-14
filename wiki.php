@@ -52,19 +52,7 @@ $CONFIG["wiki"] = array(
 			'SAF\Wiki\Change_Name_Page_Refactor',
 			//'SAF\Wiki\Fix_Link_Url',
 			'SAF\Wiki\Links_Recognition',
-			'SAF\Wiki\Images_Upload',
-			'SAF\Wiki\Forum_Uri_Rewriter',
-			'SAF\Wiki\Update_Nb_Values',
-			'SAF\Wiki\Only_Output_For_Not_Connected',
-			'SAF\Wiki\Edition_Reserved_To_Author',
-			'SAF\Wiki\News_Subscribe',
-			'SAF\Wiki\Last_Post',
-			'SAF\Wiki\Forum_Sort_Elements',
-			'SAF\Wiki\Topic_Controls',
-			'SAF\Wiki\Forum_Controls',
-			'SAF\Wiki\Category_Controls',
-			'SAF\Wiki\Ascent_Controls',
-			'SAF\Wiki\ReadOrNotRead'
+			'SAF\Wiki\Images_Upload'
 		)
 	)
 );
