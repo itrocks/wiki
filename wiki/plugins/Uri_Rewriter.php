@@ -80,10 +80,12 @@ class Uri_Rewriter implements Plugin
 			}
 			elseif ($parameters && count($parameters)) {
 				if (@class_exists($page_class)) {
-					$name = trim(str_replace("_", " ", $parameters[0]));
+					$name = trim($parameters[0]);
 					/** @var $page_search Page */
 					$page_search = Builder::create($page_class);
-					$page_search->name = ($name == "Left menu") ? Loc::tr($name) : $name;
+					$page_search->name = (str_replace("_", " ", $name) == "Left menu")
+						? Loc::tr($name)
+						: $name;
 					/** @var $page Page */
 					$page = Dao::searchOne($page_search, $page_class);
 					if ($page) {

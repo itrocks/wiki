@@ -40,6 +40,7 @@ $CONFIG["wiki"] = array(
 	),
 	'SAF\Framework\Plugins' => array(
 		"normal" => array(
+			'SAF\Framework\Html_Session' => "use_cookie",
 			'SAF\Framework\Wiki',
 			'SAF\Wiki\Uri_Rewriter',
 			'SAF\Wiki\Modification_Reserved_Connected',
@@ -56,5 +57,8 @@ $CONFIG["wiki"] = array(
 		)
 	)
 );
+
+require_once "framework/components/html_session/Html_Session.php";
+new SAF\Framework\Html_Session("use_cookie");
 
 if (strpos($_SERVER["PHP_SELF"], $_SERVER["SCRIPT_NAME"]) == false) require "index.php";

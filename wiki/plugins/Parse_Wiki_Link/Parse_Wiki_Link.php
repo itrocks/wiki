@@ -59,7 +59,7 @@ class Parse_Wiki_Link implements Plugin
 				elseif (($text[$i] != "]") && ($j = strpos($text, "]", $i)) !== false) {
 					$uri = substr($text, $i, $j - $i);
 					$length -= (strlen($uri) + 2);
-					$uri = "\"" . $uri . "\"" . ":" . str_replace(" ", "_", $uri);
+					$uri = "\"" . $uri . "\"" . ":" . str_replace(array(" ", "'"), "_", $uri);
 					$uri_length = strlen($uri);
 					$length += $uri_length;
 					$text = substr($text, 0, $i - 1) . $uri . substr($text, $j + 1);
