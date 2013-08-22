@@ -20,6 +20,7 @@ class Page
 	 * @var string
 	 * @max_length 2000000
 	 * @multiline
+	 * @textile
 	 */
 	public $text;
 
