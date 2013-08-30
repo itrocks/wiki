@@ -10,9 +10,9 @@ $CONFIG["wiki"] = array(
 		'SAF\Framework\User' => 'SAF\Wiki\Wiki_User'
 	),
 	'SAF\Framework\Dao' => array(
-		"user"     => "saf-wiki",
-		"password" => $pwd["saf-wiki"],
-		"database" => "saf-wiki"
+		"database" => "saf_wiki",
+		"user"     => "saf_wiki",
+		"password" => $pwd["saf_wiki"]
 	),
 	'SAF\Framework\Menu' => array(
 		"Disconnected" => array(
