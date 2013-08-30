@@ -13,7 +13,7 @@ class Email_Confirmation
 	//----------------------------------------------------------------------------------------- $user
 	/**
 	 * @link Object
-	 * @var \SAF\Framework\User
+	 * @var \SAF\Wiki\Wiki_User
 	 */
 	public $user;
 
