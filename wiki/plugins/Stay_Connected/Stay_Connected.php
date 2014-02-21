@@ -1,31 +1,32 @@
 <?php
 namespace SAF\Wiki;
-use AopJoinpoint;
-use SAF\Framework\Aop;
+
 use SAF\Framework\Dao;
 use SAF\Framework\Input;
-use SAF\Framework\Plugin;
+use SAF\Framework\Main_Controller;
 use SAF\Framework\Search_Object;
 use SAF\Framework\Session;
+use SAF\Framework\User;
+use SAF\Framework\User_Authenticate_Controller;
 use SAF\Framework\User_Authentication;
+use SAF\Plugins;
 
-class Stay_Connected implements Plugin
+class Stay_Connected implements Plugins\Registerable
 {
 
 	//------------------------------------------------------------ afterUserAuthenticateControllerRun
 	/**
-	 * @param $joinpoint AopJoinpoint
+	 * @param $form array
 	 */
-	public static function afterUserAuthenticateControllerRun(AopJoinpoint $joinpoint)
+	public static function afterUserAuthenticateControllerRun($form)
 	{
-		$checkbox_result = !empty($joinpoint->getArguments()[1]["stay_connected"]);
+		$checkbox_result = !empty($form['stay_connected']);
 		if ($checkbox_result) {
-			/** @var $user \SAF\Framework\User */
-			$user = Search_Object::create('SAF\Framework\User');
-			$user = Session::current()->get(get_class($user));
+			/** @var $user User */
+			$user = User::current();
 			if (isset($user)) {
 				$user_name = $user->login;
-				$user_name_title = self::generateNameCookie("user_name");
+				$user_name_title = self::generateNameCookie('user_name');
 				$content_title = self::generateNameCookie($user_name);
 				$random_var = self::generateRandomVar();
 				$content_key = self::generateContentCookie($user_name, $random_var);
@@ -40,16 +41,15 @@ class Stay_Connected implements Plugin
 
 	//------------------------------------------------------------- afterUserAuthenticationDisconnect
 	/**
-	 * @param $joinpoint AopJoinpoint
+	 * @param $user User
 	 */
-	public static function afterUserAuthenticationDisconnect(AopJoinpoint $joinpoint)
+	public static function afterUserAuthenticationDisconnect(User $user)
 	{
-		$user = $joinpoint->getArguments()[0];
-		$user_name_title = self::generateNameCookie("user_name");
+		$user_name_title = self::generateNameCookie('user_name');
 		$content_title = self::generateNameCookie($user->login);
 		if(isset($_COOKIE[$content_title])){
 			$hash = $_COOKIE[$content_title];
-			$connection_cookie = Search_Object::create('SAF\Wiki\Connection_Cookie');
+			$connection_cookie = Search_Object::create(Connection_Cookie::class);
 			$connection_cookie->user = $user;
 			$connection_cookie->hash = $hash;
 			$connection_cookie = Dao::searchOne($connection_cookie);
@@ -65,22 +65,20 @@ class Stay_Connected implements Plugin
 
 	//--------------------------------------------------------- afterUserAuthenticationGetLoginInputs
 	/**
-	 * @param $joinpoint AopJoinpoint
+	 * @param $result Input[]
 	 */
-	public static function afterUserAuthenticationGetLoginInputs(AopJoinpoint $joinpoint)
+	public static function afterUserAuthenticationGetLoginInputs(&$result)
 	{
-		$list_inputs = $joinpoint->getReturnedValue();
-		$list_inputs[] = new Input("stay_connected", "stay connected", "checkbox");
-		$joinpoint->setReturnedValue($list_inputs);
+		$result[] = new Input('stay_connected', 'stay connected', 'checkbox');
 	}
 
 	//----------------------------------------------------------------------- beforeMainControllerRun
 	public static function beforeMainControllerRun()
 	{
-		/** @var $user \SAF\Framework\User */
-		$user = Search_Object::create('SAF\Framework\User');
+		/** @var $user User */
+		$user = Search_Object::create(User::class);
 		if (!Session::current() || !Session::current()->get(get_class($user))) {
-			$user_name_title = self::generateNameCookie("user_name");
+			$user_name_title = self::generateNameCookie('user_name');
 			$user_name = null;
 			if (isset($_COOKIE[$user_name_title])) {
 				$user_name = $_COOKIE[$user_name_title];
@@ -91,17 +89,17 @@ class Stay_Connected implements Plugin
 					$user->login = $user_name;
 					$user = Dao::searchOne($user);
 					if (isset($user)) {
-						/** @var $connection_cookie \SAF\Wiki\Connection_Cookie */
-						$connection_cookie = Search_Object::create('SAF\Wiki\Connection_Cookie');
+						/** @var $connection_cookie Connection_Cookie */
+						$connection_cookie = Search_Object::create(Connection_Cookie::class);
 						$connection_cookie->user = $user;
 						/** @var $list_connection_cookie Connection_Cookie[] */
 						$list_connection_cookie = Dao::search($connection_cookie);
 						$connection_cookie = self::compareHashPossible($list_connection_cookie, $content_key);
 						if ($connection_cookie) {
 							// Test if the context has not change
-							$content_check =
-								self::generateContentCookie($user->login, $connection_cookie->random_var);
-							if($content_key == $content_check){
+							$content_check
+								= self::generateContentCookie($user->login, $connection_cookie->random_var);
+							if ($content_key == $content_check) {
 								User_Authentication::authenticate($user);
 							}
 						}
@@ -129,22 +127,23 @@ class Stay_Connected implements Plugin
 
 	//------------------------------------------------------------------------- generateContentCookie
 	/**
-	 * Generate a content cookie width a key depending of local context.
-	 * @param $user_name  string The login of the user.
-	 * @param $random_var string A random value.
-	 * @return string The content of the cookie.
+	 * Generate a content cookie width a key depending of local context
+	 *
+	 * @param $user_name  string The login of the user
+	 * @param $random_var string A random value
+	 * @return string The content of the cookie
 	 */
 	public static function generateContentCookie($user_name, $random_var)
 	{
-		$content = ":";
+		$content = ':';
 		$list_server_values = array(
-			"HTTP_HOST",
-			"HTTP_USER_AGENT",
-			"SERVER_SIGNATURE",
-			"SERVER_NAME",
-			"SERVER_ADDR"
+			'HTTP_HOST',
+			'HTTP_USER_AGENT',
+			'SERVER_SIGNATURE',
+			'SERVER_NAME',
+			'SERVER_ADDR'
 		);
-		$var_server = "";
+		$var_server = '';
 		foreach ($list_server_values as $key) {
 			$var_server .= $_SERVER[$key];
 		}
@@ -155,19 +154,20 @@ class Stay_Connected implements Plugin
 
 	//---------------------------------------------------------------------------- generateNameCookie
 	/**
-	 * Give a name of a cookie attached to this project.
-	 * @param $name string Name of the cookie.
+	 * Give a name of a cookie attached to this project
+	 *
+	 * @param $name string Name of the cookie
 	 * @return string
 	 */
 	public static function generateNameCookie($name)
 	{
-		$application_name = end($GLOBALS["CONFIG"])["app"];
-		return $application_name . "_" . $name;
+		return Application::current()->name . '_' . $name;
 	}
 
 	//----------------------------------------------------------------------------- generateRandomVar
 	/**
-	 * Return a random var.
+	 * Return a random var
+	 *
 	 * @return string
 	 */
 	private static function generateRandomVar()
@@ -181,35 +181,40 @@ class Stay_Connected implements Plugin
 	 */
 	private static function getPath()
 	{
-		$script_name = $_SERVER["SCRIPT_NAME"];
-		$script_name = str_replace(".php", "", $script_name);
-		return $script_name . "/";
+		$script_name = $_SERVER['SCRIPT_NAME'];
+		$script_name = str_replace('.php', '', $script_name);
+		return $script_name . '/';
 	}
 
 	//-------------------------------------------------------------------------------------- register
-	public static function register()
+	/**
+	 * @param $register Plugins\Register
+	 */
+	public function register(Plugins\Register $register)
 	{
-		Aop::add("before",
-			'SAF\Framework\Main_Controller->runController()',
-			array(__CLASS__, "beforeMainControllerRun")
+		$aop = $register->aop;
+		$aop->beforeMethod(
+			[ Main_Controller::class, 'runController' ],
+			[ __CLASS__, 'beforeMainControllerRun' ]
 		);
-		Aop::add("after",
-			'SAF\Framework\User_Authenticate_Controller->run()',
-			array(__CLASS__, "afterUserAuthenticateControllerRun")
+		$aop->afterMethod(
+			[ User_Authenticate_Controller::class, 'run' ],
+			[ __CLASS__, 'afterUserAuthenticateControllerRun' ]
 		);
-		Aop::add("after",
-			'SAF\Framework\User_Authentication->getLoginInputs()',
-			array(__CLASS__, "afterUserAuthenticationGetLoginInputs")
+		$aop->afterMethod(
+			[ User_Authentication::class, 'getLoginInputs' ],
+			[ __CLASS__, 'afterUserAuthenticationGetLoginInputs' ]
 		);
-		Aop::add("after",
-			'SAF\Framework\User_Authentication->disconnect()',
-			array(__CLASS__, "afterUserAuthenticationDisconnect")
+		$aop->afterMethod(
+			[ User_Authentication::class, 'disconnect' ],
+			[ __CLASS__, 'afterUserAuthenticationDisconnect' ]
 		);
 	}
 
 	//----------------------------------------------------------------------------- registerHashInDao
 	/**
-	 * Add a generate hash in databases with dao's object.
+	 * Add a generate hash in databases with dao's object
+	 *
 	 * @param $user        \SAF\Framework\User
 	 * @param $content_key string
 	 * @param $random_var  string
@@ -217,7 +222,7 @@ class Stay_Connected implements Plugin
 	private static function registerHashInDao($user, $content_key, $random_var)
 	{
 		/** @var $connection_cookie Connection_Cookie */
-		$connection_cookie = Search_Object::create('SAF\Wiki\Connection_Cookie');
+		$connection_cookie = Search_Object::create(Connection_Cookie::class);
 		$connection_cookie->user = $user;
 		$connection_cookie->hash = $content_key;
 		$connection_cookie->random_var = $random_var;

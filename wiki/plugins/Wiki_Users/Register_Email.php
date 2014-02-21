@@ -1,64 +1,63 @@
 <?php
 namespace SAF\Wiki;
-use AopJoinpoint;
-use SAF\Framework\Aop;
-use SAF\Framework\Input;
-use SAF\Framework\Plugin;
 
-class Register_Email implements Plugin
+use SAF\Framework\Input;
+use SAF\Framework\User;
+use SAF\Framework\User_Authentication;
+use SAF\Plugins;
+
+class Register_Email implements Plugins\Registerable
 {
 
 	//--------------------------------------------------- afterUserAuthenticationBuildUserForRegister
 	/**
-	 * @param $joinpoint AopJoinpoint
+	 * @param $array array
+	 * @param $result User
 	 */
-	public static function afterUserAuthenticationArrayToUser(AopJoinpoint $joinpoint)
+	public static function afterUserAuthenticationArrayToUser($array, $result)
 	{
-		$user = $joinpoint->getReturnedValue();
-		$user->email = $joinpoint->getArguments()[0]["email"];
-		$joinpoint->setReturnedValue($user);
+		$result->email = $array['email'];
 	}
 
 	//------------------------------------------ afterUserAuthenticationControlRegisterFormParameters
 	/**
-	 * @param $joinpoint AopJoinpoint
+	 * @param $form   array
+	 * @param $result array
 	 */
-	public static function afterUserAuthenticationControlRegisterFormParameters(
-		AopJoinpoint $joinpoint
-	) {
-		if (!preg_match('#^[\w.-]+@[\w.-]+\.[a-z]{2,6}$#i', $joinpoint->getArguments()[0]["email"]))
-		{
-			$value = $joinpoint->getReturnedValue();
-			$value[] = array("name" => "Email error", "message" => "Email must be a valid email format.");
-			$joinpoint->setReturnedValue($value);
+	public static function afterUserAuthenticationControlRegisterFormParameters($form, &$result)
+	{
+		if (!preg_match('#^[\w.-]+@[\w.-]+\.[a-z]{2,6}$#i', $form['email'])) {
+			$result[] = array('name' => 'Email error', 'message' => 'Email must be a valid email format.');
 		}
 	}
 
 	//------------------------------------------------------ afterUserAuthenticationGetRegisterInputs
 	/**
-	 * @param $joinpoint AopJoinpoint
+	 * @param $result Input[]
 	 */
-	public static function afterUserAuthenticationGetRegisterInputs(AopJoinpoint $joinpoint)
+	public static function afterUserAuthenticationGetRegisterInputs(&$result)
 	{
-		$list_inputs = $joinpoint->getReturnedValue();
-		$list_inputs[] = new Input("email", "Email address", "text");
-		$joinpoint->setReturnedValue($list_inputs);
+		$result[] = new Input('email', 'Email address', 'text');
 	}
 
 	//-------------------------------------------------------------------------------------- register
-	public static function register()
+	/**
+	 * @param $register Plugins\Register
+	 */
+	public function register(Plugins\Register $register)
 	{
-		Aop::add("after",
-			'SAF\Framework\User_Authentication->getRegisterInputs()',
-			array(__CLASS__, "afterUserAuthenticationGetRegisterInputs")
+		$aop = $register->aop;
+		$aop->afterMethod(
+			[ User_Authentication::class, 'getRegisterInputs' ],
+			[ __CLASS__, 'afterUserAuthenticationGetRegisterInputs' ]
 		);
-		Aop::add("after",
-			'SAF\Framework\User_Authentication->controlRegisterFormParameters()',
-			array(__CLASS__, "afterUserAuthenticationControlRegisterFormParameters")
+		$aop->afterMethod(
+			[ User_Authentication::class, 'controlRegisterFormParameters' ],
+			[ __CLASS__, 'afterUserAuthenticationControlRegisterFormParameters']
 		);
-		Aop::add("after",
-			'SAF\Framework\User_Authentication->arrayToUser()',
-			array(__CLASS__, "afterUserAuthenticationArrayToUser")
+		$aop->afterMethod(
+			[ User_Authentication::class, 'arrayToUser' ],
+			[ __CLASS__, 'afterUserAuthenticationArrayToUser' ]
 		);
 	}
 

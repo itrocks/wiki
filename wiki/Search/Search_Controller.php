@@ -1,5 +1,6 @@
 <?php
 namespace SAF\Wiki;
+
 use SAF\Framework\Builder;
 use SAF\Framework\Class_Controller;
 use SAF\Framework\Controller_Parameters;
@@ -15,7 +16,7 @@ class Search_Controller implements Class_Controller
 	 *
 	 * @var string
 	 */
-	private static $page_class_name = 'SAF\Wiki\Page';
+	private static $page_class_name = Page::class;
 
 	//-------------------------------------------------------------------------------- $page_var_name
 	/**
@@ -23,7 +24,7 @@ class Search_Controller implements Class_Controller
 	 *
 	 * @var string
 	 */
-	private static $page_var_name = "name";
+	private static $page_var_name = 'name';
 
 	//-------------------------------------------------------------------------------- $page_var_text
 	/**
@@ -31,7 +32,7 @@ class Search_Controller implements Class_Controller
 	 *
 	 * @var string
 	 */
-	private static $page_var_text = "text";
+	private static $page_var_text = 'text';
 
 	//------------------------------------------------------------------------- approximateNameSearch
 	/**
@@ -51,13 +52,13 @@ class Search_Controller implements Class_Controller
 		foreach ($approximate_name as $result) {
 			$occurrences = $this->countOccurrences($result->$page_var_name, $search_text);
 			$content[] = array(
-				"occurrence" => $occurrences,
-				"label"      => "occurrence" . (($occurrences > 1) ? "s" : "") . " in the name",
-				"name"       => $result->$page_var_name,
-				"link"       => str_replace(" ", "_", $result->$page_var_name)
+				'occurrence' => $occurrences,
+				'label'      => 'occurrence' . (($occurrences > 1) ? 's' : '') . ' in the name',
+				'name'       => $result->$page_var_name,
+				'link'       => str_replace(' ', '_', $result->$page_var_name)
 			);
 		}
-		return array("title" => "Approximate name", "content" => $content);
+		return array('title' => 'Approximate name', 'content' => $content);
 	}
 
 	//--------------------------------------------------------------------------------- contentSearch
@@ -79,13 +80,13 @@ class Search_Controller implements Class_Controller
 		foreach ($content_search as $result) {
 			$occurrences = $this->countOccurrences($result->$page_var_text, $search_text);
 			$content[] = array(
-				"occurrence" => $occurrences,
-				"label"      => "occurrence" . ($occurrences > 1 ? "s" : "") . " in the text",
-				"name"       => $result->$page_var_name,
-				"link"       => str_replace(" ", "_", $result->$page_var_name)
+				'occurrence' => $occurrences,
+				'label'      => 'occurrence' . ($occurrences > 1 ? 's' : '') . ' in the text',
+				'name'       => $result->$page_var_name,
+				'link'       => str_replace(' ', '_', $result->$page_var_name)
 			);
 		}
-		return array("title" => "Content search", "content" => $content);
+		return array('title' => 'Content search', 'content' => $content);
 	}
 
 	//------------------------------------------------------------------------------ countOccurrences
@@ -97,7 +98,7 @@ class Search_Controller implements Class_Controller
 	 */
 	private function countOccurrences($text, $search_text)
 	{
-		$tab = explode(" ", $search_text);
+		$tab = explode(' ', $search_text);
 		$count = 0;
 		foreach ($tab as $element) {
 			$count += substr_count(strtolower($text),strtolower($element));
@@ -123,13 +124,13 @@ class Search_Controller implements Class_Controller
 		$content = array();
 		if (isset($exact_name)) {
 			$content[] = array(
-				"occurrence" => "",
-				"label"      => "A page have this exact name",
-				"name"       => $exact_name,
-				"link"       => str_replace(" ", "_", $exact_name)
+				'occurrence' => '',
+				'label'      => 'A page have this exact name',
+				'name'       => $exact_name,
+				'link'       => str_replace(' ', '_', $exact_name)
 			);
 		}
-		return array("title" => "Exact name", "content" => $content);
+		return array('title' => 'Exact name', 'content' => $content);
 	}
 
 	//------------------------------------------------------------------------------------------- run
@@ -142,7 +143,7 @@ class Search_Controller implements Class_Controller
 	 */
 	public function run(Controller_Parameters $parameters, $form, $files, $feature_name)
 	{
-		return "unknown feature Search::$feature_name";
+		return 'unknown feature Search::' . $feature_name;
 	}
 
 	//--------------------------------------------------------------------------------------- runList
@@ -172,16 +173,16 @@ class Search_Controller implements Class_Controller
 	{
 		$parameters = $parameters->getObjects();
 		$search = new Search();
-		if (isset($form["search"])) {
-			$search->text = $form["search"];
+		if (isset($form['search'])) {
+			$search->text = $form['search'];
 		}
 		array_unshift($parameters, $search);
-		return View::run($parameters, $form, $files, 'SAF\Wiki\Search', "output");
+		return View::run($parameters, $form, $files, Search::class, 'output');
 	}
 
 	//------------------------------------------------------------------------------------------- run
 	/**
-	 * The controller search and print results if $form["search"] exist, else it print search field.
+	 * The controller search and print results if $form['search'] exist, else it print search field.
 	 *
 	 * @param $parameters   Controller_Parameters
 	 * @param $form         array
@@ -190,11 +191,11 @@ class Search_Controller implements Class_Controller
 	 */
 	private function runResult(Controller_Parameters $parameters, $form, $files)
 	{
-		if (isset($form["search"])) {
-			$search_text = trim($form["search"]);
+		if (isset($form['search'])) {
+			$search_text = trim($form['search']);
 		}
 		/** @var $search Search */
-		$search = Builder::Create('SAF\Wiki\Search');
+		$search = Builder::Create(Search::class);
 		$result = array();
 		if (!empty($search_text)) {
 			$result[] = $this->exactNameSearch($search_text);
@@ -206,7 +207,7 @@ class Search_Controller implements Class_Controller
 
 		$parameters = $parameters->getObjects();
 		array_unshift($parameters, $search);
-		return View::run($parameters, $form, $files, 'SAF\Wiki\Search', "result");
+		return View::run($parameters, $form, $files, Search::class, 'result');
 	}
 
 	//----------------------------------------------------------------------------------- searchWords
@@ -220,10 +221,10 @@ class Search_Controller implements Class_Controller
 	 */
 	private function searchWords($object, $var, $search_text)
 	{
-		$tab = explode(" ", $search_text);
+		$tab = explode(' ', $search_text);
 		$search_result = array();
 		foreach ($tab as $element) {
-			$object->$var = "%" . $element . "%";
+			$object->$var = '%' . $element . '%';
 			$search_result = array_merge($search_result, Dao::search($object));
 		}
 		return $search_result;

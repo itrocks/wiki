@@ -1,59 +1,58 @@
 <?php
 namespace SAF\Wiki;
-use AopJoinpoint;
-use SAF\Framework\Aop;
+
 use SAF\Framework\Controller_Parameters;
 use SAF\Framework\Dao;
-use SAF\Framework\Plugin;
-use SAF\Framework\Reflection_Class;
+use SAF\Framework\Default_Write_Controller;
 use SAF\Framework\Search_Object;
+use SAF\Plugins;
 
-class Change_Name_Page_Refactor implements Plugin
+class Change_Name_Page_Refactor implements Plugins\Registerable
 {
 
 	//------------------------------------------------------------------------------ $page_class_name
 	/**
 	 * @var string
 	 */
-	private static $page_class_name = 'SAF\Wiki\Page';
+	private $page_class_name = Page::class;
 
 	//-------------------------------------------------------------------------------- $page_var_name
 	/**
 	 * @var string
 	 */
-	private static $page_var_name = "name";
+	private $page_var_name = 'name';
 
 	//-------------------------------------------------------------------------------- $page_var_text
 	/**
 	 * @var string
 	 */
-	private static $page_var_text = "text";
+	private $page_var_text = 'text';
 
 	//--------------------------------------------------------------- beforeDefaultWriteControllerRun
 	/**
-	 * Change all references of a link of this page with the new name.
-	 * @param $joinpoint AopJoinpoint
+	 * Change all references of a link of this page with the new name
+	 *
+	 * @param $parameters Controller_Parameters
+	 * @param $form       array
 	 */
-	public static function beforeDefaultWriteControllerRun(AopJoinpoint $joinpoint)
+	public function beforeDefaultWriteControllerRun(Controller_Parameters $parameters, $form)
 	{
-		$page_object = Search_Object::create(self::$page_class_name);
-		$class = get_class($page_object);
-		/** @var $parameters Controller_Parameters */
-		$parameters = $joinpoint->getArguments()[0];
 		$objects = $parameters->getObjects();
-		$object = reset($objects);
+		$object  = reset($objects);
 		// It's specific to Pages objects
-		if (is_object($object) && (get_class($object) == $class)) {
-			$name = self::$page_var_name;
-			$form = $joinpoint->getArguments()[1];
+		if (is_object($object) && (get_class($object) == $this->page_class_name)) {
+			$name = $this->page_var_name;
 			if ($object->$name != $form[$name]) {
-				$page_var_text = self::$page_var_text;
+				$page_var_text = $this->page_var_text;
 				$old_name = $object->$name;
 				$new_name = $form[$name];
-				$references = self::generateReferences($old_name, $new_name);
+				$references = $this->generateReferences($old_name, $new_name);
 				foreach ($references as $reference) {
-					self::replaceInContent(
-						$reference["old_reference"], $reference["new_reference"], $class, $page_var_text
+					$this->replaceInContent(
+						$reference['old_reference'],
+						$reference['new_reference'],
+						$this->page_class_name,
+						$page_var_text
 					);
 				}
 			}
@@ -67,26 +66,30 @@ class Change_Name_Page_Refactor implements Plugin
 	 * @param $new_name string
 	 * @return array List references possible.
 	 */
-	protected static function generateReferences($old_name, $new_name)
+	protected function generateReferences($old_name, $new_name)
 	{
-		return array(
-			array(
-				"old_reference" => "[" . $old_name . "]",
-				"new_reference" => "[" . $new_name . "]"
-			),
-			array(
-				"old_reference" => "\":" . str_replace(" ", "_", $old_name) . "",
-				"new_reference" => "\":" . str_replace(" ", "_", $new_name) . ""
-			)
-		);
+		return [
+			[
+				'old_reference' => '[' . $old_name . ']',
+				'new_reference' => '[' . $new_name . ']'
+			],
+			[
+				'old_reference' => '":' . str_replace(' ', '_', $old_name) . '',
+				'new_reference' => '":' . str_replace(' ', '_', $new_name) . ''
+			]
+		];
 	}
 
 	//-------------------------------------------------------------------------------------- register
-	public static function register()
+	/**
+	 * @param $register Plugins\Register
+	 */
+	public function register(Plugins\Register $register)
 	{
-		Aop::add("before",
-			'SAF\Framework\Default_Write_Controller->run()',
-			array(__CLASS__, "beforeDefaultWriteControllerRun")
+		$aop = $register->aop;
+		$aop->beforeMethod(
+			array(Default_Write_Controller::class, 'run'),
+			array($this, 'beforeDefaultWriteControllerRun')
 		);
 	}
 
@@ -99,10 +102,10 @@ class Change_Name_Page_Refactor implements Plugin
 	 * @param $class_name string The class corresponding to the databases table.
 	 * @param $var_text   string Field's name.
 	 */
-	public static function replaceInContent($old_string, $new_string, $class_name, $var_text)
+	public function replaceInContent($old_string, $new_string, $class_name, $var_text)
 	{
 		$object_search = Search_Object::create($class_name);
-		$object_search->$var_text = "%" . $old_string . "%";
+		$object_search->$var_text = '%' . $old_string . '%';
 		$pages = Dao::search($object_search);
 		foreach ($pages as $page) {
 			$page->$var_text = str_ireplace($old_string, $new_string, $page->$var_text);

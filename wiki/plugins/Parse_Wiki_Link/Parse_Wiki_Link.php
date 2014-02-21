@@ -1,25 +1,23 @@
 <?php
 namespace SAF\Wiki;
-use AopJoinpoint;
-use SAF\Framework\Aop;
-use SAF\Framework\Plugin;
 
-class Parse_Wiki_Link implements Plugin
+use SAF\Framework\Textile;
+use SAF\Framework\Wiki;
+use SAF\Plugins;
+
+class Parse_Wiki_Link implements Plugins\Registerable
 {
 
 	//------------------------------------------------------------------------- beforeTextileParseURI
 	/**
 	 * When textile parse a link, each non / nor protocol:// links must be absolute instead of relative
 	 *
-	 * @param AopJoinpoint $joinpoint
+	 * @param $uri string
 	 */
-	public static function beforeTextileParseURI(AopJoinpoint $joinpoint)
+	public static function beforeTextileParseURI(&$uri)
 	{
-		$arguments = $joinpoint->getArguments();
-		$uri = $arguments[0];
-		if ((substr($uri, 0, 1) !== "/") && !strpos($uri, "://")) {
-			$arguments[0] = "/" . $uri;
-			$joinpoint->setArguments($arguments);
+		if ((substr($uri, 0, 1) !== '/') && !strpos($uri, '://')) {
+			$uri = '/' . $uri;
 		}
 	}
 
@@ -27,60 +25,56 @@ class Parse_Wiki_Link implements Plugin
 	/**
 	 * Read the text in parameter, and parse wiki format link to the textile link.
 	 *
-	 * @param $joinpoint AopJoinpoint
+	 * @param $string string
 	 */
-	public static function beforeWikiTextile(AopJoinpoint $joinpoint)
+	public static function beforeWikiTextile(&$string)
 	{
-		$arguments = $joinpoint->getArguments();
-		$arguments[0] = self::parseWikiLinks($arguments[0]);
-		$joinpoint->setArguments($arguments);
+		$string = self::parseWikiLinks($string);
 	}
 
 	//------------------------------------------------------------------------------------- parseLink
 	/**
-	 * Parse [Wiki links] and replace then with "Wiki links":/Wiki_links
+	 * Parse [Wiki links] and replace then with 'Wiki links':/Wiki_links
 	 *
-	 * @param $text string The string to parse.
+	 * @param $string string The string to parse.
 	 * @return string The parsed string
 	 */
-	private static function parseWikiLinks($text)
+	private static function parseWikiLinks($string)
 	{
 		$i = 0;
-		$length = strlen($text);
-		while (($i < $length) && (($i = strpos($text, "[", $i)) !== false)) {
+		$length = strlen($string);
+		while (($i < $length) && (($i = strpos($string, '[', $i)) !== false)) {
 			$i++;
 			if (($i < $length)) {
 				// escape with [[ => [ without parsing
-				if ($text[$i] == "[") {
-					$text = substr($text, 0, $i) . substr($text, $i + 1);
+				if ($string[$i] == '[') {
+					$string = substr($string, 0, $i) . substr($string, $i + 1);
 					$length --;
 				}
-				// parse link : replace [A link] with "A link":/A_link
-				elseif (($text[$i] != "]") && ($j = strpos($text, "]", $i)) !== false) {
-					$uri = substr($text, $i, $j - $i);
+				// parse link : replace [A link] with 'A link':/A_link
+				elseif (($string[$i] != ']') && ($j = strpos($string, ']', $i)) !== false) {
+					$uri = substr($string, $i, $j - $i);
 					$length -= (strlen($uri) + 2);
-					$uri = "\"" . $uri . "\"" . ":" . str_replace(array(" ", "'"), "_", $uri);
+					$uri = '"' . $uri . '"' . ':' . str_replace(array(' ', "'"), '_', $uri);
 					$uri_length = strlen($uri);
 					$length += $uri_length;
-					$text = substr($text, 0, $i - 1) . $uri . substr($text, $j + 1);
+					$string = substr($string, 0, $i - 1) . $uri . substr($string, $j + 1);
 					$i += $uri_length;
 				}
 			}
 		}
-		return $text;
+		return $string;
 	}
 
 	//-------------------------------------------------------------------------------------- register
-	public static function register()
+	/**
+	 * @param $register Plugins\Register
+	 */
+	public function register(Plugins\Register $register)
 	{
-		Aop::add("before",
-			'SAF\Framework\Wiki->textile()',
-			array(__CLASS__, "beforeWikiTextile")
-		);
-		Aop::add("before",
-			'SAF\Framework\Textile->parseURI()',
-			array(__CLASS__, "beforeTextileParseURI")
-		);
+		$aop = $register->aop;
+		$aop->beforeMethod([ Wiki::class, 'textile' ], [ __CLASS__, 'beforeWikiTextile' ]);
+		$aop->beforeMethod([ Textile::class, 'parseURI' ], [ __CLASS__, 'beforeTextileParseURI' ]);
 	}
 
 }

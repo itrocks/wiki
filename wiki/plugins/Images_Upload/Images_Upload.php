@@ -1,40 +1,42 @@
 <?php
 namespace SAF\Wiki;
-use AopJoinpoint;
-use SAF\Framework\Aop;
-use SAF\Framework\Plugin;
+
 use SAF\Framework\Button;
 use SAF\Framework\Color;
+use SAF\Framework\Default_Edit_Controller;
+use SAF\Plugins;
 
 /**
  * This plugin need that :
  * the plugin Image_Wiki_Link_Parse is on
  * the default main html file import the Jquery script : images_upload.js
  */
-class Images_Upload implements Plugin
+class Images_Upload implements Plugins\Registerable
 {
+
 	//--------------------------------------------------- afterDefaultEditControllerGetGeneralButtons
 	/**
-	 * @param $joinpoint AopJoinpoint
+	 * @param $result Button[]
 	 */
-	public static function afterDefaultEditControllerGetGeneralButtons(AopJoinpoint $joinpoint)
+	public static function afterDefaultEditControllerGetGeneralButtons(&$result)
 	{
-		$buttons = $joinpoint->getReturnedValue();
-		$buttons[] = new Button(
-			"Images upload",
-			"Images_Upload",
-			"images_upload",
-			array(Color::of("red"), "#popup")
+		$result[] = new Button(
+			'Images upload',
+			'Images_Upload',
+			'images_upload',
+			[ Color::of('red'), '#popup' ]
 		);
-		$joinpoint->setReturnedValue($buttons);
 	}
 
 	//-------------------------------------------------------------------------------------- register
-	public static function register()
+	/**
+	 * @param $register Plugins\Register
+	 */
+	public function register(Plugins\Register $register)
 	{
-		Aop::add("after",
-			'SAF\Framework\Default_Edit_Controller->getGeneralButtons()',
-			array(__CLASS__, "afterDefaultEditControllerGetGeneralButtons")
+		$register->aop->afterMethod(
+			[ Default_Edit_Controller::class, 'getGeneralButtons' ],
+			[ __CLASS__, 'afterDefaultEditControllerGetGeneralButtons' ]
 		);
 	}
 

@@ -1,11 +1,13 @@
 <?php
 namespace SAF\Wiki;
+
 use SAF\Framework\Controller_Parameters;
 use SAF\Framework\Default_Controller;
 use SAF\Framework\Feature_Controller;
+use SAF\Framework\User;
 use SAF\Framework\User_Authentication;
 
-class Wiki_User_Disconnect_Controller implements Feature_Controller
+class User_Disconnect_Controller implements Feature_Controller
 {
 
 	//------------------------------------------------------------------------------------------- run
@@ -17,13 +19,11 @@ class Wiki_User_Disconnect_Controller implements Feature_Controller
 	 */
 	public function run(Controller_Parameters $parameters, $form, $files)
 	{
-		$current = Wiki_User::current();
+		$current = User::current();
 		if ($current) {
 			User_Authentication::disconnect($current);
 		}
-		return (new Default_Controller())->run(
-			$parameters, $form, $files, 'SAF\Wiki\Wiki_User', "disconnect"
-		);
+		return (new Default_Controller())->run($parameters, $form, $files, User::class, 'disconnect');
 	}
 
 }

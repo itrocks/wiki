@@ -1,137 +1,138 @@
 <?php
 namespace SAF\Wiki;
-use AopJoinpoint;
-use SAF\Framework\Aop;
+
 use SAF\Framework\Dao;
 use SAF\Framework\Input;
-use SAF\Framework\Namespaces;
-use SAF\Framework\Plugin;
+use SAF\Framework\User_Authentication;
+use SAF\Plugins;
 use SAF\Framework\Session;
 use SAF\Framework\String;
 use SAF\Framework\View;
 
-class Anti_Bot implements Plugin
+class Anti_Bot implements Plugins\Registerable
 {
 
 	//--------------------------------------------------------------------------------- $content_name
 	/**
 	 * @var string
 	 */
-	private static $content_name = "text";
+	private $content_name = 'text';
 
 	//--------------------------------------------------------------------------------- $number_cases
 	/**
 	 * @var integer
 	 */
-	private static $number_cases = 12;
+	private $number_cases = 12;
 
 	//---------------------------------------------------------------------------------- $table_pages
 	/**
 	 * @var string
 	 */
-	private static $table_pages = 'SAF\Wiki\Page';
+	private $table_pages = Page::class;
 
 	//------------------------------------------ afterUserAuthenticationControlRegisterFormParameters
 	/**
-	 * Control if the word in forms results is the same as the current session anti bot word.
-	 * @param AopJoinpoint $joinpoint
+	 * Control if the word in forms results is the same as the current session anti bot word
+	 *
+	 * @param $form   array
+	 * @param $result array
 	 */
-	public static function afterUserAuthenticationControlRegisterFormParameters(AopJoinpoint $joinpoint)
+	public function afterUserAuthenticationControlRegisterFormParameters($form, &$result)
 	{
-		$word = Session::current()->get(Namespaces::fullClassName("Anti_Bot_Word"));
-		if ($joinpoint->getArguments()[0]["Anti_bot"] != $word->word) {
-			$value = $joinpoint->getReturnedValue();
-			$value[] = array(
-				"name" => "Anti Bot error", "message" => "The security word was not copied correctly."
+		$word = Session::current()->get(Anti_Bot_Word::class);
+		if ($form['Anti_bot'] != $word->word) {
+			$result[] = array(
+				'name' => 'Anti Bot error', 'message' => 'The security word was not copied correctly.'
 			);
-			$joinpoint->setReturnedValue($value);
 		}
 	}
 
 	//------------------------------------------------------ afterUserAuthenticationGetRegisterInputs
 	/**
-	 * Find the control word, generate the test and add input.
-	 * @param AopJoinpoint $joinpoint
+	 * Find the control word, generate the test and add input
+	 *
+	 * @param $result Input[]
 	 */
-	public static function afterUserAuthenticationGetRegisterInputs(AopJoinpoint $joinpoint)
+	public function afterUserAuthenticationGetRegisterInputs(&$result)
 	{
-		$text = self::choosePage(self::$table_pages, self::$content_name);
-		$tab = self::generateTab($text);
-		$word = self::chooseWord($tab);
-		$text = self::generateTextSelected($tab, $word);
-		$parameters = self::getViewParameters($text, $word);
-		$form = array();
-		$files = array();
-		$class_name = "Anti_Bot";
-		$feature_name = "output";
+		$text = $this->choosePage($this->table_pages, $this->content_name);
+		$tab  = $this->generateTab($text);
+		$word = $this->chooseWord($tab);
+		$text = $this->generateTextSelected($tab, $word);
+		$parameters = $this->getViewParameters($text, $word);
+		$form  = [];
+		$files = [];
+		$class_name   = Anti_Bot::class;
+		$feature_name = 'output';
 		$view = View::run($parameters, $form, $files, $class_name, $feature_name);
-		Session::current()->set(new Anti_Bot_Word($word["word"]));
-		$list_inputs = $joinpoint->getReturnedValue();
-		$list_inputs[] = new Input("Anti_bot", $view, "text");
-		$joinpoint->setReturnedValue($list_inputs);
+		Session::current()->set(new Anti_Bot_Word($word['word']));
+		$result[] = new Input('Anti_bot', $view, 'text');
 	}
 
 	//------------------------------------------------------------------------------------ choosePage
 	/**
-	 * Choose a random page in the bdd.
+	 * Choose a random page from the database
+	 *
 	 * @param $class        string The class corresponding to the table in database.
 	 * @param $content_name string The field's name where take content.
 	 * @return Page The chosen page.
 	 */
-	private static function choosePage($class, $content_name)
+	private function choosePage($class, $content_name)
 	{
 		$list_pages = Dao::readAll($class);
-		$possible_pages = array();
+		$possible_pages = [];
 		foreach ($list_pages as $page) {
 			$text = $page->$content_name;
-			if ($text && str_replace(" ", "", $text) && count(explode(" ", $text)) > 50) {
+			if ($text && str_replace(' ', '', $text) && count(explode(' ', $text)) > 50) {
 				$possible_pages[] = $page;
 			}
 		}
 		$index = rand(0, count($possible_pages) -1);
-		return isset($possible_pages[$index]) ? $possible_pages[$index]->$content_name : "";
+		return isset($possible_pages[$index]) ? $possible_pages[$index]->$content_name : '';
 	}
 
 	//------------------------------------------------------------------------------------ chooseWord
 	/**
-	 * Chose a word in an array.
-	 * @param $tab string[] An array of words.
+	 * Chose a word in an array
+	 *
+	 * @param $tab string[] An array of words
 	 * @return mixed[] Returns all attributes necessary of this word :
-	 * "col" for the column number,
-	 * "row" for the row number,
-	 * "word" for the word choose.
+	 *         'col' for the column number,
+	 *         'row' for the row number,
+	 *         'word' for the word choose
 	 */
-	private static function chooseWord($tab)
+	private function chooseWord($tab)
 	{
 		$row = rand(0, count($tab) - 1);
 		$col = rand(0, (isset($tab[$row]) ? count($tab[$row]) : 1) - 1);
-		$word = (new String(isset($tab[$row]) ? $tab[$row][$col] : ""))->cleanWord();
-		return array("col" => $col, "row" => $row, "word" => $word);
+		$word = (new String(isset($tab[$row]) ? $tab[$row][$col] : ''))->cleanWord();
+		return array('col' => $col, 'row' => $row, 'word' => $word);
 	}
 
 	//----------------------------------------------------------------------- explodeRowInArrayToWord
 	/**
 	 * Explode an array corresponding of rows in an array of array, corresponding of rows and columns,
-	 * the columns separate the words.
-	 * @param $text_rows string[] The array to explode.
-	 * @return array An array of array, represent rows and words.
+	 * the columns separate the words
+	 *
+	 * @param $text_rows string[] The array to explode
+	 * @return array An array of array, represent rows and words
 	 */
-	private static function explodeRowsInArrayToWord($text_rows)
+	private function explodeRowsInArrayToWord($text_rows)
 	{
-		$main_delimiter = " ";
+		$main_delimiter = ' ';
 		$delimiters = array(
-			"." => ". ", ":" => ": ", "," => ", ", "(" => " (", ") ", "  " => " ",
-			"[" => " [", "]" => "] "
+			'.' => '. ', ':' => ': ', ',' => ', ', '(' => ' (', ') ', '  ' => ' ',
+			'[' => ' [', ']' => '] '
 		);
-		$text_rows = str_replace("  ", " ", $text_rows);
+		$text_rows = str_replace('  ', ' ', $text_rows);
 		foreach ($delimiters as $delimiter => $new_delimiter) {
 			$text_rows = str_replace($delimiter, $new_delimiter, $text_rows);
 		}
 		$text_rows = explodeStringInArrayToDoubleArray($main_delimiter, $text_rows);
-		$text_clean = array();
+		$text_clean = [];
 		$key_row = 0;
 		foreach ($text_rows as $row) {
-			$row_clean = array();
+			$row_clean = [];
 			$key_col = 0;
 			foreach ($row as $col) {
 				if ((new String($col))->isWord()) {
@@ -149,17 +150,18 @@ class Anti_Bot implements Plugin
 
 	//----------------------------------------------------------------------------------- generateTab
 	/**
-	 * Parse a text in parameter to an array of array, to represent rows and columns.
-	 * @param $text string The string to parse.
-	 * @return array An array of array.
+	 * Parse a text in parameter to an array of array, to represent rows and columns
+	 *
+	 * @param $text string The string to parse
+	 * @return array An array of array
 	 */
-	private static function generateTab($text)
+	private function generateTab($text)
 	{
 		$text_explode = explode("\n\r", $text);
 		$text_explode = explodeStringInArrayToSimpleArray("\n", $text_explode);
-		$text_explode = self::explodeRowsInArrayToWord($text_explode);
-		$tab = array();
-		$tab_size = self::$number_cases;
+		$text_explode = $this->explodeRowsInArrayToWord($text_explode);
+		$tab = [];
+		$tab_size = $this->number_cases;
 		$text_max_row = count($text_explode);
 		if ($text_max_row > $tab_size) {
 			$text_row = rand(0, $text_max_row - 1);
@@ -187,20 +189,21 @@ class Anti_Bot implements Plugin
 
 	//-------------------------------------------------------------------------- generateTextSelected
 	/**
-	 * Transform the tab result to be used in views parameters.
+	 * Transform the tab result to be used in views parameters
+	 *
 	 * @param $tab array
 	 * @return array
 	 */
-	private static function generateTextSelected($tab)
+	private function generateTextSelected($tab)
 	{
-		$text = array();
+		$text = [];
 		$row_number = 0;
 		foreach ($tab as $row) {
-			$cols = array();
+			$cols = [];
 			foreach ($row as $col) {
-				$cols[] = array("value" => $col . " ");
+				$cols[] = array('value' => $col . ' ');
 			}
-			$text[] = array("row_number" => $row_number + 1, "cols" => $cols);
+			$text[] = array('row_number' => $row_number + 1, 'cols' => $cols);
 			$row_number++;
 		}
 		return array(array($text));
@@ -212,44 +215,49 @@ class Anti_Bot implements Plugin
 	 * @param $word array
 	 * @return array
 	 */
-	private static function getViewParameters($text, $word)
+	private function getViewParameters($text, $word)
 	{
-		$parameters = array();
-		$parameters["row_number"] = $word["row"] + 1;
-		$parameters["col_number"] = $word["col"] + 1;
-		$numbering = array();
-		for ($number = 0; $number < self::$number_cases; $number++) {
-			$numbering[] = array("number" => self::numberToCharacter($number));
+		$parameters = [];
+		$parameters['row_number'] = $word['row'] + 1;
+		$parameters['col_number'] = $word['col'] + 1;
+		$numbering = [];
+		for ($number = 0; $number < $this->number_cases; $number++) {
+			$numbering[] = array('number' => $this->numberToCharacter($number));
 		}
-		$parameters["col_numbering"] = $numbering;
-		$parameters["rows"]          = $text;
+		$parameters['col_numbering'] = $numbering;
+		$parameters['rows']          = $text;
 		return $parameters;
 	}
 
 	//----------------------------------------------------------------------------- numberToCharacter
 	/**
-	 * Get the character corresponding of the number put in parameters.
+	 * Get the character corresponding of the number put in parameters
+	 *
 	 * @param $number integer
-	 * @return string The character.
+	 * @return string The character
 	 */
-	private static function numberToCharacter($number)
+	private function numberToCharacter($number)
 	{
 		$numbering = array(
-			"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
-			"N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z");
+			'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+			'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
 		return $numbering[$number % count($numbering)];
 	}
 
 	//-------------------------------------------------------------------------------------- register
-	public static function register()
+	/**
+	 * @param $register Plugins\Register
+	 */
+	public function register(Plugins\Register $register)
 	{
-		Aop::add("after",
-			'SAF\Framework\User_Authentication->getRegisterInputs()',
-			array(__CLASS__, "afterUserAuthenticationGetRegisterInputs")
+		$aop = $register->aop;
+		$aop->afterMethod(
+			array(User_Authentication::class, 'getRegisterInputs'),
+			array($this, 'afterUserAuthenticationGetRegisterInputs')
 		);
-		Aop::add("after",
-			'SAF\Framework\User_Authentication->controlRegisterFormParameters()',
-			array(__CLASS__, "afterUserAuthenticationControlRegisterFormParameters")
+		$aop->afterMethod(
+			array(User_Authentication::class, 'controlRegisterFormParameters'),
+			array($this, 'afterUserAuthenticationControlRegisterFormParameters')
 		);
 	}
 

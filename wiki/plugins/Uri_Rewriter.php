@@ -1,13 +1,13 @@
 <?php
 namespace SAF\Wiki;
-use AopJoinpoint;
-use SAF\Framework\Aop;
+
 use SAF\Framework\Builder;
 use SAF\Framework\Dao;
 use SAF\Framework\Loc;
-use SAF\Framework\Plugin;
+use SAF\Framework\Main_Controller;
+use SAF\Plugins;
 
-class Uri_Rewriter implements Plugin
+class Uri_Rewriter implements Plugins\Registerable
 {
 
 	//-------------------------------------------------------------------------------------- $feature
@@ -20,7 +20,7 @@ class Uri_Rewriter implements Plugin
 
 	//-------------------------------------------------------------------------------- $features_list
 	public static $features_list = array(
-		"delete", "edit", "include", "new", "output", "write"
+		'delete', 'edit', 'include', 'new', 'output', 'write'
 	);
 
 	//---------------------------------------------------------------------------------- $ignore_list
@@ -29,7 +29,7 @@ class Uri_Rewriter implements Plugin
 	 * @var string[]
 	 */
 	public static $ignore_list = array(
-		"Images_Upload", "Menu", "Page", "Search", "User"
+		'Images_Upload', 'Menu', 'Page', 'Search', 'User'
 	);
 
 	//------------------------------------------------------------------------------------ arrayToUri
@@ -39,17 +39,17 @@ class Uri_Rewriter implements Plugin
 	 */
 	private static function arrayToUri($array)
 	{
-		$uri = "";
+		$uri = '';
 		$isGets = false;
 		foreach ($array as $element) {
-			if (strstr($element, "?") == true) {
+			if (strstr($element, '?') == true) {
 				$isGets = true;
 			}
 			if ($isGets) {
 				$uri .= $element;
 			}
 			else {
-				$uri .= "/" . $element;
+				$uri .= '/' . $element;
 			}
 		}
 		return $uri;
@@ -57,60 +57,57 @@ class Uri_Rewriter implements Plugin
 
 	//------------------------------------------------------------- beforeMainControllerRunController
 	/**
-	 * @param $joinpoint AopJoinpoint
+	 * @param $uri string
 	 */
-	public static function beforeMainControllerRunController(AopJoinpoint $joinpoint)
+	public static function beforeMainControllerRunController(&$uri)
 	{
-		$arguments = $joinpoint->getArguments();
-		$link = $arguments[0];
-		if (!$link || ($link == "/")) {
-			$link = "/" . Loc::tr("Home");
+		$link = $uri;
+		if (!$link || ($link == '/')) {
+			$link = '/' . Loc::tr('Home');
 		}
-		$page_class = 'SAF\Wiki\Page';
 		$parameters = self::uriToArray($link);
 		if ($parameters && !self::isIgnored($parameters[0], self::$ignore_list)) {
 			if (
 				!$parameters
-				|| ($parameters && count($parameters) && (strtolower($parameters[0]) == "new"))
+				|| ($parameters && count($parameters) && (strtolower($parameters[0]) == 'new'))
 				|| ($parameters && (count($parameters) < 1))
 			) {
-				$feature = "new";
-				$parameters[0] = $page_class;
+				$feature = 'new';
+				$parameters[0] = Page::class;
 				$parameters[1] = $feature;
 			}
 			elseif ($parameters && count($parameters)) {
-				if (@class_exists($page_class)) {
+				if (@class_exists(Page::class)) {
 					$name = trim($parameters[0]);
 					/** @var $page_search Page */
-					$page_search = Builder::create($page_class);
-					$page_search->name = (str_replace("_", " ", $name) == "Left menu")
+					$page_search = Builder::create(Page::class);
+					$page_search->name = (str_replace('_', ' ', $name) == 'Left menu')
 						? Loc::tr($name)
 						: $name;
 					/** @var $page Page */
-					$page = Dao::searchOne($page_search, $page_class);
+					$page = Dao::searchOne($page_search, Page::class);
 					if ($page) {
 						Page::current($page);
-						$feature = "output";
+						$feature = 'output';
 						if(isset($parameters[1]) && self::isFeature($parameters[1], self::$features_list)) {
 							$feature = strtolower($parameters[1]);
 						}
-						$parameters[0] = $page_class;
+						$parameters[0] = Page::class;
 						$parameters[1] = Dao::getObjectIdentifier($page);
 						$parameters[2] = $feature;
 					}
 					else {
-						$feature = "new";
-						$parameters[0] = $page_class;
+						$feature = 'new';
+						$parameters[0] = Page::class;
 						$parameters[1] = $feature;
 					}
 					self::$feature = $feature;
 				}
-				$arguments[0] = self::arrayToUri($parameters);
-				$joinpoint->setArguments($arguments);
+				$uri = self::arrayToUri($parameters);
 			}
 		}
 		else {
-			if (isset($parameters[1]) && $parameters[1] == "new") {
+			if (isset($parameters[1]) && $parameters[1] == 'new') {
 				self::$feature = $parameters[1];
 			}
 		}
@@ -151,11 +148,14 @@ class Uri_Rewriter implements Plugin
 	}
 
 	//-------------------------------------------------------------------------------------- register
-	public static function register()
+	/**
+	 * @param $register Plugins\Register
+	 */
+	public function register(Plugins\Register $register)
 	{
-		Aop::add("before",
-			'SAF\Framework\Main_Controller->runController()',
-			array(__CLASS__, "beforeMainControllerRunController")
+		$register->aop->beforeMethod(
+			[ Main_Controller::class, 'runController' ],
+			[ __CLASS__, 'beforeMainControllerRunController' ]
 		);
 	}
 
@@ -166,9 +166,9 @@ class Uri_Rewriter implements Plugin
 	 */
 	private static function uriToArray($uri)
 	{
-		$uri = explode("/", str_replace(",", "/", $uri));
+		$uri = explode('/', str_replace(',', '/', $uri));
 		array_shift($uri);
-		if (end($uri) === "") {
+		if (end($uri) === '') {
 			array_pop($uri);
 		}
 		return $uri;

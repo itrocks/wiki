@@ -1,41 +1,19 @@
 <?php
 namespace SAF\Wiki;
-use AopJoinpoint;
-use SAF\Framework\Aop;
-use SAF\Framework\Plugin;
 
-class Image_Wiki_Link_Parse implements Plugin
+use SAF\Framework\Wiki;
+use SAF\Plugins;
+
+class Image_Wiki_Link_Parse implements Plugins\Registerable
 {
+
 	//----------------------------------------------------------------------------- beforeWikiTextile
 	/**
 	 * Read the text in parameter, and parse wiki format link to the textile link.
-	 *
-	 * @param $joinpoint AopJoinpoint
 	 */
-	public static function beforeWikiTextile(AopJoinpoint $joinpoint)
+	public static function beforeWikiTextile(&$string)
 	{
-		$arguments = $joinpoint->getArguments();
-		$text = $arguments[0];
-		$text = self::parseLink($text);
-		$arguments[0] = $text;
-		$joinpoint->setArguments($arguments);
-	}
-
-	//------------------------------------------------------------------------------------- parseLink
-	/**
-	 * Parse wiki's links in a text to replace by textile's links.
-	 *
-	 * @param $text string The string to parse.
-	 * @return string The parsed string
-	 */
-	static function parseLink($text)
-	{
-		$callback = function($matches) {
-			return self::formatLink($matches);
-		};
-		$list_extension_regex = join("|", Images_Upload_Utils::$list_extension_accepted);
-		$text = preg_replace_callback("#\[(.+)\.(" . $list_extension_regex . ")\]#", $callback, $text);
-		return $text;
+		$string = self::parseLink($string);
 	}
 
 	//------------------------------------------------------------------------------------ formatLink
@@ -45,18 +23,33 @@ class Image_Wiki_Link_Parse implements Plugin
 	 * @param $matches string[]
 	 * @return string
 	 */
-	static function formatLink($matches)
+	public static function formatLink($matches)
 	{
-		return "!/" . $matches[1] . "." . $matches[2] . "!";
+		return '!/' . $matches[1] . '.' . $matches[2] . '!';
+	}
+
+	//------------------------------------------------------------------------------------- parseLink
+	/**
+	 * Parse wiki's links in a text to replace by textile's links.
+	 *
+	 * @param $text string The string to parse.
+	 * @return string The parsed string
+	 */
+	private static function parseLink($text)
+	{
+		$callback = [__CLASS__, 'formatLink'];
+		$list_extension_regex = join('|', Images_Upload_Utils::$list_extension_accepted);
+		$text = preg_replace_callback('#\[(.+)\.(' . $list_extension_regex . ')\]#', $callback, $text);
+		return $text;
 	}
 
 	//-------------------------------------------------------------------------------------- register
-	public static function register()
+	/**
+	 * @param $register Plugins\Register
+	 */
+	public function register(Plugins\Register $register)
 	{
-		Aop::add("before",
-			'SAF\Framework\Wiki->textile()',
-			array(__CLASS__, "beforeWikiTextile")
-		);
+		$register->aop->beforeMethod([ Wiki::class, 'textile' ], [ __CLASS__, 'beforeWikiTextile' ]);
 	}
 
 }

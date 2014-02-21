@@ -1,6 +1,8 @@
 <?php
 namespace SAF\Wiki;
 
+use SAF\Framework\User;
+
 class Email_Confirmation
 {
 
@@ -13,7 +15,7 @@ class Email_Confirmation
 	//----------------------------------------------------------------------------------------- $user
 	/**
 	 * @link Object
-	 * @var \SAF\Wiki\Wiki_User
+	 * @var User
 	 */
 	public $user;
 
