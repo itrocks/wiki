@@ -5,20 +5,14 @@ use SAF\Wiki;
 
 global $pwd;
 include_once 'pwd.php';
+include 'config.php';
 
 /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
 
 //-------------------------------------------------------------------------------------------- wiki
-$CONFIG['wiki'] = [
+$config['wiki'] = [
 	'app'     => 'Wiki',
 	'extends' => 'framework',
-
-	//------------------------------------------------------------------------------------------ core
-	'core' => [
-		Builder::class => [
-			'SAF\Framework\User' => 'SAF\Wiki\Wiki_User'
-		]
-	],
 
 	//--------------------------------------------------------------------------------------- highest
 	'highest' => [
@@ -30,7 +24,7 @@ $CONFIG['wiki'] = [
 	],
 
 	//---------------------------------------------------------------------------------------- normal
-	'normal' => array(
+	'normal' => [
 		\SAF\Framework\Wiki::class,
 		Menu::class => [
 			'Disconnected' => [
@@ -64,5 +58,5 @@ $CONFIG['wiki'] = [
 		Wiki\Register_Email::class,
 		Wiki\Stay_Connected::class,
 		Wiki\Uri_Rewriter::class
-	),
+	]
 ];
