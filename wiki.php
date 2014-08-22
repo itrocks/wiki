@@ -1,52 +1,36 @@
 <?php
-namespace SAF\Framework;
+namespace SAF\Wiki;
 
-use SAF\Wiki;
+use SAF\Framework;
 
 global $pwd;
-include_once 'pwd.php';
-include 'config.php';
+require 'pwd.php';
+require 'saf.php';
 
 /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
 
 //-------------------------------------------------------------------------------------------- wiki
-$config['wiki'] = [
-	'app'     => 'Wiki',
-	'extends' => 'framework',
-
-	//--------------------------------------------------------------------------------------- highest
-	'highest' => [
-		Dao::class => [
-			'database' => 'saf_wiki',
-			'user'     => 'saf_wiki',
-			'password' => $pwd['saf_wiki']
-		]
-	],
+$config['SAF/Wiki'] = [
+	'app'     => Application::class,
+	'extends' => 'SAF/Framework',
 
 	//---------------------------------------------------------------------------------------- normal
 	'normal' => [
-		\SAF\Framework\Wiki::class,
-		Menu::class => [
-			'Disconnected' => [
-				'/|Home|'        => 'Home',
-				'/User/login'    => 'Log in',
-				'/User/register' => 'Sign in'
-			],
-			'Connected' => [
-				'/|Home|'          => 'Home',
-				'/User/disconnect' => 'Log out'
-			],
-			'Output' => [
-				'/Page/new'    => 'New page',
-				'/{page}/edit' => 'Edit'
-			],
-			'Edit' => [
-				'/{page}/write?#page_edit' => 'Save page',
-				'/{page}'                  => 'Cancel',
-				'/{page}/delete'           => 'Delete',
-				'/Images_Upload'           => ['Images upload', '#images_upload']
+		Framework\Dao::class => [
+			'database' => 'saf_wiki',
+			'login'    => 'saf_wiki',
+			'password' => $pwd['saf_wiki']
+		],
+		Framework\Tools\Wiki::class,
+		Framework\Widget\Menu::class => [
+			'title' => ['/', 'Home', '#main'],
+			'Articles' => [
+				'/SAF/Wiki/Articles/Article/add' => 'Add a new article',
+				'/SAF/Wiki/Articles/Articles'    => 'Full articles list',
+				'/SAF/Wiki/Search/Search/form'   => 'Search'
 			]
 		],
+		/*
 		Wiki\Anti_Bot::class,
 		Wiki\Change_Name_Page_Refactor::class,
 		Wiki\Email_Confirmation_Register::class,
@@ -58,5 +42,6 @@ $config['wiki'] = [
 		Wiki\Register_Email::class,
 		Wiki\Stay_Connected::class,
 		Wiki\Uri_Rewriter::class
+		*/
 	]
 ];
