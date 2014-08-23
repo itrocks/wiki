@@ -8,11 +8,12 @@ use SAF\Framework\Dao;
 use SAF\Framework\Mapper\Map;
 use SAF\Framework\View;
 use SAF\Wiki\Articles\Article;
+use SAF\Wiki\Search;
 
 /**
  * Search class controller
  */
-class Search_Controller implements Class_Controller
+class Controller implements Class_Controller
 {
 
 	//-------------------------------------------------------------------- Search controller features
@@ -47,7 +48,7 @@ class Search_Controller implements Class_Controller
 	{
 		/** @var $article Article */
 		$article = Dao::searchOne(['title' => $search_text], Article::class);
-		return $article ? [Builder::create(Search_Result::class, [$article, 0])] : [];
+		return $article ? [Builder::create(Result::class, [$article, 0])] : [];
 	}
 
 	//------------------------------------------------------------------------------------------- run
@@ -116,7 +117,7 @@ class Search_Controller implements Class_Controller
 	 * @param $property_name string The property name 'title' or 'text' of the article where to
 	 *                              search into
 	 * @param $search_text   string A list of words, separated by spaces
-	 * @return Search_Result[] All results
+	 * @return Result[] All results
 	 */
 	private function searchWords($property_name, $search_text)
 	{
@@ -127,11 +128,11 @@ class Search_Controller implements Class_Controller
 		}
 		/** @var $articles Article[] */
 		$articles = $map->objects;
-		/** @var $search_results Search_Result[] */
+		/** @var $search_results Result[] */
 		$search_results = [];
 		foreach ($articles as $article) {
 			$occurrences = $this->countOccurrences($article->title, $search_text);
-			$search_results[] = Builder::create(Search_Result::class, [$article, $occurrences]);
+			$search_results[] = Builder::create(Result::class, [$article, $occurrences]);
 		}
 		return $search_results;
 	}

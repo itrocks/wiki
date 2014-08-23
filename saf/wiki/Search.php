@@ -1,5 +1,5 @@
 <?php
-namespace SAF\Wiki\Search;
+namespace SAF\Wiki;
 
 /**
  * Search data
