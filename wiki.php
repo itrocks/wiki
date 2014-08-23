@@ -27,7 +27,7 @@ $config['SAF/Wiki'] = [
 			'Articles' => [
 				'/SAF/Wiki/Articles/Article/add' => 'Add a new article',
 				'/SAF/Wiki/Articles/Articles'    => 'Full articles list',
-				'/SAF/Wiki/Search/Search/form'   => 'Search'
+				'/SAF/Wiki/Search/form'          => 'Search'
 			]
 		],
 		/*

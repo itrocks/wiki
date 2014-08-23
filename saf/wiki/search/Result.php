@@ -6,7 +6,7 @@ use SAF\Wiki\Articles\Article;
 /**
  * Search result
  */
-class Search_Result
+class Result
 {
 
 	//-------------------------------------------------------------------------------------- $article
