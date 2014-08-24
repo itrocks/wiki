@@ -30,6 +30,7 @@ $config['SAF/Wiki'] = [
 				'/SAF/Wiki/Search/form'          => 'Search'
 			]
 		],
+		Markup\Links::class
 		/*
 		Wiki\Anti_Bot::class,
 		Wiki\Change_Name_Page_Refactor::class,
@@ -38,7 +39,6 @@ $config['SAF/Wiki'] = [
 		Wiki\Image_Wiki_Link_Parse::class,
 		Wiki\Links_Recognition::class,
 		Wiki\Modification_Reserved_Connected::class,
-		Wiki\Parse_Wiki_Link::class,
 		Wiki\Register_Email::class,
 		Wiki\Stay_Connected::class,
 		Wiki\Uri_Rewriter::class
