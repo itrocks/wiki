@@ -11,6 +11,7 @@ class Article
 
 	//---------------------------------------------------------------------------------------- $title
 	/**
+	 * @setter setTitle
 	 * @var string
 	 */
 	public $title;
@@ -24,6 +25,12 @@ class Article
 	 */
 	public $text;
 
+	//------------------------------------------------------------------------------------------ $uri
+	/**
+	 * @var string
+	 */
+	public $uri;
+
 	//------------------------------------------------------------------------------------ __toString
 	/**
 	 * @return string
@@ -31,6 +38,18 @@ class Article
 	public function __toString()
 	{
 		return strval($this->title);
+	}
+
+	//-------------------------------------------------------------------------------------- setTitle
+	/**
+	 * @param $title string
+	 * @return string
+	 */
+	/* @noinspection PhpUnusedPrivateMethodInspection */
+	private function setTitle($title)
+	{
+		$this->title = $title;
+		$this->uri = strUri($title);
 	}
 
 }

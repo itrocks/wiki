@@ -21,6 +21,16 @@ $config['SAF/Wiki'] = [
 			'login'    => 'saf_wiki',
 			'password' => $pwd['saf_wiki']
 		],
+		Framework\Locale::class => [
+			'date'     => 'd/m/Y',
+			'language' => 'fr',
+			'number'   => [
+				'decimal_minimal_count' => 2,
+				'decimal_maximal_count' => 2,
+				'decimal_separator'     => ',',
+				'thousand_separator'    => ' '
+			]
+		],
 		Framework\Tools\Wiki::class,
 		Framework\Widget\Menu::class => [
 			'title' => ['/', 'Home', '#main'],
@@ -30,7 +40,8 @@ $config['SAF/Wiki'] = [
 				'/SAF/Wiki/Search/form'          => 'Search'
 			]
 		],
-		Markup\Links::class
+		Markup\Links::class,
+		Uri_Rewriter::class
 		/*
 		Wiki\Anti_Bot::class,
 		Wiki\Change_Name_Page_Refactor::class,
@@ -41,7 +52,6 @@ $config['SAF/Wiki'] = [
 		Wiki\Modification_Reserved_Connected::class,
 		Wiki\Register_Email::class,
 		Wiki\Stay_Connected::class,
-		Wiki\Uri_Rewriter::class
 		*/
 	]
 ];
