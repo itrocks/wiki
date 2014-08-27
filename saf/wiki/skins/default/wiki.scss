@@ -1,10 +1,23 @@
 .article.window {
 	width: 1024px;
-}
 
-.article.window img {
-	border: 1px solid darkgrey;
-	box-shadow: 0 0 1px darkgrey;
+	img {
+		border: 1px solid darkgrey;
+		box-shadow: 0 0 1px darkgrey;
+		margin: .25em;
+
+		&.align-center {
+			display: block;
+			margin-left: auto;
+			margin-right: auto;
+		}
+		&.align-left {
+			float: left;
+		}
+		&.align-right {
+			float: right;
+		}
+	}
 }
 
 h1 {

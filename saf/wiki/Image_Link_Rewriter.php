@@ -27,13 +27,23 @@ class Image_Link_Rewriter implements Registerable
 	 */
 	public function rewriteLink($matches)
 	{
+		$attachment_name = $matches[1];
+		if (in_array($attachment_name[0], ['>', '<', '='])) {
+			$start = $attachment_name[0];
+			$attachment_name = substr($attachment_name, 1);
+		}
+		else {
+			$start = '';
+		}
 		/** @var $attachment Attachment */
-		$attachment = Dao::searchOne(['name' => $matches[1]], Attachment::class);
+		$attachment = Dao::searchOne(['name' => $attachment_name], Attachment::class);
 		if ($attachment) {
 			/** @var $session_files Files */
 			$session_files = Session::current()->get(Files::class, true);
 			$session_files->files[] = $attachment->file;
-			return '!' . View::link(Session_File::class, 'output', [$attachment->file->name]) . '!';
+			return '!' . $start
+				. View::link(Session_File::class, 'output', [$attachment->file->name])
+				. '!';
 		}
 		else {
 			return '_' . $matches[1] . '_!';
@@ -49,7 +59,7 @@ class Image_Link_Rewriter implements Registerable
 	 */
 	public function rewriteLinks(&$string)
 	{
-		$string = preg_replace_callback('%!(\w.*\w)!%', [$this, 'rewriteLink'], $string);
+		$string = preg_replace_callback('%!([\w<=>].*\w)!%', [$this, 'rewriteLink'], $string);
 	}
 
 	//-------------------------------------------------------------------------------------- register
