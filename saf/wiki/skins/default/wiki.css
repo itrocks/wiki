@@ -1,17 +1,21 @@
 .article.window {
   width: 1024px; }
-  .article.window img {
-    border: 1px solid darkgrey;
-    box-shadow: 0 0 1px darkgrey;
-    margin: .25em; }
-    .article.window img.align-center {
-      display: block;
-      margin-left: auto;
-      margin-right: auto; }
-    .article.window img.align-left {
-      float: left; }
-    .article.window img.align-right {
-      float: right; }
+  .article.window .wiki.text {
+    font-size: 130%;
+    line-height: 125%;
+    text-align: justify; }
+    .article.window .wiki.text img {
+      border: 1px solid darkgrey;
+      box-shadow: 0 0 1px darkgrey;
+      margin: .25em; }
+      .article.window .wiki.text img.align-center {
+        display: block;
+        margin-left: auto;
+        margin-right: auto; }
+      .article.window .wiki.text img.align-left {
+        float: left; }
+      .article.window .wiki.text img.align-right {
+        float: right; }
 
 h1 {
   margin: 1em 0 .8em; }
