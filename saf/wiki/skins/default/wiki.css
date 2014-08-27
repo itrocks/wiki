@@ -1,5 +1,9 @@
 .article.window {
-  max-width: 1024px; }
+  width: 1024px; }
+
+.article.window img {
+  border: 1px solid darkgrey;
+  box-shadow: 0 0 1px darkgrey; }
 
 h1 {
   margin: 1em 0 .8em; }

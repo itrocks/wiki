@@ -38,8 +38,12 @@ $config['SAF/Wiki'] = [
 				'/SAF/Wiki/Articles/Article/add' => 'Add a new article',
 				'/SAF/Wiki/Articles/Articles'    => 'Full articles list',
 				'/SAF/Wiki/Search/form'          => 'Search'
+			],
+			'Tools' => [
+				'/SAF/Wiki/Attachments/Attachments' => 'Attachment files'
 			]
 		],
+		Image_Link_Rewriter::class,
 		Markup\Links::class,
 		Uri_Rewriter::class
 		/*
@@ -47,7 +51,6 @@ $config['SAF/Wiki'] = [
 		Wiki\Change_Name_Page_Refactor::class,
 		Wiki\Email_Confirmation_Register::class,
 		Wiki\Images_Upload::class,
-		Wiki\Image_Wiki_Link_Parse::class,
 		Wiki\Links_Recognition::class,
 		Wiki\Modification_Reserved_Connected::class,
 		Wiki\Register_Email::class,
