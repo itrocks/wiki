@@ -9,7 +9,8 @@
       border: 1px solid darkgrey;
       border-radius: 3px;
       box-shadow: 0 0 1px darkgrey;
-      margin: .25em; }
+      margin: .25em;
+      vertical-align: middle; }
       .article.window .wiki.text img.align-center {
         display: block;
         margin-left: auto;
