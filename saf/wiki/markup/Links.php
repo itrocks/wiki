@@ -47,7 +47,9 @@ class Links implements Registerable
 				elseif (($string[$i] != ']') && ($j = strpos($string, ']', $i)) !== false) {
 					$uri = substr($string, $i, $j - $i);
 					$length -= (strlen($uri) + 2);
-					$uri = DQ . $uri . DQ . ':' . strUri($uri);
+					$uri = (strpos($uri, 'http://') === 0 || strpos($uri, 'https://') === 0)
+						? (DQ . rParse($uri, '//') . DQ . ':' . $uri)
+						: (DQ . $uri . DQ . ':' . strUri($uri));
 					$uri_length = strlen($uri);
 					$length += $uri_length;
 					$string = substr($string, 0, $i - 1) . $uri . substr($string, $j + 1);
