@@ -35,6 +35,11 @@ class Images implements Registerable
 		else {
 			$start = '';
 		}
+		if (
+			(strpos($attachment_name, 'http://') === 0) || (strpos($attachment_name, 'https://') === 0)
+		) {
+			return '!' . $attachment_name . '!';
+		}
 		/** @var $attachment Attachment */
 		$attachment = Dao::searchOne(['name' => $attachment_name], Attachment::class);
 		if ($attachment) {
@@ -45,9 +50,7 @@ class Images implements Registerable
 				. View::link(Session_File::class, 'output', [$attachment->file->name])
 				. '!';
 		}
-		else {
-			return '_' . $matches[1] . '_!';
-		}
+		return '_' . $matches[1] . '_!';
 	}
 
 	//---------------------------------------------------------------------------------- rewriteLinks
