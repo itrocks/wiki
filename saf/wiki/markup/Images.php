@@ -1,5 +1,5 @@
 <?php
-namespace SAF\Wiki;
+namespace SAF\Wiki\Markup;
 
 use SAF\Framework\Dao;
 use SAF\Framework\Dao\File\Session_File\Files;
@@ -15,7 +15,7 @@ use SAF\Wiki\Attachments\Attachment;
  * Image link rewriter class
  * Its job is to rewrite !Image name! into !/Images/image-name.png!
  */
-class Image_Link_Rewriter implements Registerable
+class Images implements Registerable
 {
 
 	//----------------------------------------------------------------------------------- rewriteLink

@@ -43,7 +43,7 @@ $config['SAF/Wiki'] = [
 				'/SAF/Wiki/Attachments/Attachments' => 'Attachment files'
 			]
 		],
-		Image_Link_Rewriter::class,
+		Markup\Images::class,
 		Markup\Links::class,
 		Uri_Rewriter::class
 		/*
