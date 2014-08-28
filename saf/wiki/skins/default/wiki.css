@@ -1,5 +1,6 @@
 .article.window {
-  width: 1024px; }
+  min-width: 600px;
+  max-width: 1024px; }
   .article.window .wiki.text {
     font-size: 130%;
     line-height: 125%;
