@@ -5,6 +5,14 @@
     font-size: 130%;
     line-height: 125%;
     text-align: justify; }
+    .article.window .wiki.text h1 {
+      clear: both;
+      margin: 1em 0 .8em; }
+    .article.window .wiki.text h2 {
+      clear: both;
+      margin: .8em 0 .6em; }
+    .article.window .wiki.text h3 {
+      margin: .6em 0 .4em; }
     .article.window .wiki.text img {
       border: 1px solid darkgrey;
       border-radius: 3px;
@@ -19,12 +27,3 @@
         float: left; }
       .article.window .wiki.text img.align-right {
         float: right; }
-
-h1 {
-  margin: 1em 0 .8em; }
-
-h2 {
-  margin: .8em 0 .6em; }
-
-h3 {
-  margin: .6em 0 .4em; }
