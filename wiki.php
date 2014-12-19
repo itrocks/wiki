@@ -1,39 +1,45 @@
 <?php
 namespace SAF\Wiki;
 
-use SAF\Framework;
+use SAF\Framework\Configuration;
+use SAF\Framework\Dao;
+use SAF\Framework\Dao\Mysql\Link;
+use SAF\Framework\Locale;
+use SAF\Framework\Locale\Number_Format;
+use SAF\Framework\Plugin\Priority;
+use SAF\Framework\Tools\Wiki;
+use SAF\Framework\Widget\Menu;
 
 global $pwd;
+require 'loc.php';
 require 'pwd.php';
 require 'saf.php';
 
-/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
-
 //-------------------------------------------------------------------------------------------- wiki
 $config['SAF/Wiki'] = [
-	'app'     => Application::class,
-	'extends' => 'SAF/Framework',
+	Configuration::APP         => Application::class,
+	Configuration::EXTENDS_APP => 'SAF/Framework',
 
 	//---------------------------------------------------------------------------------------- normal
-	'normal' => [
-		Framework\Dao::class => [
-			'database' => 'saf_wiki',
-			'login'    => 'saf_wiki',
-			'password' => $pwd['saf_wiki']
+	Priority::NORMAL => [
+		Dao::class => [
+			Link::DATABASE => 'saf_wiki',
+			Link::LOGIN    => 'saf_wiki',
+			Link::PASSWORD => $pwd['saf_wiki']
 		],
-		Framework\Locale::class => [
-			'date'     => 'd/m/Y',
-			'language' => 'fr',
-			'number'   => [
-				'decimal_minimal_count' => 2,
-				'decimal_maximal_count' => 2,
-				'decimal_separator'     => ',',
-				'thousand_separator'    => ' '
+		Locale::class => [
+			Locale::DATE     => 'd/m/Y',
+			Locale::LANGUAGE => 'fr',
+			Locale::NUMBER   => [
+				Number_Format::DECIMAL_MAXIMAL_COUNT => 2,
+				Number_Format::DECIMAL_MINIMAL_COUNT => 2,
+				Number_Format::DECIMAL_SEPARATOR     => ',',
+				Number_Format::THOUSAND_SEPARATOR    => ' '
 			]
 		],
-		Framework\Tools\Wiki::class,
-		Framework\Widget\Menu::class => [
-			'title' => ['/', 'Home', '#main'],
+		Wiki::class,
+		Menu::class => [
+			Menu::TITLE => ['/', 'Home', '#main'],
 			'Articles' => [
 				'/SAF/Wiki/Articles/Article/add' => 'Add a new article',
 				'/SAF/Wiki/Articles/Articles'    => 'Full articles list',

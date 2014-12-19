@@ -17,22 +17,22 @@ $('document').ready(function()
 		});
 
 		// can enter tab characters into textarea
-		this.in('textarea').presstab();
+		this.inside('textarea').presstab();
 
 		// messages is draggable
-		this.in('#messages').draggable();
+		this.inside('#messages').draggable();
 
 		// tab controls
-		this.in('.tabber').tabber();
+		this.inside('.tabber').tabber();
 
 		// draggable objects brought to front on mousedown
-		this.in('.ui-draggable').mousedown(function()
+		this.inside('.ui-draggable').mousedown(function()
 		{
 			$(this).css('z-index', ++window.zindex_counter);
 		});
 
 		// minimize menu
-		this.in('.menu.output').minimize();
+		this.inside('.menu.output').minimize();
 
 	});
 

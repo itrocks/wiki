@@ -11,6 +11,9 @@
 /vendor
 
 /index.php
+/loc.php
 /pwd.php
 /saf.php
 /update
+
+/wiki/uploaded_img
