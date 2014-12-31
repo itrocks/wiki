@@ -9,6 +9,7 @@ use SAF\Framework\Locale\Number_Format;
 use SAF\Framework\Plugin\Priority;
 use SAF\Framework\Tools\Wiki;
 use SAF\Framework\Widget\Menu;
+use SAF\Wiki\Articles;
 
 global $pwd;
 require 'loc.php';
@@ -22,6 +23,7 @@ $config['SAF/Wiki'] = [
 
 	//---------------------------------------------------------------------------------------- normal
 	Priority::NORMAL => [
+		Articles\Redirect::class,
 		Dao::class => [
 			Link::DATABASE => 'saf_wiki',
 			Link::LOGIN    => 'saf_wiki',
@@ -37,7 +39,8 @@ $config['SAF/Wiki'] = [
 				Number_Format::THOUSAND_SEPARATOR    => ' '
 			]
 		],
-		Wiki::class,
+		Markup\Images::class,
+		Markup\Links::class,
 		Menu::class => [
 			Menu::TITLE => ['/', 'Home', '#main'],
 			'Articles' => [
@@ -49,9 +52,8 @@ $config['SAF/Wiki'] = [
 				'/SAF/Wiki/Attachments/Attachments' => 'Attachment files'
 			]
 		],
-		Markup\Images::class,
-		Markup\Links::class,
-		Uri_Rewriter::class
+		Uri_Rewriter::class,
+		Wiki::class
 		/*
 		Wiki\Anti_Bot::class,
 		Wiki\Change_Name_Page_Refactor::class,
