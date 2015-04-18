@@ -27,7 +27,7 @@ class Links implements Registerable
 
 	//-------------------------------------------------------------------------------- parseWikiLinks
 	/**
-	 * Parse [Wiki links] and replace then with 'Wiki links':/Wiki_links
+	 * Parse [Wiki links] and replace then with "Wiki links":/wiki-links
 	 *
 	 * @param $string string The string where to found and parse wiki links
 	 */
@@ -43,7 +43,7 @@ class Links implements Registerable
 					$string = substr($string, 0, $i) . substr($string, $i + 1);
 					$length --;
 				}
-				// parse link : replace [A link] with 'A link':/A_link
+				// parse link : replace [A link] with "A link":/a-link
 				elseif (($string[$i] != ']') && ($j = strpos($string, ']', $i)) !== false) {
 					$uri = substr($string, $i, $j - $i);
 					$length -= (strlen($uri) + 2);
