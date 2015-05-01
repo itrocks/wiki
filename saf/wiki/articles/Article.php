@@ -48,7 +48,6 @@ class Article
 	/** @noinspection PhpUnusedPrivateMethodInspection @setter */
 	/**
 	 * @param $title string
-	 * @return string
 	 */
 	private function setTitle($title)
 	{
