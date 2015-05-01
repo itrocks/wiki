@@ -1,13 +1,17 @@
 <?php
 namespace SAF\Wiki\Articles;
 
+use SAF\Framework\Traits\Date_Logged;
+
 /**
  * A wiki article
  *
+ * @business
  * @representative title
  */
 class Article
 {
+	use Date_Logged;
 
 	//---------------------------------------------------------------------------------------- $title
 	/**
@@ -41,11 +45,11 @@ class Article
 	}
 
 	//-------------------------------------------------------------------------------------- setTitle
+	/** @noinspection PhpUnusedPrivateMethodInspection @setter */
 	/**
 	 * @param $title string
 	 * @return string
 	 */
-	/* @noinspection PhpUnusedPrivateMethodInspection */
 	private function setTitle($title)
 	{
 		$this->title = $title;

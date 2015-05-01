@@ -5,6 +5,7 @@ use SAF\Framework\Dao\File;
 /**
  * Wiki attached file class
  *
+ * @business
  * @representative name
  */
 class Attachment
@@ -36,10 +37,10 @@ class Attachment
 	}
 
 	//--------------------------------------------------------------------------------------- setFile
+	/** @noinspection PhpUnusedPrivateMethodInspection @setter */
 	/**
 	 * @param $file File
 	 */
-	/* @noinspection PhpUnusedPrivateMethodInspection @getter */
 	private function setFile(File $file)
 	{
 		$this->file = $file;
