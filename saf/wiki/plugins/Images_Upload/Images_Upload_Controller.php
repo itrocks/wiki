@@ -1,9 +1,12 @@
 <?php
 namespace SAF\Wiki;
 
-use SAF\Framework\Feature_Controller;
-use SAF\Framework\Controller_Parameters;
+use SAF\Framework\Controller\Feature_Controller;
+use SAF\Framework\Controller\Parameters;
 
+/**
+ * Images upload controller
+ */
 class Images_Upload_Controller implements Feature_Controller
 {
 
@@ -11,7 +14,7 @@ class Images_Upload_Controller implements Feature_Controller
 	/**
 	 * Return a text which explain a code error
 	 *
-	 * @param $code int The code error to explain
+	 * @param $code integer The error code to explain
 	 * @return string The text which explain the code
 	 */
 	private function codeToMessage($code)
@@ -39,8 +42,8 @@ class Images_Upload_Controller implements Feature_Controller
 	/**
 	 * Generate a name who not exist in this server
 	 *
-	 * @param $destination  string The images folder
-	 * @param $image        string The image
+	 * @param $destination string The images folder
+	 * @param $image       string The image
 	 * @return string Return the same name if the file not exist
 	 *         or return this name file incremented by a number, this name is unique.
 	 */
@@ -56,7 +59,14 @@ class Images_Upload_Controller implements Feature_Controller
 	}
 
 	//----------------------------------------------------------------------------- getViewParameters
-	public function getViewParameters(Controller_Parameters $parameters, $message)
+	/**
+	 * Get view parameters
+	 *
+	 * @param $parameters Parameters
+	 * @param $message    string
+	 * @return array
+	 */
+	public function getViewParameters(Parameters $parameters, $message)
 	{
 		$parameters = $parameters->getObjects();
 		$parameters['message'] = $message;
@@ -66,8 +76,9 @@ class Images_Upload_Controller implements Feature_Controller
 	//--------------------------------------------------------------------------------------- isImage
 	/**
 	 * Test if this image is an image permitted
+	 *
 	 * @param $image array Image to test
-	 * @return bool True if it's a permitted image, false else.
+	 * @return boolean True if it's a permitted image, false else.
 	 */
 	public function isImage($image)
 	{
@@ -80,22 +91,28 @@ class Images_Upload_Controller implements Feature_Controller
 	}
 
 	//------------------------------------------------------------------------------------------- run
-	public function run(Controller_Parameters $parameters, $form, $files)
+	/**
+	 * @param $parameters Parameters
+	 * @param $form       array
+	 * @param $files      array
+	 * @return Images_Upload_List_Controller
+	 */
+	public function run(Parameters $parameters, $form, $files)
 	{
-		return (new Images_Upload_List_Controller($parameters, $form, $files));
+		return new Images_Upload_List_Controller($parameters, $form, $files);
 	}
 
 	//---------------------------------------------------------------------------------------- upload
 	/**
 	 * Upload an image passed by forms.
 	 *
-	 * @param $parameters Controller_Parameters
+	 * @param $parameters Parameters
 	 * @param $form       array
 	 * @param $files      array
 	 * @return mixed
 	 */
 	public function runUpload(
-		Controller_Parameters $parameters,
+		Parameters $parameters,
 		/** @noinspection PhpUnusedParameterInspection */ $form,
 		$files
 	) {
