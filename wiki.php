@@ -8,6 +8,7 @@ use SAF\Framework\Locale;
 use SAF\Framework\Locale\Number_Format;
 use SAF\Framework\Plugin\Priority;
 use SAF\Framework\Tools\Wiki;
+use SAF\Framework\User\Write_Access_Control;
 use SAF\Framework\Widget\Menu;
 use SAF\Wiki\Articles;
 
@@ -23,6 +24,7 @@ $config['SAF/Wiki'] = [
 
 	//---------------------------------------------------------------------------------------- normal
 	Priority::NORMAL => [
+		Write_Access_Control::class,
 		Articles\Redirect::class,
 		Dao::class => [
 			Link::DATABASE => 'saf_wiki',
