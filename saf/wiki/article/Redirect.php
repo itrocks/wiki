@@ -45,7 +45,7 @@ class Redirect implements Registerable
 			}
 			// redirected from is a link to the "edit" feature
 			$this->redirected_from .= SP
-				. DQ . $object->title . DQ . ':'
+				. DQ . str_replace('@', '&#64;', $object->title) . DQ . ':'
 				. strUri($object->title . SL . Feature::F_EDIT);
 			Main::$current->redirect(SL . strUri(substr($value, 11, -1)));
 		}
