@@ -1,10 +1,12 @@
 <?php
 namespace SAF\Wiki\markup;
 
+use SAF\Framework\Controller\Target;
 use SAF\Framework\Plugin\Register;
 use SAF\Framework\Plugin\Registerable;
 use SAF\Framework\Tools\Wiki;
 use SAF\Framework\Tools\Wiki\Textile;
+use SAF\Framework\View\Html\Dom\Anchor;
 
 /**
  * Class Links
@@ -23,6 +25,18 @@ class Links implements Registerable
 		if ((substr($uri, 0, 1) !== SL) && !strpos($uri, '://')) {
 			$uri = SL . $uri;
 		}
+	}
+
+	//------------------------------------------------------------------------------------ htmlAnchor
+	/**
+	 * @param $uri string
+	 * @return string The <a href="..." target="#main">...</a>
+	 */
+	public function htmlAnchor($uri)
+	{
+		$anchor = new Anchor(SL . strUri($uri), $uri);
+		$anchor->setAttribute('target', Target::MAIN);
+		return strval($anchor);
 	}
 
 	//-------------------------------------------------------------------------------- parseWikiLinks
@@ -47,9 +61,9 @@ class Links implements Registerable
 				elseif (($string[$i] != ']') && ($j = strpos($string, ']', $i)) !== false) {
 					$uri = substr($string, $i, $j - $i);
 					$length -= (strlen($uri) + 2);
-					$uri = (strpos($uri, 'http://') === 0 || strpos($uri, 'https://') === 0)
+					$uri = ((strpos($uri, 'http://') === 0) || (strpos($uri, 'https://') === 0))
 						? (DQ . rParse($uri, '//') . DQ . ':' . $uri)
-						: (DQ . $uri . DQ . ':' . strUri($uri));
+						: $this->htmlAnchor($uri);
 					$uri_length = strlen($uri);
 					$length += $uri_length;
 					$string = substr($string, 0, $i - 1) . $uri . substr($string, $j + 1);
