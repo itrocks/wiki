@@ -46,8 +46,9 @@ $config['SAF/Wiki'] = [
 		Menu::class => [
 			Menu::TITLE => ['/', 'Home', '#main'],
 			'Articles' => [
-				'/SAF/Wiki/Article/add' => 'Add a new article',
+				'/'                     => 'Home',
 				'/SAF/Wiki/Articles'    => 'Full articles list',
+				'/SAF/Wiki/Article/add' => 'Add a new article',
 				'/SAF/Wiki/Search/form' => 'Search'
 			],
 			'Tools' => [
