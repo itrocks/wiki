@@ -34,7 +34,8 @@ class Links implements Registerable
 	 */
 	public function htmlAnchor($uri)
 	{
-		$anchor = new Anchor(SL . strUri($uri), $uri);
+		// TODO textile should be more intelligent and detect those @ are not code
+		$anchor = new Anchor(SL . strUri($uri), str_replace('@', '&#64;', $uri));
 		$anchor->setAttribute('target', Target::MAIN);
 		return strval($anchor);
 	}
