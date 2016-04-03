@@ -8,6 +8,10 @@
 		line-height: 125%;
 		text-align: justify;
 
+		code, pre[class] {
+			background: #eee;
+		}
+
 		h1 {
 			clear: both;
 			margin: 1em 0 .8em;
@@ -40,10 +44,6 @@
 			&.align-right {
 				float: right;
 			}
-		}
-
-		pre.php {
-			background: #eee;
 		}
 	}
 }

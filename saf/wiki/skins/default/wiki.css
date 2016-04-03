@@ -6,6 +6,8 @@
     font-size: 130%;
     line-height: 125%;
     text-align: justify; }
+    .article.window .wiki.text code, .article.window .wiki.text pre[class] {
+      background: #eee; }
     .article.window .wiki.text h1 {
       clear: both;
       margin: 1em 0 .8em; }
@@ -28,5 +30,3 @@
         float: left; }
       .article.window .wiki.text img.align-right {
         float: right; }
-    .article.window .wiki.text pre.php {
-      background: #eee; }
