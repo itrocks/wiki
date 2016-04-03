@@ -1,5 +1,6 @@
 <?php
-namespace SAF\Wiki\Attachments;
+namespace SAF\Wiki;
+
 use SAF\Framework\Dao\File;
 
 /**

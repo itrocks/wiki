@@ -1,5 +1,5 @@
 <?php
-namespace SAF\Wiki\Articles;
+namespace SAF\Wiki\Article;
 
 use SAF\Framework\Controller\Feature;
 use SAF\Framework\Controller\Main;
@@ -7,6 +7,7 @@ use SAF\Framework\Locale\Loc;
 use SAF\Framework\Plugin\Register;
 use SAF\Framework\Plugin\Registerable;
 use SAF\Framework\Tools\Call_Stack;
+use SAF\Wiki\Article;
 
 /**
  * The Redirect plugin allows articles containing #REDIRECT [Another article title]

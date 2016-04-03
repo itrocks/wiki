@@ -10,7 +10,7 @@ use SAF\Framework\Plugin\Priority;
 use SAF\Framework\Tools\Wiki;
 use SAF\Framework\User\Write_Access_Control;
 use SAF\Framework\Widget\Menu;
-use SAF\Wiki\Articles;
+use SAF\Wiki\Article;
 
 global $pwd;
 require 'loc.php';
@@ -25,7 +25,7 @@ $config['SAF/Wiki'] = [
 	//---------------------------------------------------------------------------------------- normal
 	Priority::NORMAL => [
 		Write_Access_Control::class,
-		Articles\Redirect::class,
+		Article\Redirect::class,
 		Dao::class => [
 			Link::DATABASE => 'saf_wiki',
 			Link::LOGIN    => 'saf_wiki',
@@ -46,12 +46,13 @@ $config['SAF/Wiki'] = [
 		Menu::class => [
 			Menu::TITLE => ['/', 'Home', '#main'],
 			'Articles' => [
-				'/SAF/Wiki/Articles/Article/add' => 'Add a new article',
-				'/SAF/Wiki/Articles/Articles'    => 'Full articles list',
-				'/SAF/Wiki/Search/form'          => 'Search'
+				'/SAF/Wiki/Article/add' => 'Add a new article',
+				'/SAF/Wiki/Articles'    => 'Full articles list',
+				'/SAF/Wiki/Search/form' => 'Search'
 			],
 			'Tools' => [
-				'/SAF/Wiki/Attachments/Attachments' => 'Attachment files'
+				'/SAF/Wiki/Attachments'     => 'Attachment files',
+				'/SAF/Framework/User/login' => 'Connect user'
 			]
 		],
 		Uri_Rewriter::class,

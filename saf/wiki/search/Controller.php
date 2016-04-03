@@ -5,9 +5,10 @@ use SAF\Framework\Builder;
 use SAF\Framework\Controller\Class_Controller;
 use SAF\Framework\Controller\Parameters;
 use SAF\Framework\Dao;
+use SAF\Framework\Dao\Func;
 use SAF\Framework\Mapper\Map;
 use SAF\Framework\View;
-use SAF\Wiki\Articles\Article;
+use SAF\Wiki\Article;
 use SAF\Wiki\Search;
 
 /**
@@ -124,14 +125,14 @@ class Controller implements Class_Controller
 		$words = explode(SP, $search_text);
 		$map = new Map();
 		foreach ($words as $element) {
-			$map->add(Dao::search([$property_name => '%' . $element . '%'], Article::class));
+			$map->add(Dao::search([$property_name => Func::like('%' . $element . '%')], Article::class));
 		}
 		/** @var $articles Article[] */
 		$articles = $map->objects;
 		/** @var $search_results Result[] */
 		$search_results = [];
 		foreach ($articles as $article) {
-			$occurrences = $this->countOccurrences($article->title, $search_text);
+			$occurrences = $this->countOccurrences($article->$property_name, $search_text);
 			$search_results[] = Builder::create(Result::class, [$article, $occurrences]);
 		}
 		return $search_results;

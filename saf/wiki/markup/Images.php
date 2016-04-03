@@ -9,7 +9,7 @@ use SAF\Framework\Plugin\Registerable;
 use SAF\Framework\Session;
 use SAF\Framework\Tools\Wiki;
 use SAF\Framework\View;
-use SAF\Wiki\Attachments\Attachment;
+use SAF\Wiki\Attachment;
 
 /**
  * Image link rewriter class

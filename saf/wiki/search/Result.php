@@ -1,7 +1,7 @@
 <?php
 namespace SAF\Wiki\Search;
 
-use SAF\Wiki\Articles\Article;
+use SAF\Wiki\Article;
 
 /**
  * Search result
@@ -48,7 +48,7 @@ class Result
 	 */
 	public function link()
 	{
-		return strUri($this->article->title);
+		return SL . strUri($this->article->title);
 	}
 
 	//------------------------------------------------------------------------------- occurrencesText

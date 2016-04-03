@@ -7,6 +7,34 @@
 		|{@application.ucwords}| - |¦{@class.ucfirst}¦ {@feature.display}|
 	</title>
 
+	<link href="../../vendor/reset5/reset.css" rel="stylesheet" type="text/css">
+
+	<link href="../../vendor/jquery-ui/smoothness/jquery-ui.css" rel="stylesheet" type="text/css">
+	<link href="../../vendor/jquery-ui/smoothness/jquery.ui.theme.css" rel="stylesheet" type="text/css">
+
+	<link href="../framework/skins/default/application.css" rel="stylesheet" type="text/css">
+
+	<link href="../framework/skins/default/actions.css" rel="stylesheet" type="text/css">
+	<link href="../framework/skins/default/custom.css" rel="stylesheet" type="text/css">
+	<link href="../framework/skins/default/environment.css" rel="stylesheet" type="text/css">
+	<link href="../framework/skins/default/form.css" rel="stylesheet" type="text/css">
+	<link href="../framework/skins/default/import.css" rel="stylesheet" type="text/css">
+	<link href="../framework/skins/default/list.css" rel="stylesheet" type="text/css">
+	<link href="../framework/skins/default/menu.css" rel="stylesheet" type="text/css">
+	<link href="../framework/skins/default/modules.css" rel="stylesheet" type="text/css">
+	<link href="../framework/skins/default/property.css" rel="stylesheet" type="text/css">
+	<link href="../framework/skins/default/rad.css" rel="stylesheet" type="text/css">
+	<link href="../framework/skins/default/tabber.css" rel="stylesheet" type="text/css">
+	<link href="../framework/skins/default/trashcan.css" rel="stylesheet" type="text/css">
+	<link href="../framework/skins/default/vertical_scrollbar.css" rel="stylesheet" type="text/css">
+	<link href="../framework/skins/default/window.css" rel="stylesheet" type="text/css">
+	<link href="../framework/skins/default/xdebug.css" rel="stylesheet" type="text/css">
+
+	<link href="../framework/skins/default/support.css" rel="stylesheet" type="text/css">
+	<link href="../framework/skins/default/user.css" rel="stylesheet" type="text/css">
+
+	<link href="../wiki/skins/default/wiki.css" rel="stylesheet" type="text/css">
+
 	<!-- must be first -->
 	<script type="text/javascript" src="../../saf/framework/js/saf.constants.js"></script>
 	<script type="text/javascript" src="../../vendor/jquery/jquery-1.8.3.js"></script>
@@ -58,61 +86,30 @@
 		);
 	</script>
 
-	<style type="text/css">
-		@import "../../vendor/reset5/reset.css";
-
-		@import "../../vendor/jquery-ui/smoothness/jquery-ui.css";
-		@import "../../vendor/jquery-ui/smoothness/jquery.ui.theme.css";
-
-		@import "../framework/skins/default/application.css";
-
-		@import "../framework/skins/default/actions.css";
-		@import "../framework/skins/default/custom.css";
-		@import "../framework/skins/default/environment.css";
-		@import "../framework/skins/default/form.css";
-		@import "../framework/skins/default/import.css";
-		@import "../framework/skins/default/list.css";
-		@import "../framework/skins/default/menu.css";
-		@import "../framework/skins/default/modules.css";
-		@import "../framework/skins/default/property.css";
-		@import "../framework/skins/default/rad.css";
-		@import "../framework/skins/default/tabber.css";
-		@import "../framework/skins/default/trashcan.css";
-		@import "../framework/skins/default/vertical_scrollbar.css";
-		@import "../framework/skins/default/window.css";
-		@import "../framework/skins/default/xdebug.css";
-
-		@import "../framework/skins/default/support.css";
-		@import "../framework/skins/default/user.css";
-
-		@import "../wiki/skins/default/wiki.css";
-	</style>
-
 </head>
 
 <body>
 
-<header>
-	<div id="messages"></div>
-	<ul class="links">
-		<li class="provider bappli">
-			<a href="http://www.bappli.com" target="_blank" title="www.bappli.com">B-APPLI</a>
-		</li>
-	</ul>
-</header>
+	<header>
+		{/SAF/Framework/User/miniDisplay.html}
+		<div id="messages"></div>
+		<ul class="links">
+			<li class="provider bappli">
+				<a href="http://www.bappli.com" target="_blank" title="www.bappli.com">B-APPLI</a>
+			</li>
+		</ul>
+	</header>
 
-<nav class="menu output">
 	{/SAF/Framework/Widget/Menu/output}
-</nav>
 
-<section id="main" class="application center">
-	{@content}
-</section>
+	<section id="main" class="application center">
+		{@content}
+	</section>
 
-<section id="trashcan">
-	<div></div>
-	<a href="/SAF/Framework/Widget/Trashcan" target="#trashcan>div">bin</a>
-</section>
+	<section id="trashcan">
+		<div></div>
+		<a href="/SAF/Framework/Widget/Trashcan" target="#trashcan>div">bin</a>
+	</section>
 
 </body>
 </html>

@@ -9,7 +9,7 @@ use SAF\Framework\Locale\Loc;
 use SAF\Framework\Plugin\Register;
 use SAF\Framework\Plugin\Registerable;
 use SAF\Framework\View;
-use SAF\Wiki\Articles\Article;
+use SAF\Wiki\Article;
 
 /**
  * URI rewriter class
@@ -28,6 +28,9 @@ class Uri_Rewriter implements Registerable
 	public static $feature;
 
 	//-------------------------------------------------------------------------------- $features_list
+	/**
+	 * @var string[]
+	 */
 	public static $features_list = [
 		Feature::F_ADD, Feature::F_DELETE, Feature::F_EDIT, Feature::F_OUTPUT, Feature::F_WRITE
 	];

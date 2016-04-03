@@ -1,7 +1,9 @@
 <?php
-namespace SAF\Wiki\Articles;
+namespace SAF\Wiki;
 
+use SAF\Framework\History\Has_History;
 use SAF\Framework\Traits\Date_Logged;
+use SAF\Wiki\Article\History;
 
 /**
  * A wiki article
@@ -9,7 +11,7 @@ use SAF\Framework\Traits\Date_Logged;
  * @business
  * @representative title
  */
-class Article
+class Article implements Has_History
 {
 	use Date_Logged;
 
@@ -42,6 +44,14 @@ class Article
 	public function __toString()
 	{
 		return strval($this->title);
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getHistoryClassName()
+	{
+		return History::class;
 	}
 
 	//-------------------------------------------------------------------------------------- setTitle
