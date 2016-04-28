@@ -6,6 +6,19 @@
     font-size: 130%;
     line-height: 125%;
     text-align: justify; }
+    .article.window .wiki.text table:not(.nostyle) {
+      width: 100%;
+      border: solid 1px black; }
+      .article.window .wiki.text table:not(.nostyle) tr th {
+        padding: 5px 5px 5px 5px;
+        border: solid 1px black;
+        vertical-align: middle;
+        background-color: #93c437;
+        color: white; }
+      .article.window .wiki.text table:not(.nostyle) tr td {
+        padding: 5px 5px 5px 5px;
+        border: solid 1px black;
+        vertical-align: middle; }
     .article.window .wiki.text code, .article.window .wiki.text pre[class] {
       background: #eee; }
     .article.window .wiki.text h1 {
