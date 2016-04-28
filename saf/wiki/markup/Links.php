@@ -29,13 +29,14 @@ class Links implements Registerable
 
 	//------------------------------------------------------------------------------------ htmlAnchor
 	/**
-	 * @param $uri string
+	 * @param $uri  string
+	 * @param $text string
 	 * @return string The <a href="..." target="#main">...</a>
 	 */
-	public function htmlAnchor($uri)
+	public function htmlAnchor($uri, $text)
 	{
 		// TODO textile should be more intelligent and detect those @ are not code
-		$anchor = new Anchor(SL . strUri($uri), str_replace('@', '&#64;', $uri));
+		$anchor = new Anchor(SL . strtolower(strUri($uri)), str_replace('@', '&#64;', $text));
 		$anchor->setAttribute('target', Target::MAIN);
 		return strval($anchor);
 	}
@@ -61,10 +62,16 @@ class Links implements Registerable
 				// parse link : replace [A link] with "A link":/a-link
 				elseif (($string[$i] != ']') && ($j = strpos($string, ']', $i)) !== false) {
 					$uri = substr($string, $i, $j - $i);
+					if (strpos($uri, '>') !== false) {
+						list($text, $uri) = explode('>', $uri, 2);
+					}
+					else {
+						$text = $uri;
+					}
 					$length -= (strlen($uri) + 2);
 					$uri = ((strpos($uri, 'http://') === 0) || (strpos($uri, 'https://') === 0))
-						? (DQ . rParse($uri, '//') . DQ . ':' . $uri)
-						: $this->htmlAnchor($uri);
+						? (DQ . $text . DQ . ':' . $uri)
+						: $this->htmlAnchor($uri, $text);
 					$uri_length = strlen($uri);
 					$length += $uri_length;
 					$string = substr($string, 0, $i - 1) . $uri . substr($string, $j + 1);
