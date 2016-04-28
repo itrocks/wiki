@@ -1,19 +1,15 @@
+/.buildpath
 /.git
 /.idea
-/.settings
-/.buildpath
 /.project
+/.settings
 
 /cache
-/phpdoc
 /saf/framework
 /tmp
 /vendor
 
-/index.php
+/composer.lock
 /loc.php
 /pwd.php
-/saf.php
 /update
-
-/wiki/uploaded_img

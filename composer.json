@@ -1,0 +1,12 @@
+{
+	"authors":     [{ "name": "Baptiste Pillot", "email": "baptiste.pillot@bappli.com" }],
+	"description": "Wiki",
+	"extra": {
+		"installer-paths": { "{$vendor}/{$name}/": ["type:itrocks"] },
+		"installer-types": ["itrocks"]
+	},
+	"license":      "MIT",
+	"name":         "saf/wiki",
+	"repositories": [{ "type": "composer", "url": "https://packages.bappli.com" }],
+	"require":      { "saf/framework": "dev-master" }
+}

@@ -1,2 +1,0 @@
-#!/bin/bash
-unison ./ ../saf/ -batch -fastcheck true -times -group -owner -repeat 3 -path saf.php -path index.php -path saf/framework -ignore "Name .DS_Store"
