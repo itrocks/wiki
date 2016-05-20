@@ -12,7 +12,7 @@ use SAF\Framework\User\Write_Access_Control;
 use SAF\Framework\Widget\Menu;
 use SAF\Wiki\Article;
 
-global $pwd;
+global $loc, $pwd;
 require __DIR__ . '/../../loc.php';
 require __DIR__ . '/../../pwd.php';
 require __DIR__ . '/../framework/config.php';
@@ -27,8 +27,8 @@ $config['SAF/Wiki'] = [
 		Write_Access_Control::class,
 		Article\Redirect::class,
 		Dao::class => [
-			Link::DATABASE => 'saf_wiki',
-			Link::LOGIN    => 'saf_wiki',
+			Link::DATABASE => $loc[Link::DATABASE],
+			Link::LOGIN    => $loc[Link::LOGIN],
 			Link::PASSWORD => $pwd['saf_wiki']
 		],
 		Locale::class => [
