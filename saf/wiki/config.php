@@ -20,6 +20,7 @@ require __DIR__ . '/../framework/config.php';
 //-------------------------------------------------------------------------------------------- wiki
 $config['SAF/Wiki'] = [
 	Configuration::APP         => Application::class,
+	Configuration::ENVIRONMENT => $loc['environment'],
 	Configuration::EXTENDS_APP => 'SAF/Framework',
 
 	//---------------------------------------------------------------------------------------- normal
@@ -29,7 +30,7 @@ $config['SAF/Wiki'] = [
 		Dao::class => [
 			Link::DATABASE => $loc[Link::DATABASE],
 			Link::LOGIN    => $loc[Link::LOGIN],
-			Link::PASSWORD => $pwd['saf_wiki']
+			Link::PASSWORD => $pwd[$loc[Link::LOGIN]]
 		],
 		Locale::class => [
 			Locale::DATE     => 'd/m/Y',
