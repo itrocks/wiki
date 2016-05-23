@@ -1,19 +1,35 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 <head>
 	<title>{title}</title>
 </head>
 <body>
 <!--BEGIN-->
-
-	<section class="article output window" data-class="{@class}" data-feature="{@feature}" data-id="{id}">
-		<h2>{title}</h2>
-		{/general_buttons.html}
-		<div class="wiki text">
-			{@property('text').value}
-		</div>
-	</section>
-
+<section class="article output window" data-class="{@class}" data-feature="{@feature}"
+	data-id="{id}">
+	<h2>{title}</h2>
+	{/general_buttons.html}
+	<div class="wiki text">
+		{@property('text').value}
+	</div>
+</section>
+<!-- -->
+<section class="article output window history">
+	<h2>|History|</h2>
+	<!--getChanges()-->
+	<div class="change">
+		<h3>{date} - {user}</h3>
+		<button type="button" onclick="getChanges($(this),{id},{id})">
+			|Changes|
+		</button>
+		<button type="button" onclick="getChanges($(this),{id})">
+			|Unified changes to latest|
+		</button>
+		<p></p>
+	</div>
+	<!--getChanges()-->
+</section>
+<!-- -->
 <!--END-->
 </body>
 </html>

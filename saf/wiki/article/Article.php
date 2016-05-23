@@ -3,7 +3,7 @@ namespace SAF\Wiki;
 
 use SAF\Framework\History\Has_History;
 use SAF\Framework\Traits\Date_Logged;
-use SAF\Wiki\Article\History;
+use SAF\Wiki\History;
 
 /**
  * A wiki article
@@ -13,6 +13,7 @@ use SAF\Wiki\Article\History;
  */
 class Article implements Has_History
 {
+
 	use Date_Logged;
 
 	//---------------------------------------------------------------------------------------- $title
@@ -36,6 +37,13 @@ class Article implements Has_History
 	 * @var string
 	 */
 	public $uri;
+
+	//------------------------------------------------------------------------------------ $histories
+	/**
+	 * @link Collection
+	 * @var History[]
+	 */
+	public $histories;
 
 	//------------------------------------------------------------------------------------ __toString
 	/**
@@ -65,4 +73,21 @@ class Article implements Has_History
 		$this->uri = strUri($title);
 	}
 
+	//-------------------------------------------------------------------------------- getTextChanges
+	/**
+	 * Return histories of property changes, newest is first
+	 * @param string $name
+	 * @return array
+	 */
+	public function getChanges($name)
+	{
+		$name=($name&&$name!=''?$name:'text');
+		$textChanges = array_filter(
+			$this->histories,
+			function ($value) use ($name) {
+				return $value->property_name == $name;
+			}
+		);
+		return array_reverse($textChanges);
+	}
 }

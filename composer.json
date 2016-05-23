@@ -8,5 +8,8 @@
 	"license":      "MIT",
 	"name":         "saf/wiki",
 	"repositories": [{ "type": "composer", "url": "https://packages.bappli.com" }],
-	"require":      { "saf/framework": "dev-master" }
+	"require":      {
+		"saf/framework": "dev-master",
+		"gorhill/php-finediff": "^1.0"
+	}
 }

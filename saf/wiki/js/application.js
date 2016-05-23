@@ -1,3 +1,14 @@
+function getChanges(target,oldID,newId){
+	var request = '../History/changes/Old/'+oldID;
+	if (newId){
+		request +='/New/'+newId;
+	}
+	$.ajax(request)
+		.done(function(data){
+			target.parent().children('p').html(data);
+		});
+}
+
 $('document').ready(function()
 {
 	window.zindex_counter = 0;
@@ -38,5 +49,4 @@ $('document').ready(function()
 
 	// focus first form element
 	$(this).autofocus();
-
 });

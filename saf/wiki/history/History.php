@@ -1,5 +1,5 @@
 <?php
-namespace SAF\Wiki\Article;
+namespace SAF\Wiki;
 
 use SAF\Framework;
 use SAF\Wiki\Article;
