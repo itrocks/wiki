@@ -19,13 +19,18 @@
 	<!--getChanges()-->
 	<div class="change">
 		<h3>{date} - {user}</h3>
-		<button type="button" onclick="getChanges($(this),{id},{id})">
-			|Changes|
-		</button>
-		<button type="button" onclick="getChanges($(this),{id})">
-			|Unified changes to latest|
-		</button>
-		<p></p>
+		<ul class="actions">
+			<li class="export" onclick="getChanges({id},{id})">
+				<a>|Changes|</a>
+			</li>
+			<li class="export" onclick="getChanges({id})">
+				<a>|Unified changes to latest|</a>
+			</li>
+			<li class="close" onclick="$('#target-{id}').empty()">
+				<a>|Close|</a>
+			</li>
+		</ul>
+		<p id="target-{id}"></p>
 	</div>
 	<!--getChanges()-->
 </section>

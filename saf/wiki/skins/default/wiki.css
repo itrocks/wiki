@@ -49,8 +49,6 @@
       padding: 5px;
       margin-bottom: 2px;
       border: solid 1px black; }
-      .article.window.history .change h3 {
-        cursor: pointer; }
       .article.window.history .change p {
         white-space: pre-line; }
     .article.window.history ins {

@@ -5,7 +5,7 @@ function getChanges(target,oldID,newId){
 	}
 	$.ajax(request)
 		.done(function(data){
-			target.parent().children('p').html(data);
+			$('#target-'+oldID).html(data);
 		});
 }
 
