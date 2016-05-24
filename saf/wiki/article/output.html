@@ -20,11 +20,11 @@
 	<div class="change">
 		<h3>{date} - {user}</h3>
 		<ul class="actions">
-			<li class="export" onclick="getChanges({id},{id})">
-				<a>|Changes|</a>
+			<li class="export">
+				<a href="/SAF/Wiki/History/changes/Old/{id}/New/{id}" target="#target-{id}">|Changes|</a>
 			</li>
-			<li class="export" onclick="getChanges({id})">
-				<a>|Unified changes to latest|</a>
+			<li class="export">
+				<a href="/SAF/Wiki/History/changes/Old/{id}" target="#target-{id}">|Unified changes to latest|</a>
 			</li>
 			<li class="close" onclick="$('#target-{id}').empty()">
 				<a>|Close|</a>
