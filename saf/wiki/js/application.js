@@ -1,4 +1,4 @@
-function getChanges(target,oldID,newId){
+function getChanges(oldID,newId){
 	var request = '../History/changes/Old/'+oldID;
 	if (newId){
 		request +='/New/'+newId;
