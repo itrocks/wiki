@@ -1,6 +1,7 @@
 <?php
 namespace SAF\Wiki;
 
+use SAF\Framework\Dao;
 use SAF\Framework\History\Has_History;
 use SAF\Framework\Traits\Date_Logged;
 use SAF\Wiki\History;
@@ -13,8 +14,14 @@ use SAF\Wiki\History;
  */
 class Article implements Has_History
 {
-
 	use Date_Logged;
+
+	//-------------------------------------------------------------------------------------- $history
+	/**
+	 * @link Collection
+	 * @var History[]
+	 */
+	public $history;
 
 	//---------------------------------------------------------------------------------------- $title
 	/**
@@ -38,13 +45,6 @@ class Article implements Has_History
 	 */
 	public $uri;
 
-	//------------------------------------------------------------------------------------ $histories
-	/**
-	 * @link Collection
-	 * @var History[]
-	 */
-	public $histories;
-
 	//------------------------------------------------------------------------------------ __toString
 	/**
 	 * @return string
@@ -54,6 +54,22 @@ class Article implements Has_History
 		return strval($this->title);
 	}
 
+	//-------------------------------------------------------------------------------- getTextHistory
+	/**
+	 * Returns history of property values changes, newest is first
+	 *
+	 * @return History[]
+	 */
+	public function getTextHistory()
+	{
+		return Dao::search(
+			['article' => $this, 'property_name' => ['text', 'title']],
+			History::class,
+			[Dao::sort([Dao::reverse('date')])]
+		);
+	}
+
+	//--------------------------------------------------------------------------- getHistoryClassName
 	/**
 	 * @return string
 	 */
@@ -73,21 +89,4 @@ class Article implements Has_History
 		$this->uri = strUri($title);
 	}
 
-	//-------------------------------------------------------------------------------- getTextChanges
-	/**
-	 * Return histories of property changes, newest is first
-	 * @param string $name
-	 * @return array
-	 */
-	public function getChanges($name)
-	{
-		$name=($name&&$name!=''?$name:'text');
-		$textChanges = array_filter(
-			$this->histories,
-			function ($value) use ($name) {
-				return $value->property_name == $name;
-			}
-		);
-		return array_reverse($textChanges);
-	}
 }

@@ -9,7 +9,7 @@
 	"name":         "saf/wiki",
 	"repositories": [{ "type": "composer", "url": "https://packages.bappli.com" }],
 	"require":      {
-		"saf/framework": "dev-master",
-		"gorhill/php-finediff": "^1.0"
+		"gorhill/php-finediff": "^1.0",
+		"saf/framework":        "dev-master"
 	}
 }

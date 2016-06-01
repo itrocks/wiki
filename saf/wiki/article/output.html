@@ -5,36 +5,43 @@
 </head>
 <body>
 <!--BEGIN-->
-<section class="article output window" data-class="{@class}" data-feature="{@feature}"
-	data-id="{id}">
-	<h2>{title}</h2>
-	{/general_buttons.html}
-	<div class="wiki text">
-		{@property('text').value}
-	</div>
-</section>
-<!-- -->
-<section class="article output window history">
-	<h2>|History|</h2>
-	<!--getChanges()-->
-	<div class="change">
-		<h3>{date} - {user}</h3>
-		<ul class="actions">
-			<li class="export">
-				<a href="/SAF/Wiki/History/changes/Old/{id}/New/{id}" target="#target-{id}">|Changes|</a>
+
+	<section class="article output window" data-class="{@class}" data-feature="{@feature}" data-id="{id}">
+		<h2>{title}</h2>
+		{/general_buttons.html}
+		<div class="wiki text">
+			{@property('text').value}
+		</div>
+	</section>
+
+	<!--getTextHistory?-->
+	<section class="article output window history">
+		<h2>|History|</h2>
+		<ul>
+			<!--getTextHistory-->
+			<li id="history-{id}">
+				<ul class="actions">
+					<li>
+						<a href="/SAF/Wiki/History/changes/{id}" target="#history-{id}>p">
+							{date} - {user.login}
+						</a>
+						<ul>
+							<li><a href="/SAF/Wiki/History/changes/{id}" target="#history-{id}>p">
+								|Changes made at this date|
+							</a></li>
+							<li><a href="/SAF/Wiki/History/changes/{id}/current" target="#history-{id}>p">
+								|Differences with the actual version|
+							</a></li>
+						</ul>
+					</li>
+				</ul>
+				<p></p>
 			</li>
-			<li class="export">
-				<a href="/SAF/Wiki/History/changes/Old/{id}" target="#target-{id}">|Unified changes to latest|</a>
-			</li>
-			<li class="close" onclick="$('#target-{id}').empty()">
-				<a>|Close|</a>
-			</li>
+		<!--getTextHistory-->
 		</ul>
-		<p id="target-{id}"></p>
-	</div>
-	<!--getChanges()-->
-</section>
-<!-- -->
+	</section>
+	<!--getTextHistory?-->
+
 <!--END-->
 </body>
 </html>

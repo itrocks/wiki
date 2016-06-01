@@ -72,24 +72,32 @@
 	}
 
 	&.history {
+		min-width: 0;
 		vertical-align: top;
 
-		.change {
-			padding: 5px;
-			margin-bottom: 2px;
-			border: solid 1px black;
+		p {
+			display: none;
+			margin-bottom: 1em;
+			white-space: pre-line;
 
-			p {
-				white-space: pre-line;
+			del {
+				text-decoration: none;
+				background-color: rgb(255, 125, 127);
+			}
+
+			ins {
+				text-decoration: none;
+				background-color: rgb(162, 255, 157);
 			}
 		}
-		ins {
-			text-decoration: none;
-			background-color: rgb(162, 255, 157);
-		}
-		del {
-			text-decoration: none;
-			background-color: rgb(255, 125, 127);
+
+		> ul > li {
+			list-style: none;
+			margin: 0;
+
+			> ul.actions > li > ul {
+				margin-left: 4em;
+			}
 		}
 	}
 }

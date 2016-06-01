@@ -44,16 +44,20 @@
       .article.window .wiki.text img.align-right {
         float: right; }
   .article.window.history {
+    min-width: 0;
     vertical-align: top; }
-    .article.window.history .change {
-      padding: 5px;
-      margin-bottom: 2px;
-      border: solid 1px black; }
-      .article.window.history .change p {
-        white-space: pre-line; }
-    .article.window.history ins {
-      text-decoration: none;
-      background-color: #a2ff9d; }
-    .article.window.history del {
-      text-decoration: none;
-      background-color: #ff7d7f; }
+    .article.window.history p {
+      display: none;
+      margin-bottom: 1em;
+      white-space: pre-line; }
+      .article.window.history p del {
+        text-decoration: none;
+        background-color: #ff7d7f; }
+      .article.window.history p ins {
+        text-decoration: none;
+        background-color: #a2ff9d; }
+    .article.window.history > ul > li {
+      list-style: none;
+      margin: 0; }
+      .article.window.history > ul > li > ul.actions > li > ul {
+        margin-left: 4em; }

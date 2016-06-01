@@ -9,6 +9,7 @@ $('document').ready(function()
 			url_append:      'as_widget',
 			draggable_blank: '.window>h2',
 			popup_element:   'section',
+			show:            true,
 			success:         function() { $(this).autofocus(); },
 			history: {
 				condition: '.window>h2',
@@ -38,4 +39,5 @@ $('document').ready(function()
 
 	// focus first form element
 	$(this).autofocus();
+
 });
