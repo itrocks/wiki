@@ -15,30 +15,8 @@
 	</section>
 
 	<!--getTextHistory?-->
-	<section class="article output window history">
-		<h2>|History|</h2>
-		<ul>
-			<!--getTextHistory-->
-			<li id="history-{id}">
-				<ul class="actions">
-					<li>
-						<a href="/SAF/Wiki/History/changes/{id}" target="#history-{id}>p">
-							{date.@loc} - {user.login}
-						</a>
-						<ul>
-							<li><a href="/SAF/Wiki/History/changes/{id}" target="#history-{id}>p">
-								|Changes made at this date|
-							</a></li>
-							<li><a href="/SAF/Wiki/History/changes/{id}/current" target="#history-{id}>p">
-								|Differences with the actual version|
-							</a></li>
-						</ul>
-					</li>
-				</ul>
-				<p></p>
-			</li>
-		<!--getTextHistory-->
-		</ul>
+	<section class="article output history" id="history">
+		<a class="action" href="/SAF/Wiki/History/output/{@class.path}/{id}" target="#history" title="|Show article history|">|Show history|</a>
 	</section>
 	<!--getTextHistory?-->
 

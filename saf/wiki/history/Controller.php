@@ -2,8 +2,11 @@
 namespace SAF\Wiki\History;
 
 use SAF\Framework\Controller\Class_Controller;
+use SAF\Framework\Controller\Feature;
 use SAF\Framework\Controller\Parameters;
 use SAF\Framework\Dao;
+use SAF\Framework\View;
+use SAF\Wiki\Article;
 use SAF\Wiki\History;
 
 /**
@@ -32,7 +35,7 @@ class Controller implements Class_Controller
 	 * The controller searches history and print changes between 2.
 	 *
 	 * @param $parameters Parameters history id
-	 * @return mixed
+	 * @return string
 	 */
 	public function runChanges(Parameters $parameters)
 	{
@@ -42,6 +45,21 @@ class Controller implements Class_Controller
 			$history->old_value,
 			($parameters->shift() === 'current') ? $history->article->text : $history->new_value
 		);
+	}
+
+	//------------------------------------------------------------------------------------- runOutput
+	/**
+	 * Output the history for a given article
+	 *
+	 * @param $parameters Parameters
+	 * @param $form       array
+	 * @param $files      array
+	 * @return string
+	 */
+	public function runOutput(Parameters $parameters, $form, $files)
+	{
+		$parameters->set('article', $parameters->getObject(Article::class));
+		return View::run($parameters->getObjects(), $form, $files, History::class, Feature::F_OUTPUT);
 	}
 
 }

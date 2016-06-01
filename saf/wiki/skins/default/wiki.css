@@ -1,3 +1,15 @@
+.article.history {
+  display: inline-block;
+  margin-top: 3em;
+  vertical-align: top; }
+  .article.history > a {
+    background: url("img/history.png") center no-repeat;
+    color: transparent;
+    display: inline-block;
+    font-size: 1px;
+    height: 32px;
+    width: 32px; }
+
 .article.window {
   min-width: 300px;
   max-width: 1024px; }
@@ -44,8 +56,11 @@
       .article.window .wiki.text img.align-right {
         float: right; }
   .article.window.history {
-    min-width: 0;
-    vertical-align: top; }
+    min-width: 0; }
+    .article.window.history h2 {
+      background: #93c437 url("img/history.png") left no-repeat;
+      background-size: 20px;
+      padding-left: 24px; }
     .article.window.history p {
       display: none;
       margin-bottom: 1em;

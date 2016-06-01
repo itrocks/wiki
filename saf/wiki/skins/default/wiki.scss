@@ -1,3 +1,18 @@
+.article.history {
+	display: inline-block;
+	margin-top: 3em;
+	vertical-align: top;
+
+	> a {
+		background: url('img/history.png') center no-repeat;
+		color: transparent;
+		display: inline-block;
+		font-size: 1px;
+		height: 32px;
+		width: 32px;
+	}
+}
+
 .article.window {
 	min-width: 300px;
 	max-width: 1024px;
@@ -73,7 +88,12 @@
 
 	&.history {
 		min-width: 0;
-		vertical-align: top;
+
+		h2 {
+			background: #93c437 url('img/history.png') left no-repeat;
+			background-size: 20px;
+			padding-left: 24px;
+		}
 
 		p {
 			display: none;
