@@ -5,11 +5,13 @@
 		"installer-paths": { "{$vendor}/{$name}/": ["type:itrocks"] },
 		"installer-types": ["itrocks"]
 	},
-	"license":      "MIT",
-	"name":         "saf/wiki",
+	"license": "MIT",
+	"name":    "saf/wiki",
 	"repositories": [{ "type": "composer", "url": "https://packages.bappli.com" }],
-	"require":      {
-		"gorhill/php-finediff": "^1.0",
-		"saf/framework":        "dev-master"
+	"require": {
+		"gorhill/php-finediff": "^1.0"
+	},
+	"require-dev": {
+		"saf/framework": "@dev"
 	}
 }
