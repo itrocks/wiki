@@ -30,7 +30,7 @@ $config['SAF/Wiki'] = [
 		Dao::class => [
 			Link::DATABASE => $loc[Link::DATABASE],
 			Link::LOGIN    => $loc[Link::LOGIN],
-			Link::PASSWORD => $pwd[$loc[Link::LOGIN]]
+			Link::PASSWORD => $pwd[Link::class]
 		],
 		Locale::class => [
 			Locale::DATE     => 'd/m/Y',
