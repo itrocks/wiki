@@ -1,7 +1,6 @@
 <?php
 namespace SAF\Wiki;
 
-use SAF\Framework\Builder;
 use SAF\Framework\Controller\Feature;
 use SAF\Framework\Controller\Main;
 use SAF\Framework\Dao;
@@ -9,7 +8,6 @@ use SAF\Framework\Locale\Loc;
 use SAF\Framework\Plugin\Register;
 use SAF\Framework\Plugin\Registerable;
 use SAF\Framework\View;
-use SAF\Wiki\Article;
 
 /**
  * URI rewriter class
