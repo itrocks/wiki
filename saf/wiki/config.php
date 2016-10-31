@@ -2,8 +2,6 @@
 namespace SAF\Wiki;
 
 use SAF\Framework\Configuration;
-use SAF\Framework\Dao;
-use SAF\Framework\Dao\Mysql\Link;
 use SAF\Framework\Locale;
 use SAF\Framework\Locale\Number_Format;
 use SAF\Framework\Plugin\Priority;
@@ -12,26 +10,20 @@ use SAF\Framework\User\Write_Access_Control;
 use SAF\Framework\Widget\Menu;
 use SAF\Wiki\Article;
 
-global $loc, $pwd;
+global $loc;
 require __DIR__ . '/../../loc.php';
-require __DIR__ . '/../../pwd.php';
 require __DIR__ . '/../framework/config.php';
 
 //-------------------------------------------------------------------------------------------- wiki
 $config['SAF/Wiki'] = [
 	Configuration::APP         => Application::class,
-	Configuration::ENVIRONMENT => $loc['environment'],
+	Configuration::ENVIRONMENT => $loc[Configuration::ENVIRONMENT],
 	Configuration::EXTENDS_APP => 'SAF/Framework',
 
 	//---------------------------------------------------------------------------------------- normal
 	Priority::NORMAL => [
 		Write_Access_Control::class,
 		Article\Redirect::class,
-		Dao::class => [
-			Link::DATABASE => $loc[Link::DATABASE],
-			Link::LOGIN    => $loc[Link::LOGIN],
-			Link::PASSWORD => $pwd[Link::class]
-		],
 		Locale::class => [
 			Locale::DATE     => 'd/m/Y',
 			Locale::LANGUAGE => 'fr',
