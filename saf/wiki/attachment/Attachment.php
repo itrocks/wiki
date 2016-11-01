@@ -42,10 +42,10 @@ class Attachment
 	/**
 	 * @param $file File
 	 */
-	private function setFile(File $file)
+	private function setFile(File $file = null)
 	{
 		$this->file = $file;
-		if (empty($this->name)) {
+		if ($file && empty($this->name)) {
 			$this->name = ucfirst(strFromUri(lLastParse($file->name, DOT)));
 		}
 	}
