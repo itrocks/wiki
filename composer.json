@@ -7,12 +7,12 @@
 	},
 	"license":           "MIT",
 	"minimum-stability": "dev",
-	"name":              "saf/wiki",
+	"name":              "itrocks/wiki",
 	"prefer-stable":     true,
 	"repositories":      [{ "type": "composer", "url": "https://packages.bappli.com" }],
 	"require": {
 		"gorhill/php-finediff": "^1.0",
-		"saf/framework":        "dev-master"
+		"itrocks/framework":        "dev-master"
 	},
 	"type": "itrocks-final"
 }

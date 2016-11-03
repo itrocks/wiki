@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+</head>
+<body>
+<section class="article output history window" id="history">
+<!--BEGIN-->
+
+	<h2>|History|</h2>
+	<ul>
+		<!--article.getTextHistory-->
+		<li id="history-{id}">
+			<ul class="actions">
+				<li>
+					<a href="/ITRocks/Wiki/History/changes/{id}" target="#history-{id}>p">
+						{date.@loc} - {user.login}
+					</a>
+					<ul>
+						<li><a href="/ITRocks/Wiki/History/changes/{id}" target="#history-{id}>p">
+							|Changes made at this date|
+						</a></li>
+						<li><a href="/ITRocks/Wiki/History/changes/{id}/current" target="#history-{id}>p">
+							|Differences with the actual version|
+						</a></li>
+					</ul>
+				</li>
+			</ul>
+			<p></p>
+		</li>
+		<!--article.getTextHistory-->
+	</ul>
+
+<!--END-->
+</section>
+</body>
+</html>

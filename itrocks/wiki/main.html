@@ -1,0 +1,116 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>
+		|{@application.ucwords}| - |¦{@class.ucfirst}¦ {@feature.display}|
+	</title>
+
+	<link href="../../vendor/csl/reset5/reset.min.css" rel="stylesheet" type="text/css">
+
+	<link href="../../vendor/components/jqueryui/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css">
+	<link href="../../vendor/components/jqueryui/themes/smoothness/theme.css" rel="stylesheet" type="text/css">
+
+	<link href="../framework/skins/default/application.css" rel="stylesheet" type="text/css">
+
+	<link href="../framework/skins/default/actions.css" rel="stylesheet" type="text/css">
+	<link href="../framework/skins/default/custom.css" rel="stylesheet" type="text/css">
+	<link href="../framework/skins/default/environment.css" rel="stylesheet" type="text/css">
+	<link href="../framework/skins/default/form.css" rel="stylesheet" type="text/css">
+	<link href="../framework/skins/default/import.css" rel="stylesheet" type="text/css">
+	<link href="../framework/skins/default/list.css" rel="stylesheet" type="text/css">
+	<link href="../framework/skins/default/menu.css" rel="stylesheet" type="text/css">
+	<link href="../framework/skins/default/modules.css" rel="stylesheet" type="text/css">
+	<link href="../framework/skins/default/property.css" rel="stylesheet" type="text/css">
+	<link href="../framework/skins/default/rad.css" rel="stylesheet" type="text/css">
+	<link href="../framework/skins/default/tabber.css" rel="stylesheet" type="text/css">
+	<link href="../framework/skins/default/trashcan.css" rel="stylesheet" type="text/css">
+	<link href="../framework/skins/default/vertical_scrollbar.css" rel="stylesheet" type="text/css">
+	<link href="../framework/skins/default/window.css" rel="stylesheet" type="text/css">
+	<link href="../framework/skins/default/xdebug.css" rel="stylesheet" type="text/css">
+
+	<link href="../framework/skins/default/support.css" rel="stylesheet" type="text/css">
+	<link href="../framework/skins/default/user.css" rel="stylesheet" type="text/css">
+
+	<link href="../wiki/skins/default/wiki.css" rel="stylesheet" type="text/css">
+
+	<!-- must be first -->
+	<script type="text/javascript" src="../../itrocks/framework/js/itrocks.constants.js"></script>
+	<script type="text/javascript" src="../../vendor/components/jquery/jquery.min.js"></script>
+	<script type="text/javascript" src="../../vendor/components/jquery/jquery-migrate.min.js"></script>
+	<script type="text/javascript" src="../../vendor/components/jqueryui/jquery-ui.min.js"></script>
+
+	<!-- xtarget must be the first, as it is high-level for a and sub-modules may want to prevent propagation -->
+	<script type="text/javascript" src="../framework/js/jquery.xtarget.js"></script>
+
+	<script type="text/javascript" src="../../vendor/malsup/form/jquery.form.js"></script>
+
+	<script type="text/javascript" src="../framework/js/jquery.autofocus.js"></script>
+	<script type="text/javascript" src="../framework/js/jquery.autoheight.js"></script>
+	<script type="text/javascript" src="../framework/js/jquery.autowidth.js"></script>
+	<script type="text/javascript" src="../framework/js/jquery.build.js"></script>
+	<script type="text/javascript" src="../framework/js/jquery.classvar.js"></script>
+	<script type="text/javascript" src="../framework/js/jquery.minimize.js"></script>
+	<script type="text/javascript" src="../framework/js/jquery.modifiable.js"></script>
+	<script type="text/javascript" src="../framework/js/jquery.mouse.js"></script>
+	<script type="text/javascript" src="../framework/js/jquery.presstab.js"></script>
+	<script type="text/javascript" src="../framework/js/jquery.sortcontent.js"></script>
+	<script type="text/javascript" src="../framework/js/jquery.verticalscrollbar.js"></script>
+	<script type="text/javascript" src="../framework/js/jquery-ui.tabber.js"></script>
+
+	<script type="text/javascript" src="../framework/js/itrocks.app.js"></script>
+	<script type="text/javascript" src="../framework/js/itrocks.fullheight.js"></script>
+	<script type="text/javascript" src="../framework/js/itrocks.functions.js"></script>
+	<script type="text/javascript" src="../framework/js/itrocks.string.js"></script>
+
+	<script type="text/javascript" src="../framework/debug/debug.js"></script>
+	<script type="text/javascript" src="../framework/import/import.js"></script>
+	<script type="text/javascript" src="../framework/property/select.js"></script>
+	<script type="text/javascript" src="../framework/widget/edit/edit.js"></script>
+	<script type="text/javascript" src="../framework/widget/data_list/dataList.js"></script>
+	<script type="text/javascript" src="../framework/widget/trashcan/trashcan.js"></script>
+
+	<!-- must be after dataList because of modifiable -->
+	<script type="text/javascript" src="../framework/setting/custom.js"></script>
+
+	<script type="text/javascript" src="history/history.js"></script>
+	<script type="text/javascript" src="js/application.js"></script>
+
+	<!--use ITRocks\Framework\Html_Session-->
+	<!--use ITRocks\Framework\Locale\Loc-->
+	<!--use ITRocks\Framework\Tools\Paths-->
+	<script type="text/javascript">
+		window.app = new App(
+			'{PHPSESSID}', '{Paths.uri_root}', '{Paths.script_name}', '{Paths.project_uri}',
+			'{Loc.language}', '{Loc.date.format}', '{Html_Session.useCookies}'
+		);
+	</script>
+
+</head>
+
+<body>
+
+	<header>
+		{/ITRocks/Framework/User/miniDisplay.html}
+		<div id="messages"></div>
+		<ul class="links">
+			<li class="provider bappli">
+				<a href="http://www.bappli.com" target="_blank" title="www.bappli.com">B-APPLI</a>
+			</li>
+		</ul>
+	</header>
+
+	{/ITRocks/Framework/Widget/Menu/output}
+
+	<section id="main" class="application center">
+		{@content}
+	</section>
+
+	<section id="trashcan">
+		<div></div>
+		<a href="/ITRocks/Framework/Widget/Trashcan" target="#trashcan>div">bin</a>
+	</section>
+
+</body>
+</html>
