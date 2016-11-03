@@ -1,18 +1,9 @@
 {
-	"authors": [{ "name": "Baptiste Pillot", "email": "baptiste.pillot@bappli.com" }],
-	"description": "Wiki",
-	"extra": {
-		"installer-paths": { "{$vendor}/{$name}/": ["type:itrocks"] },
-		"installer-types": ["itrocks"]
-	},
-	"license":           "MIT",
-	"minimum-stability": "dev",
-	"name":              "itrocks/wiki",
-	"prefer-stable":     true,
-	"repositories":      [{ "type": "composer", "url": "https://packages.bappli.com" }],
-	"require": {
-		"gorhill/php-finediff": "^1.0",
-		"itrocks/framework":        "dev-master"
-	},
-	"type": "itrocks-final"
+	"authors":      [{ "email": "baptiste.pillot@bappli.com", "name": "Baptiste Pillot" }],
+	"description":  "Wiki",
+	"license":      "MIT",
+	"name":         "itrocks/wiki",
+	"repositories": [{ "type": "composer", "url": "https://packages.bappli.com" }],
+	"require":      { "gorhill/php-finediff": "^1.0", "itrocks/framework": "dev-master" },
+	"type": "itrocks"
 }
