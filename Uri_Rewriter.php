@@ -47,12 +47,13 @@ class Uri_Rewriter implements Registerable
 	 */
 	public function afterViewLink(&$result, $object, $feature)
 	{
-		if (
-			!$this->before_main_run_controller
-			&& ($object instanceof Article)
-			&& (($feature === Feature::F_OUTPUT) || !$feature)
-		) {
-			$result = SL . $object->uri;
+		if (!$this->before_main_run_controller && (($feature === Feature::F_OUTPUT) || !$feature)) {
+			if (is_array($object)) {
+				$object = Dao::read(end($object), reset($object));
+			}
+			if ($object instanceof Article) {
+				$result = SL . $object->uri;
+			}
 		}
 	}
 
