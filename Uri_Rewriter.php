@@ -17,6 +17,12 @@ use ITRocks\Framework\View;
 class Uri_Rewriter implements Registerable
 {
 
+	//------------------------------------------------------------------- $before_main_run_controller
+	/**
+	 * @var boolean
+	 */
+	private $before_main_run_controller = false;
+
 	//-------------------------------------------------------------------------------------- $feature
 	/**
 	 * Current feature after url rewriting
@@ -32,6 +38,23 @@ class Uri_Rewriter implements Registerable
 	public static $features_list = [
 		Feature::F_ADD, Feature::F_DELETE, Feature::F_EDIT, Feature::F_OUTPUT, Feature::F_WRITE
 	];
+
+	//--------------------------------------------------------------------------------- afterViewLink
+	/**
+	 * @param $result  string The result of the call to View::link() is the calculated link
+	 * @param $object  object The object to which the link is generated
+	 * @param $feature string The feature : we act only if OUTPUT here
+	 */
+	public function afterViewLink(&$result, $object, $feature)
+	{
+		if (
+			!$this->before_main_run_controller
+			&& ($object instanceof Article)
+			&& (($feature === Feature::F_OUTPUT) || !$feature)
+		) {
+			$result = SL . $object->uri;
+		}
+	}
 
 	//----------------------------------------------------------------------- beforeMainRunController
 	/**
@@ -53,6 +76,7 @@ class Uri_Rewriter implements Registerable
 				}
 			}
 			// search article
+			$this->before_main_run_controller = true;
 			/** @var $article Article */
 			$article = Dao::searchOne(['uri' => substr($uri, 1)], Article::class);
 			if ($article) {
@@ -65,6 +89,7 @@ class Uri_Rewriter implements Registerable
 				$get['title'] = ucfirst(strFromUri(substr($uri, 1)));
 				$uri = View::link(Article::class, Feature::F_ADD);
 			}
+			$this->before_main_run_controller = false;
 		}
 	}
 
@@ -86,6 +111,9 @@ class Uri_Rewriter implements Registerable
 	 */
 	public function register(Register $register)
 	{
+		$register->aop->afterMethod(
+			[View::class, 'link'], [$this, 'afterViewLink']
+		);
 		$register->aop->beforeMethod(
 			[Main::class, 'runController'], [$this, 'beforeMainRunController']
 		);
