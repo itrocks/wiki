@@ -20,7 +20,6 @@ $config['ITRocks/Wiki'] = [
 	Configuration::ENVIRONMENT => $loc[Configuration::ENVIRONMENT],
 	Configuration::EXTENDS_APP => 'ITRocks/Framework',
 
-	//---------------------------------------------------------------------------------------- normal
 	Priority::NORMAL => [
 		Write_Access_Control::class,
 		Article\Redirect::class,
@@ -31,15 +30,15 @@ $config['ITRocks/Wiki'] = [
 				Number_Format::DECIMAL_MAXIMAL_COUNT => 2,
 				Number_Format::DECIMAL_MINIMAL_COUNT => 2,
 				Number_Format::DECIMAL_SEPARATOR     => ',',
-				Number_Format::THOUSAND_SEPARATOR    => ' '
+				Number_Format::THOUSAND_SEPARATOR    => SP
 			]
 		],
 		Markup\Images::class,
 		Markup\Links::class,
 		Menu::class => [
-			Menu::TITLE => ['/', 'Home', '#main'],
+			Menu::TITLE => [SP, 'Home', '#main'],
 			'Articles' => [
-				'/'                     => 'Home',
+				SL                          => 'Home',
 				'/ITRocks/Wiki/Articles'    => 'Full articles list',
 				'/ITRocks/Wiki/Article/add' => 'Add a new article',
 				'/ITRocks/Wiki/Search/form' => 'Search'

@@ -17,6 +17,8 @@ class Article implements Has_History
 
 	//-------------------------------------------------------------------------------------- $history
 	/**
+	 * History of changes to the article
+	 *
 	 * @link Collection
 	 * @var History[]
 	 */
@@ -24,6 +26,8 @@ class Article implements Has_History
 
 	//---------------------------------------------------------------------------------------- $title
 	/**
+	 * Main title for the article
+	 *
 	 * @setter setTitle
 	 * @var string
 	 */
@@ -31,6 +35,8 @@ class Article implements Has_History
 
 	//----------------------------------------------------------------------------------------- $text
 	/**
+	 * Full text of the article
+	 *
 	 * @max_length 2000000
 	 * @multiline
 	 * @textile
@@ -40,6 +46,9 @@ class Article implements Has_History
 
 	//------------------------------------------------------------------------------------------ $uri
 	/**
+	 * URI for this article, relative to the root of the wiki.
+	 * This is a 'nude' URI : it does not begin with /
+	 *
 	 * @var string
 	 */
 	public $uri;
