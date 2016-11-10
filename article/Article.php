@@ -96,7 +96,7 @@ class Article implements Has_History
 	private function setTitle($title)
 	{
 		$this->title = $title;
-		$this->uri = strUri($title);
+		$this->uri = strUri(preg_replace('%([a-z])([A-Z])%', '$1-$2', $title));
 	}
 
 }
