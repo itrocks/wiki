@@ -55,7 +55,7 @@ class Links implements Registerable
 			$i++;
 			if (($i < $length)) {
 				// escape with [[ => [ without parsing
-				if ($string[$i] == '[') {
+				if (($string[$i] == '[') && ($string[$i + 1] != '[')) {
 					$string = substr($string, 0, $i) . substr($string, $i + 1);
 					$length --;
 				}
@@ -71,7 +71,7 @@ class Links implements Registerable
 					$length -= (strlen($uri) + 2);
 					$uri = ((strpos($uri, 'http://') === 0) || (strpos($uri, 'https://') === 0))
 						? (DQ . $text . DQ . ':' . $uri)
-						: $this->htmlAnchor($uri, $text);
+						: $this->htmlAnchor(strUri($uri), $text);
 					$uri_length = strlen($uri);
 					$length += $uri_length;
 					$string = substr($string, 0, $i - 1) . $uri . substr($string, $j + 1);
@@ -79,6 +79,7 @@ class Links implements Registerable
 				}
 			}
 		}
+		$string = str_replace(['[[', ']]'], ['[', ']'], $string);
 	}
 
 	//-------------------------------------------------------------------------------------- register
