@@ -4,6 +4,7 @@ namespace ITRocks\Wiki;
 use ITRocks\Framework\Controller\Feature;
 use ITRocks\Framework\Controller\Main;
 use ITRocks\Framework\Dao;
+use ITRocks\Framework\Dao\Func;
 use ITRocks\Framework\Locale\Loc;
 use ITRocks\Framework\Plugin\Register;
 use ITRocks\Framework\Plugin\Registerable;
@@ -80,7 +81,7 @@ class Uri_Rewriter implements Registerable
 			// search article
 			$this->before_main_run_controller = true;
 			/** @var $article Article */
-			$article = Dao::searchOne(['uri' => substr($uri, 1)], Article::class);
+			$article = Dao::searchOne(['uri' => Func::equal(substr($uri, 1))], Article::class);
 			if ($article) {
 				$uri = View::link($article);
 				if (isset($feature)) {
