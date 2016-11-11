@@ -8,6 +8,7 @@ use ITRocks\Framework\Plugin\Register;
 use ITRocks\Framework\Plugin\Registerable;
 use ITRocks\Framework\Tools\Call_Stack;
 use ITRocks\Wiki\Article;
+use ITRocks\Wiki\markup\Links;
 
 /**
  * The Redirect plugin allows articles containing #REDIRECT [Another article title]
@@ -46,8 +47,8 @@ class Redirect implements Registerable
 			// redirected from is a link to the "edit" feature
 			$this->redirected_from .= SP
 				. DQ . str_replace('@', '&#64;', $object->title) . DQ . ':'
-				. strUri($object->title . SL . Feature::F_EDIT);
-			Main::$current->redirect(SL . strUri(substr($value, 11, -1)));
+				. Links::strUri($object->title . SL . Feature::F_EDIT);
+			Main::$current->redirect(SL . Links::strUri(substr($value, 11, -1)));
 		}
 		// when current article comes from a redirection, display the "directed from" edit links
 		elseif ($this->redirected_from) {

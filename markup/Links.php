@@ -36,7 +36,7 @@ class Links implements Registerable
 	public function htmlAnchor($uri, $text)
 	{
 		// TODO textile should be more intelligent and detect those @ are not code
-		$anchor = new Anchor(SL . strtolower(strUri($uri)), str_replace('@', '&#64;', $text));
+		$anchor = new Anchor(SL . static::strUri($uri), str_replace('@', '&#64;', $text));
 		$anchor->setAttribute('target', Target::MAIN);
 		return strval($anchor);
 	}
@@ -71,7 +71,7 @@ class Links implements Registerable
 					$length -= (strlen($uri) + 2);
 					$uri = ((strpos($uri, 'http://') === 0) || (strpos($uri, 'https://') === 0))
 						? (DQ . $text . DQ . ':' . $uri)
-						: $this->htmlAnchor(strUri($uri), $text);
+						: $this->htmlAnchor($uri, $text);
 					$uri_length = strlen($uri);
 					$length += $uri_length;
 					$string = substr($string, 0, $i - 1) . $uri . substr($string, $j + 1);
@@ -91,6 +91,16 @@ class Links implements Registerable
 		$aop = $register->aop;
 		$aop->beforeMethod([Textile::class, 'parseURI'], [$this, 'absoluteUri']);
 		$aop->beforeMethod([Wiki::class,    'textile'],  [$this, 'parseWikiLinks']);
+	}
+
+	//---------------------------------------------------------------------------------------- strUri
+	/**
+	 * @param $link string
+	 * @return string
+	 */
+	public static function strUri($link)
+	{
+		return strUri(preg_replace('%([a-z])([A-Z])%', '$1-$2', $link));
 	}
 
 }

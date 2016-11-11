@@ -2,6 +2,7 @@
 namespace ITRocks\Wiki\Search;
 
 use ITRocks\Wiki\Article;
+use ITRocks\Wiki\markup\Links;
 
 /**
  * Search result
@@ -48,7 +49,7 @@ class Result
 	 */
 	public function link()
 	{
-		return SL . strUri($this->article->title);
+		return SL . Links::strUri($this->article->title);
 	}
 
 	//------------------------------------------------------------------------------- occurrencesText

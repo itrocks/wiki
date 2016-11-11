@@ -8,6 +8,7 @@ use ITRocks\Framework\Locale\Loc;
 use ITRocks\Framework\Plugin\Register;
 use ITRocks\Framework\Plugin\Registerable;
 use ITRocks\Framework\View;
+use ITRocks\Wiki\markup\Links;
 
 /**
  * URI rewriter class
@@ -65,7 +66,7 @@ class Uri_Rewriter implements Registerable
 	public function beforeMainRunController(&$uri, &$get)
 	{
 		if (!$uri || ($uri == SL)) {
-			$uri = SL . strUri(Loc::tr('Home'));
+			$uri = SL . Links::strUri(Loc::tr('Home'));
 		}
 		if (ctype_lower($uri[1])) {
 			// text after the last slash may be a feature

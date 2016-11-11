@@ -4,6 +4,7 @@ namespace ITRocks\Wiki;
 use ITRocks\Framework\Dao;
 use ITRocks\Framework\History\Has_History;
 use ITRocks\Framework\Traits\Date_Logged;
+use ITRocks\Wiki\markup\Links;
 
 /**
  * A wiki article
@@ -96,7 +97,7 @@ class Article implements Has_History
 	private function setTitle($title)
 	{
 		$this->title = $title;
-		$this->uri = strUri(preg_replace('%([a-z])([A-Z])%', '$1-$2', $title));
+		$this->uri = Links::strUri($title);
 	}
 
 }
