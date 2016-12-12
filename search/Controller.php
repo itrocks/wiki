@@ -19,6 +19,7 @@ class Controller implements Class_Controller
 
 	//-------------------------------------------------------------------- Search controller features
 	const F_FORM   = 'form';
+	//-------------------------------------------------------------------------------------- F_RESULT
 	const F_RESULT = 'result';
 
 	//------------------------------------------------------------------------------ countOccurrences
@@ -56,11 +57,11 @@ class Controller implements Class_Controller
 	/**
 	 * @param $parameters   Parameters
 	 * @param $form         array
-	 * @param $files        array
+	 * @param $files        array[]
 	 * @param $feature_name string
 	 * @return mixed
 	 */
-	public function run(Parameters $parameters, $form, $files, $feature_name)
+	public function run(Parameters $parameters, array $form, array $files, $feature_name)
 	{
 		user_error('Unknown feature ' . $feature_name);
 		return;
@@ -72,10 +73,10 @@ class Controller implements Class_Controller
 	 *
 	 * @param $parameters Parameters
 	 * @param $form       array
-	 * @param $files      array
+	 * @param $files      array[]
 	 * @return mixed
 	 */
-	public function runForm(Parameters $parameters, $form, $files)
+	public function runForm(Parameters $parameters, array $form, array $files)
 	{
 		/** @var $search Search */
 		$search = $parameters->getMainObject(Search::class);
@@ -92,10 +93,10 @@ class Controller implements Class_Controller
 	 *
 	 * @param $parameters Parameters
 	 * @param $form       array
-	 * @param $files      array
+	 * @param $files      array[]
 	 * @return mixed
 	 */
-	public function runResult(Parameters $parameters, $form, $files)
+	public function runResult(Parameters $parameters, array $form, array $files)
 	{
 		if (isset($form['search'])) {
 			$search_text = trim($form['search']);

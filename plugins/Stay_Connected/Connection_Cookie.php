@@ -1,6 +1,9 @@
 <?php
-namespace ITRocks\Wiki;
+namespace ITRocks\Wiki\Plugins\Stay_Connected;
 
+/**
+ * Connection cookie
+ */
 class Connection_Cookie
 {
 

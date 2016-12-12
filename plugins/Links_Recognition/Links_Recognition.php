@@ -1,12 +1,17 @@
 <?php
-namespace ITRocks\Wiki;
+namespace ITRocks\Wiki\Plugins;
 
 use ITRocks\Framework\Dao;
-use ITRocks\Framework\Default_List_Data;
-use ITRocks\Framework\Wiki;
-use ITRocks\Plugins;
+use ITRocks\Framework\Plugin\Register;
+use ITRocks\Framework\Plugin\Registerable;
+use ITRocks\Framework\Printer\Model\Page;
+use ITRocks\Framework\Tools\Default_List_Data;
+use ITRocks\Framework\Tools\Wiki;
 
-class Links_Recognition implements Plugins\Registerable
+/**
+ * Links recognition
+ */
+class Links_Recognition implements Registerable
 {
 
 	//----------------------------------------------------------------------------- beforeWikiTextile
@@ -18,16 +23,19 @@ class Links_Recognition implements Plugins\Registerable
 		/** @var $pages Default_List_Data */
 		$pages = Dao::select(Page::class, ['name']);
 		for($i = 0 ; $i < $pages->length() ; $i++){
-			$title_page = $pages->getRow($i)->getValue('name');
-			$link_replace = '<a href=\'' . str_replace(' ', '_', $title_page) . '\'>' . $title_page . '</a>';
+			$title_page   = $pages->getRow($i)->getValue('name');
+			$link_replace = '<a href="' . str_replace(' ', '_', $title_page) . '">' . $title_page . '</a>';
 			$result = self::replaceIfNotBetweenTags($result, $title_page, $link_replace, '<a', '</a>');
 		}
 	}
 
 	//-------------------------------------------------------------------------------------- register
-	public function register(Plugins\Register $register)
+	/**
+	 * @param $register Register
+	 */
+	public function register(Register $register)
 	{
-		$register->aop->afterMethod( [ Wiki::class, 'textile' ], [ __CLASS__, 'beforeWikiTextile' ]);
+		$register->aop->afterMethod([Wiki::class, 'textile'], [__CLASS__, 'beforeWikiTextile']);
 	}
 
 	//----------------------------------------------------------------------- replaceIfNotBetweenTags

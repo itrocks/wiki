@@ -62,9 +62,9 @@ class Uri_Rewriter implements Registerable
 	//----------------------------------------------------------------------- beforeMainRunController
 	/**
 	 * @param $uri string
-	 * @param $get string[]
+	 * @param $get array
 	 */
-	public function beforeMainRunController(&$uri, &$get)
+	public function beforeMainRunController(&$uri, array &$get)
 	{
 		if (!$uri || ($uri == SL)) {
 			$uri = SL . Links::strUri(Loc::tr('Home'));

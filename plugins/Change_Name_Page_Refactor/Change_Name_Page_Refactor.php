@@ -1,13 +1,18 @@
 <?php
-namespace ITRocks\Wiki;
+namespace ITRocks\Wiki\Plugins;
 
-use ITRocks\Framework\Controller_Parameters;
+use ITRocks\Framework\Controller\Parameters;
 use ITRocks\Framework\Dao;
-use ITRocks\Framework\Default_Write_Controller;
-use ITRocks\Framework\Search_Object;
-use ITRocks\Plugins;
+use ITRocks\Framework\Mapper\Search_Object;
+use ITRocks\Framework\Plugin\Register;
+use ITRocks\Framework\Plugin\Registerable;
+use ITRocks\Framework\Printer\Model\Page;
+use ITRocks\Framework\Widget\Write\Write_Controller;
 
-class Change_Name_Page_Refactor implements Plugins\Registerable
+/**
+ * Change page name refactor
+ */
+class Change_Name_Page_Refactor implements Registerable
 {
 
 	//------------------------------------------------------------------------------ $page_class_name
@@ -32,10 +37,10 @@ class Change_Name_Page_Refactor implements Plugins\Registerable
 	/**
 	 * Change all references of a link of this page with the new name
 	 *
-	 * @param $parameters Controller_Parameters
+	 * @param $parameters Parameters
 	 * @param $form       array
 	 */
-	public function beforeDefaultWriteControllerRun(Controller_Parameters $parameters, $form)
+	public function beforeDefaultWriteControllerRun(Parameters $parameters, array $form)
 	{
 		$objects = $parameters->getObjects();
 		$object  = reset($objects);
@@ -82,14 +87,14 @@ class Change_Name_Page_Refactor implements Plugins\Registerable
 
 	//-------------------------------------------------------------------------------------- register
 	/**
-	 * @param $register Plugins\Register
+	 * @param $register Register
 	 */
-	public function register(Plugins\Register $register)
+	public function register(Register $register)
 	{
 		$aop = $register->aop;
 		$aop->beforeMethod(
-			array(Default_Write_Controller::class, 'run'),
-			array($this, 'beforeDefaultWriteControllerRun')
+			[Write_Controller::class, 'run'],
+			[$this, 'beforeDefaultWriteControllerRun']
 		);
 	}
 
@@ -104,9 +109,9 @@ class Change_Name_Page_Refactor implements Plugins\Registerable
 	 */
 	public function replaceInContent($old_string, $new_string, $class_name, $var_text)
 	{
-		$object_search = Search_Object::create($class_name);
+		$object_search            = Search_Object::create($class_name);
 		$object_search->$var_text = '%' . $old_string . '%';
-		$pages = Dao::search($object_search);
+		$pages                    = Dao::search($object_search);
 		foreach ($pages as $page) {
 			$page->$var_text = str_ireplace($old_string, $new_string, $page->$var_text);
 			Dao::write($page);

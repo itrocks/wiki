@@ -1,15 +1,21 @@
 <?php
-namespace ITRocks\Wiki;
+namespace ITRocks\Wiki\Plugins;
 
 use ITRocks\Framework\Dao;
-use ITRocks\Framework\Input;
-use ITRocks\Framework\User_Authentication;
-use ITRocks\Plugins;
+use ITRocks\Framework\Plugin\Register;
+use ITRocks\Framework\Plugin\Registerable;
+use ITRocks\Framework\Printer\Model\Page;
 use ITRocks\Framework\Session;
-use ITRocks\Framework\String;
+use ITRocks\Framework\Tools\String_Class;
+use ITRocks\Framework\User\Authenticate\Authentication;
 use ITRocks\Framework\View;
+use ITRocks\Framework\Widget\Input;
+use ITRocks\Wiki\Plugins\Anti_Bot\Anti_Bot_Word;
 
-class Anti_Bot implements Plugins\Registerable
+/**
+ * Anti-bot
+ */
+class Anti_Bot implements Registerable
 {
 
 	//--------------------------------------------------------------------------------- $content_name
@@ -37,13 +43,13 @@ class Anti_Bot implements Plugins\Registerable
 	 * @param $form   array
 	 * @param $result array
 	 */
-	public function afterUserAuthenticationControlRegisterFormParameters($form, &$result)
+	public function afterUserAuthenticationControlRegisterFormParameters(array $form, array &$result)
 	{
 		$word = Session::current()->get(Anti_Bot_Word::class);
 		if ($form['Anti_bot'] != $word->word) {
-			$result[] = array(
+			$result[] = [
 				'name' => 'Anti Bot error', 'message' => 'The security word was not copied correctly.'
-			);
+			];
 		}
 	}
 
@@ -53,18 +59,18 @@ class Anti_Bot implements Plugins\Registerable
 	 *
 	 * @param $result Input[]
 	 */
-	public function afterUserAuthenticationGetRegisterInputs(&$result)
+	public function afterUserAuthenticationGetRegisterInputs(array &$result)
 	{
-		$text = $this->choosePage($this->table_pages, $this->content_name);
-		$tab  = $this->generateTab($text);
-		$word = $this->chooseWord($tab);
-		$text = $this->generateTextSelected($tab, $word);
-		$parameters = $this->getViewParameters($text, $word);
-		$form  = [];
-		$files = [];
+		$text         = $this->choosePage($this->table_pages, $this->content_name);
+		$tab          = $this->generateTab($text);
+		$word         = $this->chooseWord($tab);
+		$text         = $this->generateTextSelected($tab);
+		$parameters   = $this->getViewParameters($text, $word);
+		$form         = [];
+		$files        = [];
 		$class_name   = Anti_Bot::class;
 		$feature_name = 'output';
-		$view = View::run($parameters, $form, $files, $class_name, $feature_name);
+		$view         = View::run($parameters, $form, $files, $class_name, $feature_name);
 		Session::current()->set(new Anti_Bot_Word($word['word']));
 		$result[] = new Input('Anti_bot', $view, 'text');
 	}
@@ -75,7 +81,7 @@ class Anti_Bot implements Plugins\Registerable
 	 *
 	 * @param $class        string The class corresponding to the table in database.
 	 * @param $content_name string The field's name where take content.
-	 * @return Page The chosen page.
+	 * @return string the content property value
 	 */
 	private function choosePage($class, $content_name)
 	{
@@ -101,15 +107,15 @@ class Anti_Bot implements Plugins\Registerable
 	 *         'row' for the row number,
 	 *         'word' for the word choose
 	 */
-	private function chooseWord($tab)
+	private function chooseWord(array $tab)
 	{
-		$row = rand(0, count($tab) - 1);
-		$col = rand(0, (isset($tab[$row]) ? count($tab[$row]) : 1) - 1);
-		$word = (new String(isset($tab[$row]) ? $tab[$row][$col] : ''))->cleanWord();
-		return array('col' => $col, 'row' => $row, 'word' => $word);
+		$row  = rand(0, count($tab) - 1);
+		$col  = rand(0, (isset($tab[$row]) ? count($tab[$row]) : 1) - 1);
+		$word = (new String_Class(isset($tab[$row]) ? $tab[$row][$col] : ''))->cleanWord();
+		return ['col' => $col, 'row' => $row, 'word' => $word];
 	}
 
-	//----------------------------------------------------------------------- explodeRowInArrayToWord
+	//---------------------------------------------------------------------- explodeRowsInArrayToWord
 	/**
 	 * Explode an array corresponding of rows in an array of array, corresponding of rows and columns,
 	 * the columns separate the words
@@ -117,13 +123,13 @@ class Anti_Bot implements Plugins\Registerable
 	 * @param $text_rows string[] The array to explode
 	 * @return array An array of array, represent rows and words
 	 */
-	private function explodeRowsInArrayToWord($text_rows)
+	private function explodeRowsInArrayToWord(array $text_rows)
 	{
 		$main_delimiter = ' ';
-		$delimiters = array(
+		$delimiters = [
 			'.' => '. ', ':' => ': ', ',' => ', ', '(' => ' (', ') ', '  ' => ' ',
 			'[' => ' [', ']' => '] '
-		);
+		];
 		$text_rows = str_replace('  ', ' ', $text_rows);
 		foreach ($delimiters as $delimiter => $new_delimiter) {
 			$text_rows = str_replace($delimiter, $new_delimiter, $text_rows);
@@ -135,7 +141,7 @@ class Anti_Bot implements Plugins\Registerable
 			$row_clean = [];
 			$key_col = 0;
 			foreach ($row as $col) {
-				if ((new String($col))->isWord()) {
+				if ((new String_Class($col))->isWord()) {
 					$row_clean[$key_col] = $col;
 					$key_col++;
 				}
@@ -194,19 +200,19 @@ class Anti_Bot implements Plugins\Registerable
 	 * @param $tab array
 	 * @return array
 	 */
-	private function generateTextSelected($tab)
+	private function generateTextSelected(array $tab)
 	{
 		$text = [];
 		$row_number = 0;
 		foreach ($tab as $row) {
 			$cols = [];
 			foreach ($row as $col) {
-				$cols[] = array('value' => $col . ' ');
+				$cols[] = ['value' => $col . ' '];
 			}
-			$text[] = array('row_number' => $row_number + 1, 'cols' => $cols);
+			$text[] = ['row_number' => $row_number + 1, 'cols' => $cols];
 			$row_number++;
 		}
-		return array(array($text));
+		return [[$text]];
 	}
 
 	//----------------------------------------------------------------------------- getViewParameters
@@ -215,14 +221,14 @@ class Anti_Bot implements Plugins\Registerable
 	 * @param $word array
 	 * @return array
 	 */
-	private function getViewParameters($text, $word)
+	private function getViewParameters(array $text, array $word)
 	{
 		$parameters = [];
 		$parameters['row_number'] = $word['row'] + 1;
 		$parameters['col_number'] = $word['col'] + 1;
 		$numbering = [];
 		for ($number = 0; $number < $this->number_cases; $number++) {
-			$numbering[] = array('number' => $this->numberToCharacter($number));
+			$numbering[] = ['number' => $this->numberToCharacter($number)];
 		}
 		$parameters['col_numbering'] = $numbering;
 		$parameters['rows']          = $text;
@@ -238,26 +244,27 @@ class Anti_Bot implements Plugins\Registerable
 	 */
 	private function numberToCharacter($number)
 	{
-		$numbering = array(
+		$numbering = [
 			'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-			'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
+			'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+		];
 		return $numbering[$number % count($numbering)];
 	}
 
 	//-------------------------------------------------------------------------------------- register
 	/**
-	 * @param $register Plugins\Register
+	 * @param $register Register
 	 */
-	public function register(Plugins\Register $register)
+	public function register(Register $register)
 	{
 		$aop = $register->aop;
 		$aop->afterMethod(
-			array(User_Authentication::class, 'getRegisterInputs'),
-			array($this, 'afterUserAuthenticationGetRegisterInputs')
+			[Authentication::class, 'getRegisterInputs'],
+			[$this, 'afterUserAuthenticationGetRegisterInputs']
 		);
 		$aop->afterMethod(
-			array(User_Authentication::class, 'controlRegisterFormParameters'),
-			array($this, 'afterUserAuthenticationControlRegisterFormParameters')
+			[Authentication::class, 'controlRegisterFormParameters'],
+			[$this, 'afterUserAuthenticationControlRegisterFormParameters']
 		);
 	}
 

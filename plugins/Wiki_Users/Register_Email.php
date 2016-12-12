@@ -1,20 +1,24 @@
 <?php
-namespace ITRocks\Wiki;
+namespace ITRocks\Wiki\Plugins\Wiki_Users;
 
-use ITRocks\Framework\Input;
+use ITRocks\Framework\Plugin\Register;
+use ITRocks\Framework\Plugin\Registerable;
 use ITRocks\Framework\User;
-use ITRocks\Framework\User_Authentication;
-use ITRocks\Plugins;
+use ITRocks\Framework\User\Authenticate\Authentication;
+use ITRocks\Framework\Widget\Input;
 
-class Register_Email implements Plugins\Registerable
+/**
+ * Register email
+ */
+class Register_Email implements Registerable
 {
 
-	//--------------------------------------------------- afterUserAuthenticationBuildUserForRegister
+	//------------------------------------------------------------ afterUserAuthenticationArrayToUser
 	/**
 	 * @param $array array
 	 * @param $result User
 	 */
-	public static function afterUserAuthenticationArrayToUser($array, $result)
+	public static function afterUserAuthenticationArrayToUser(array $array, User $result)
 	{
 		$result->email = $array['email'];
 	}
@@ -24,10 +28,11 @@ class Register_Email implements Plugins\Registerable
 	 * @param $form   array
 	 * @param $result array
 	 */
-	public static function afterUserAuthenticationControlRegisterFormParameters($form, &$result)
-	{
+	public static function afterUserAuthenticationControlRegisterFormParameters(
+		array $form, array &$result
+	) {
 		if (!preg_match('#^[\w.-]+@[\w.-]+\.[a-z]{2,6}$#i', $form['email'])) {
-			$result[] = array('name' => 'Email error', 'message' => 'Email must be a valid email format.');
+			$result[] = ['name' => 'Email error', 'message' => 'Email must be a valid email format.'];
 		}
 	}
 
@@ -35,29 +40,29 @@ class Register_Email implements Plugins\Registerable
 	/**
 	 * @param $result Input[]
 	 */
-	public static function afterUserAuthenticationGetRegisterInputs(&$result)
+	public static function afterUserAuthenticationGetRegisterInputs(array &$result)
 	{
 		$result[] = new Input('email', 'Email address', 'text');
 	}
 
 	//-------------------------------------------------------------------------------------- register
 	/**
-	 * @param $register Plugins\Register
+	 * @param $register Register
 	 */
-	public function register(Plugins\Register $register)
+	public function register(Register $register)
 	{
 		$aop = $register->aop;
 		$aop->afterMethod(
-			[ User_Authentication::class, 'getRegisterInputs' ],
-			[ __CLASS__, 'afterUserAuthenticationGetRegisterInputs' ]
+			[Authentication::class, 'getRegisterInputs'],
+			[__CLASS__, 'afterUserAuthenticationGetRegisterInputs']
 		);
 		$aop->afterMethod(
-			[ User_Authentication::class, 'controlRegisterFormParameters' ],
-			[ __CLASS__, 'afterUserAuthenticationControlRegisterFormParameters']
+			[Authentication::class, 'controlRegisterFormParameters'],
+			[__CLASS__, 'afterUserAuthenticationControlRegisterFormParameters']
 		);
 		$aop->afterMethod(
-			[ User_Authentication::class, 'arrayToUser' ],
-			[ __CLASS__, 'afterUserAuthenticationArrayToUser' ]
+			[Authentication::class, 'arrayToUser'],
+			[__CLASS__, 'afterUserAuthenticationArrayToUser']
 		);
 	}
 

@@ -1,42 +1,42 @@
 <?php
-namespace ITRocks\Wiki;
+namespace ITRocks\Wiki\Plugins;
 
-use ITRocks\Framework\Button;
-use ITRocks\Framework\Color;
-use ITRocks\Framework\Default_Edit_Controller;
-use ITRocks\Plugins;
+use ITRocks\Framework\Plugin\Register;
+use ITRocks\Framework\Plugin\Registerable;
+use ITRocks\Framework\View\Html\Dom\Button;
+use ITRocks\Framework\Widget\Edit\Edit_Controller;
 
 /**
  * This plugin need that :
  * the plugin Image_Wiki_Link_Parse is on
  * the default main html file import the Jquery script : images_upload.js
  */
-class Images_Upload implements Plugins\Registerable
+class Images_Upload implements Registerable
 {
 
 	//--------------------------------------------------- afterDefaultEditControllerGetGeneralButtons
 	/**
 	 * @param $result Button[]
 	 */
-	public static function afterDefaultEditControllerGetGeneralButtons(&$result)
+	public static function afterDefaultEditControllerGetGeneralButtons(array &$result)
 	{
 		$result[] = new Button(
 			'Images upload',
 			'Images_Upload',
 			'images_upload',
-			[ Color::of('red'), '#popup' ]
+			'#popup'
 		);
 	}
 
 	//-------------------------------------------------------------------------------------- register
 	/**
-	 * @param $register Plugins\Register
+	 * @param $register Register
 	 */
-	public function register(Plugins\Register $register)
+	public function register(Register $register)
 	{
 		$register->aop->afterMethod(
-			[ Default_Edit_Controller::class, 'getGeneralButtons' ],
-			[ __CLASS__, 'afterDefaultEditControllerGetGeneralButtons' ]
+			[Edit_Controller::class, 'getGeneralButtons'],
+			[__CLASS__, 'afterDefaultEditControllerGetGeneralButtons']
 		);
 	}
 

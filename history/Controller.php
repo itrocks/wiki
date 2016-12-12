@@ -21,11 +21,11 @@ class Controller implements Class_Controller
 	 *
 	 * @param $parameters   Parameters
 	 * @param $form         array
-	 * @param $files        array
+	 * @param $files        array[]
 	 * @param $feature_name string
 	 * @return mixed
 	 */
-	public function run(Parameters $parameters, $form, $files, $feature_name)
+	public function run(Parameters $parameters, array $form, array $files, $feature_name)
 	{
 		user_error('Unknown feature ' . $feature_name);
 		return;
@@ -54,10 +54,10 @@ class Controller implements Class_Controller
 	 *
 	 * @param $parameters Parameters
 	 * @param $form       array
-	 * @param $files      array
+	 * @param $files      array[]
 	 * @return string
 	 */
-	public function runOutput(Parameters $parameters, $form, $files)
+	public function runOutput(Parameters $parameters, array $form, array $files)
 	{
 		$parameters->set('article', $parameters->getObject(Article::class));
 		return View::run($parameters->getObjects(), $form, $files, History::class, Feature::F_OUTPUT);

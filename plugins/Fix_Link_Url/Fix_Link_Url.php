@@ -1,14 +1,15 @@
 <?php
-namespace ITRocks\Wiki;
+namespace ITRocks\Wiki\Plugins;
 
-use ITRocks\Framework\Wiki;
-use ITRocks\Plugins;
+use ITRocks\Framework\Plugin\Register;
+use ITRocks\Framework\Plugin\Registerable;
+use ITRocks\Framework\Tools\Wiki;
 
 /**
  * Fix urls build by Textile.
  * Build urls as : /url
  */
-class Fix_Link_Url implements Plugins\Registerable
+class Fix_Link_Url implements Registerable
 {
 
 	//------------------------------------------------------------------------------ afterWikiTextile
@@ -29,9 +30,9 @@ class Fix_Link_Url implements Plugins\Registerable
 	 * @param $matches string[]
 	 * @return string
 	 */
-	private function formatUrl($matches)
+	private function formatUrl(array $matches)
 	{
-		if(filter_var($matches[1], FILTER_VALIDATE_URL)) {
+		if (filter_var($matches[1], FILTER_VALIDATE_URL)) {
 			return 'href="' . $matches[1] .  '"';
 		}
 		else {
@@ -56,14 +57,11 @@ class Fix_Link_Url implements Plugins\Registerable
 
 	//-------------------------------------------------------------------------------------- register
 	/**
-	 * @param $register Plugins\Register
+	 * @param $register Register
 	 */
-	public function register(Plugins\Register $register)
+	public function register(Register $register)
 	{
-		$register->aop->afterMethod(
-			array(Wiki::class, 'textile'),
-			array($this, 'afterWikiTextile')
-		);
+		$register->aop->afterMethod([Wiki::class, 'textile'], [$this, 'afterWikiTextile']);
 	}
 
 }

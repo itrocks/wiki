@@ -25,7 +25,7 @@ class Images implements Registerable
 	 * @param $matches string[]
 	 * @return string
 	 */
-	public function rewriteLink($matches)
+	public function rewriteLink(array $matches)
 	{
 		$attachment_name = $matches[1];
 		if (in_array($attachment_name[0], ['>', '<', '='])) {

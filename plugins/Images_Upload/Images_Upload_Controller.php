@@ -1,5 +1,5 @@
 <?php
-namespace ITRocks\Wiki;
+namespace ITRocks\Wiki\Plugins\Images_Upload;
 
 use ITRocks\Framework\Controller\Feature_Controller;
 use ITRocks\Framework\Controller\Parameters;
@@ -80,7 +80,7 @@ class Images_Upload_Controller implements Feature_Controller
 	 * @param $image array Image to test
 	 * @return boolean True if it's a permitted image, false else.
 	 */
-	public function isImage($image)
+	public function isImage(array $image)
 	{
 		$extension = $image['type'];
 		foreach (Images_Upload_Utils::$list_extension_accepted as $extension_accepted) {
@@ -94,27 +94,27 @@ class Images_Upload_Controller implements Feature_Controller
 	/**
 	 * @param $parameters Parameters
 	 * @param $form       array
-	 * @param $files      array
+	 * @param $files      array[]
 	 * @return Images_Upload_List_Controller
 	 */
-	public function run(Parameters $parameters, $form, $files)
+	public function run(Parameters $parameters, array $form, array $files)
 	{
 		return new Images_Upload_List_Controller($parameters, $form, $files);
 	}
 
-	//---------------------------------------------------------------------------------------- upload
+	//------------------------------------------------------------------------------------- runUpload
 	/**
 	 * Upload an image passed by forms.
 	 *
 	 * @param $parameters Parameters
 	 * @param $form       array
-	 * @param $files      array
+	 * @param $files      array[]
 	 * @return mixed
 	 */
 	public function runUpload(
 		Parameters $parameters,
-		/** @noinspection PhpUnusedParameterInspection */ $form,
-		$files
+		/** @noinspection PhpUnusedParameterInspection */ array $form,
+		array $files
 	) {
 		if (isset($files['image'])) {
 			$image = $files['image'];
@@ -123,12 +123,14 @@ class Images_Upload_Controller implements Feature_Controller
 					$destination = Images_Upload_Utils::$images_repository;
 					$name = $this->generateName($destination, $image);
 					$result = move_uploaded_file($image['tmp_name'], $destination . $name);
-					if($result){
+					if ($result) {
 						$message = 'The image has been uploaded';
-					} else {
+					}
+					else {
 						$message = 'An error occurred while move the image in the image folder';
 					}
-				} else {
+				}
+				else {
 					$message = 'This file is not an image or have not the right extension';
 				}
 			}
@@ -139,7 +141,6 @@ class Images_Upload_Controller implements Feature_Controller
 		else {
 			return (new Images_Upload_List_Controller())->runView($parameters);
 		}
-		$adding_parameters = array();
 		$adding_parameters['message'] = $message;
 		return (new Images_Upload_List_Controller())->runView($parameters, $adding_parameters);
 	}

@@ -1,7 +1,9 @@
 <?php
-namespace ITRocks\Wiki;
-use ITRocks\Framework\Current;
+namespace ITRocks\Wiki\Plugins\Anti_Bot;
 
+/**
+ * Anti-bot word
+ */
 class Anti_Bot_Word
 {
 

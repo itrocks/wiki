@@ -1,19 +1,22 @@
 <?php
-namespace ITRocks\Wiki;
+namespace ITRocks\Wiki\Plugins;
 
 use ITRocks\Framework\Dao;
-use ITRocks\Framework\Search_Object;
+use ITRocks\Framework\Mapper\Search_Object;
+use ITRocks\Framework\Plugin\Register;
+use ITRocks\Framework\Plugin\Registerable;
 use ITRocks\Framework\User;
-use ITRocks\Framework\User_Authentication;
+use ITRocks\Framework\User\Authenticate\Authentication;
 use ITRocks\Framework\View;
-use ITRocks\Plugins;
+use ITRocks\Wiki\Application;
+use ITRocks\Wiki\Plugins\Email_Confirmation_Register\Email_Confirmation;
 
 /**
  * Use the mail() function of PHP
  * By default, the mail function need the sendmail package.
  * Please install this package or redefine the mail function of php to use this plugin.
  */
-class Email_Confirmation_Register implements Plugins\Registerable
+class Email_Confirmation_Register implements Registerable
 {
 
 	//----------------------------------------------------------------------------- $mail_domain_from
@@ -25,15 +28,17 @@ class Email_Confirmation_Register implements Plugins\Registerable
 	//--------------------------------------------------------------- afterUserAuthenticationRegister
 	/**
 	 * Generate a mail content, an activation key, save the key in databases, and send the email
+	 *
+	 * @param $form array
 	 */
-	public function afterUserAuthenticationRegister($form)
+	public function afterUserAuthenticationRegister(array $form)
 	{
 		/** @var $user User */
-		$user = Search_Object::create(User::class);
+		$user        = Search_Object::create(User::class);
 		$user->login = $form['login'];
-		$user = Dao::searchOne($user);
+		$user        = Dao::searchOne($user);
 		if ($user) {
-			$key = $this->generateKey();
+			$key  = $this->generateKey();
 			$link = $this->generateActivationLink($key);
 			/** @var $email_confirm Email_Confirmation */
 			$email_confirm = Search_Object::create(Email_Confirmation::class);
@@ -41,15 +46,15 @@ class Email_Confirmation_Register implements Plugins\Registerable
 			$email_confirm->link = $key;
 			Dao::write($email_confirm);
 			$application_name = Application::current()->name;
-			$email_from = $this->getEmailFrom($application_name);
-			$headers = $this->getHeaders($application_name, $email_from);
-			$parameters = $this->getViewParameters(
+			$email_from       = $this->getEmailFrom($application_name);
+			$headers          = $this->getHeaders($application_name, $email_from);
+			$parameters       = $this->getViewParameters(
 				$user->login, $form['password'], $application_name, $link
 			);
-			$files = array();
-			$class_name = Email_Confirmation::class;
+			$files        = [];
+			$class_name   = Email_Confirmation::class;
 			$feature_name = 'content';
-			$subject = '[' . $application_name . '] ' . 'Confirm your subscribe';
+			$subject      = '[' . $application_name . '] ' . 'Confirm your subscribe';
 			ini_set('sendmail_from', $email_from);
 			mail(
 				$user->email, $subject,
@@ -104,7 +109,7 @@ class Email_Confirmation_Register implements Plugins\Registerable
 		return $link;
 	}
 
-	//------------------------------------------------------------------------- generateActivationKey
+	//----------------------------------------------------------------------------------- generateKey
 	/**
 	 * Generate an unique key
 	 *
@@ -142,7 +147,7 @@ class Email_Confirmation_Register implements Plugins\Registerable
 	 */
 	private function getViewParameters($login, $password, $application_name, $link)
 	{
-		$parameters = array();
+		$parameters = [];
 		$parameters['login']     = $login;
 		$parameters['password']  = $password;
 		$parameters['site_name'] = $application_name;
@@ -152,18 +157,18 @@ class Email_Confirmation_Register implements Plugins\Registerable
 
 	//-------------------------------------------------------------------------------------- register
 	/**
-	 * @param $register Plugins\Register
+	 * @param $register Register
 	 */
-	public function register(Plugins\Register $register)
+	public function register(Register $register)
 	{
 		$aop = $register->aop;
 		$aop->afterMethod(
-			array(User_Authentication::class, 'register'),
-			array($this, 'afterUserAuthenticationRegister')
+			[Authentication::class, 'register'],
+			[$this, 'afterUserAuthenticationRegister']
 		);
 		$aop->afterMethod(
-			array(User_Authentication::class, 'login'),
-			array($this, 'afterUserAuthenticationLogin')
+			[Authentication::class, 'login'],
+			[$this, 'afterUserAuthenticationLogin']
 		);
 	}
 

@@ -1,16 +1,17 @@
 <?php
-namespace ITRocks\Wiki;
+namespace ITRocks\Wiki\Plugins;
 
-use ITRocks\Framework\Button;
-use ITRocks\Framework\Default_Edit_Controller;
-use ITRocks\Framework\Output_Controller;
+use ITRocks\Framework\Plugin\Register;
+use ITRocks\Framework\Plugin\Registerable;
 use ITRocks\Framework\User;
-use ITRocks\Plugins;
+use ITRocks\Framework\Widget\Button;
+use ITRocks\Framework\Widget\Edit\Edit_Controller;
+use ITRocks\Framework\Widget\Output\Output_Controller;
 
 /**
  * This plugin delete all control of the output object if user is not connected.
  */
-class Modification_Reserved_Connected implements Plugins\Registerable
+class Modification_Reserved_Connected implements Registerable
 {
 
 	//--------------------------------------------------- afterDefaultEditControllerGetViewParameters
@@ -19,7 +20,7 @@ class Modification_Reserved_Connected implements Plugins\Registerable
 	 *
 	 * @param $result array
 	 */
-	public static function afterDefaultEditControllerGetViewParameters(&$result)
+	public static function afterDefaultEditControllerGetViewParameters(array &$result)
 	{
 		$is_connected = User::current();
 		if ($is_connected) {
@@ -36,7 +37,7 @@ class Modification_Reserved_Connected implements Plugins\Registerable
 	 *
 	 * @param $result Button[]
 	 */
-	public static function afterOutputControllerGetGeneralButtons(&$result)
+	public static function afterOutputControllerGetGeneralButtons(array &$result)
 	{
 		$is_connected = User::current();
 		if ($is_connected) {
@@ -49,18 +50,18 @@ class Modification_Reserved_Connected implements Plugins\Registerable
 
 	//-------------------------------------------------------------------------------------- register
 	/**
-	 * @param $register Plugins\Register
+	 * @param $register Register
 	 */
-	public function register(Plugins\Register $register)
+	public function register(Register $register)
 	{
 		$aop = $register->aop;
 		$aop->afterMethod(
-			[ Output_Controller::class, 'getGeneralButtons' ],
-			[ __CLASS__, 'afterOutputControllerGetGeneralButtons' ]
+			[Output_Controller::class, 'getGeneralButtons'],
+			[__CLASS__, 'afterOutputControllerGetGeneralButtons']
 		);
 		$aop->afterMethod(
-			[ Default_Edit_Controller::class, 'getViewParameters' ],
-			[ __CLASS__, 'afterDefaultEditControllerGetViewParameters' ]
+			[Edit_Controller::class, 'getViewParameters'],
+			[__CLASS__, 'afterDefaultEditControllerGetViewParameters']
 		);
 	}
 

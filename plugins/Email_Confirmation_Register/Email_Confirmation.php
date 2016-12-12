@@ -1,5 +1,5 @@
 <?php
-namespace ITRocks\Wiki;
+namespace ITRocks\Wiki\Plugins\Email_Confirmation_Register;
 
 use ITRocks\Framework\User;
 
