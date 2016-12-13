@@ -4,6 +4,9 @@
 	"license":      "MIT",
 	"name":         "itrocks/wiki",
 	"repositories": [{ "type": "composer", "url": "https://packages.bappli.com" }],
-	"require":      { "gorhill/php-finediff": "^1.0", "itrocks/framework": "dev-master" },
+	"require":      {
+		"gorhill/php-finediff": "^1.0",
+		"itrocks/framework":    "dev-90891-Set-array-type-for-all-array-methods-parameters"
+	},
 	"type": "itrocks"
 }
