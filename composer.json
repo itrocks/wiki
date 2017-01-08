@@ -6,7 +6,7 @@
 	"repositories": [{ "type": "composer", "url": "https://packages.bappli.com" }],
 	"require":      {
 		"gorhill/php-finediff": "^1.0",
-		"itrocks/framework":    "dev-90891-Set-array-type-for-all-array-methods-parameters"
+		"itrocks/framework":    "master"
 	},
 	"type": "itrocks"
 }
