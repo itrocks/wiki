@@ -15,9 +15,25 @@
   max-width: 1024px; }
   .article.window .wiki.text {
     color: #222;
+    counter-reset: h2 h3 h4 h5 h6;
     font-size: 130%;
     line-height: 125%;
     text-align: justify; }
+    .article.window .wiki.text h2:before {
+      content: counter(h2,decimal) ". ";
+      counter-increment: h2; }
+    .article.window .wiki.text h3:before {
+      content: counter(h2,decimal) "." counter(h3,decimal) ". ";
+      counter-increment: h3; }
+    .article.window .wiki.text h4:before {
+      content: counter(h2,decimal) "." counter(h3,decimal) "." counter(h4,decimal) ". ";
+      counter-increment: h4; }
+    .article.window .wiki.text h5:before {
+      content: counter(h2,decimal) "." counter(h3,decimal) "." counter(h4,decimal) "." counter(h5,decimal) ". ";
+      counter-increment: h5; }
+    .article.window .wiki.text h6:before {
+      content: counter(h2,decimal) "." counter(h3,decimal) "." counter(h4,decimal) "." counter(h5,decimal) "." counter(h6,decimal) ". ";
+      counter-increment: h6; }
     .article.window .wiki.text table:not(.nostyle) {
       width: 100%;
       border: solid 1px black; }
