@@ -49,18 +49,18 @@ class Links implements Registerable
 	 */
 	public function parseWikiLinks(&$string)
 	{
-		$i = 0;
+		$i      = 0;
 		$length = strlen($string);
 		while (($i < $length) && (($i = strpos($string, '[', $i)) !== false)) {
-			$i++;
+			$i ++;
 			if (($i < $length)) {
 				// escape with [[ => [ without parsing
-				if (($string[$i] == '[') && ($string[$i + 1] != '[')) {
+				if (($string[$i] === '[') && ($string[$i + 1] !== '[')) {
 					$string = substr($string, 0, $i) . substr($string, $i + 1);
 					$length --;
 				}
 				// parse link : replace [A link] with "A link":/a-link
-				elseif (($string[$i] != ']') && ($j = strpos($string, ']', $i)) !== false) {
+				elseif (($string[$i] !== ']') && ($j = strpos($string, ']', $i)) !== false) {
 					$uri = substr($string, $i, $j - $i);
 					if (strpos($uri, '>') !== false) {
 						list($text, $uri) = explode('>', $uri, 2);
@@ -68,14 +68,13 @@ class Links implements Registerable
 					else {
 						$text = $uri;
 					}
-					$length -= (strlen($uri) + 2);
 					$uri = ((strpos($uri, 'http://') === 0) || (strpos($uri, 'https://') === 0))
 						? (DQ . $text . DQ . ':' . $uri)
 						: $this->htmlAnchor($uri, $text);
-					$uri_length = strlen($uri);
-					$length += $uri_length;
-					$string = substr($string, 0, $i - 1) . $uri . substr($string, $j + 1);
-					$i += $uri_length;
+					$uri_length  = strlen($uri);
+					$string      = substr($string, 0, $i - 1) . $uri . substr($string, $j + 1);
+					$i          += $uri_length;
+					$length      = strlen($string);
 				}
 			}
 		}
