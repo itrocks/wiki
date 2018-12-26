@@ -1,13 +1,12 @@
 <?php
 namespace ITRocks\Wiki;
 
+use ITRocks\Wiki;
+use ITRocks\Framework;
 use ITRocks\Framework\Configuration;
 use ITRocks\Framework\Locale;
 use ITRocks\Framework\Locale\Number_Format;
 use ITRocks\Framework\Plugin\Priority;
-use ITRocks\Framework\Tools\Wiki;
-use ITRocks\Framework\User\Write_Access_Control;
-use ITRocks\Framework\Widget\Menu;
 
 global $loc;
 require __DIR__ . '/../../loc.php';
@@ -19,10 +18,15 @@ $config['ITRocks/Wiki'] = [
 	Configuration::ENVIRONMENT => $loc[Configuration::ENVIRONMENT],
 	Configuration::EXTENDS_APP => 'ITRocks/Framework',
 
+	//------------------------------------------------------------------------- CORE priority plugins
+	Priority::CORE => [
+		Framework\Builder::class => include(__DIR__ . SL . 'builder.php'),
+	],
+
+	//----------------------------------------------------------------------- NORMAL priority plugins
 	Priority::NORMAL => [
-		Write_Access_Control::class,
-		Article\Redirect::class,
-		Locale::class => [
+		Framework\User\Write_Access_Control::class,
+		Framework\Locale::class => [
 			Locale::DATE     => 'd/m/Y',
 			Locale::LANGUAGE => 'fr',
 			Locale::NUMBER   => [
@@ -32,32 +36,12 @@ $config['ITRocks/Wiki'] = [
 				Number_Format::THOUSAND_SEPARATOR    => SP
 			]
 		],
-		Markup\Images::class,
-		Markup\Links::class,
-		Menu::class => [
-			Menu::TITLE => [SP, 'Home', '#main'],
-			'Articles' => [
-				SL                          => 'Home',
-				'/ITRocks/Wiki/Articles'    => 'Full articles list',
-				'/ITRocks/Wiki/Article/add' => 'Add a new article',
-				'/ITRocks/Wiki/Search/form' => 'Search'
-			],
-			'Tools' => [
-				'/ITRocks/Wiki/Attachments'     => 'Attachment files',
-				'/ITRocks/Framework/User/login' => 'Connect user'
-			]
-		],
-		Uri_Rewriter::class,
-		Wiki::class
-		/*
-		Wiki\Anti_Bot::class,
-		Wiki\Change_Name_Page_Refactor::class,
-		Wiki\Email_Confirmation_Register::class,
-		Wiki\Images_Upload::class,
-		Wiki\Links_Recognition::class,
-		Wiki\Modification_Reserved_Connected::class,
-		Wiki\Register_Email::class,
-		Wiki\Stay_Connected::class,
-		*/
+		Framework\Tools\Wiki::class,
+		Framework\Widget\Menu::class => include(__DIR__ . SL . 'menu.php'),
+
+		Wiki\Article\Redirect::class,
+		Wiki\Markup\Images::class,
+		Wiki\Markup\Links::class,
+		Wiki\Uri_Rewriter::class
 	]
 ];
