@@ -43,13 +43,13 @@ class Images_Upload_Controller implements Feature_Controller
 	 * Generate a name who not exist in this server
 	 *
 	 * @param $destination string The images folder
-	 * @param $image       string The image
+	 * @param $image_name  string The name of the image
 	 * @return string Return the same name if the file not exist
 	 *         or return this name file incremented by a number, this name is unique.
 	 */
-	public function generateName($destination, $image)
+	public function generateName($destination, $image_name)
 	{
-		$tmp_name = explode('.', $image['name']);
+		$tmp_name = explode('.', $image_name);
 		$tmp_base_name = $tmp_name[0];
 		$i = 0;
 		while (file_exists($destination . join('.', $tmp_name))) {
@@ -99,7 +99,7 @@ class Images_Upload_Controller implements Feature_Controller
 	 */
 	public function run(Parameters $parameters, array $form, array $files)
 	{
-		return new Images_Upload_List_Controller($parameters, $form, $files);
+		return (new Images_Upload_List_Controller)->run($parameters, $form, $files, get_class($this));
 	}
 
 	//------------------------------------------------------------------------------------- runUpload
@@ -121,7 +121,7 @@ class Images_Upload_Controller implements Feature_Controller
 			if (isset($image['tmp_name']) &&($image['error'] == UPLOAD_ERR_OK)) {
 				if ($this->isImage($image)) {
 					$destination = Images_Upload_Utils::$images_repository;
-					$name = $this->generateName($destination, $image);
+					$name = $this->generateName($destination, $image['name']);
 					$result = move_uploaded_file($image['tmp_name'], $destination . $name);
 					if ($result) {
 						$message = 'The image has been uploaded';

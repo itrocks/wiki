@@ -6,8 +6,8 @@ use ITRocks\Framework\Dao;
 use ITRocks\Framework\Mapper\Search_Object;
 use ITRocks\Framework\Plugin\Register;
 use ITRocks\Framework\Plugin\Registerable;
-use ITRocks\Framework\Printer\Model\Page;
-use ITRocks\Framework\Widget\Write\Write_Controller;
+use ITRocks\Framework\Widget\Write;
+use ITRocks\Wiki\Article;
 
 /**
  * Change page name refactor
@@ -19,7 +19,7 @@ class Change_Name_Page_Refactor implements Registerable
 	/**
 	 * @var string
 	 */
-	private $page_class_name = Page::class;
+	private $page_class_name = Article::class;
 
 	//-------------------------------------------------------------------------------- $page_var_name
 	/**
@@ -93,7 +93,7 @@ class Change_Name_Page_Refactor implements Registerable
 	{
 		$aop = $register->aop;
 		$aop->beforeMethod(
-			[Write_Controller::class, 'run'],
+			[Write\Controller::class, 'run'],
 			[$this, 'beforeDefaultWriteControllerRun']
 		);
 	}

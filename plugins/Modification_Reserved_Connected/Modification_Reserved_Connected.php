@@ -5,8 +5,8 @@ use ITRocks\Framework\Plugin\Register;
 use ITRocks\Framework\Plugin\Registerable;
 use ITRocks\Framework\User;
 use ITRocks\Framework\Widget\Button;
-use ITRocks\Framework\Widget\Edit\Edit_Controller;
-use ITRocks\Framework\Widget\Output\Output_Controller;
+use ITRocks\Framework\Widget\Edit;
+use ITRocks\Framework\Widget\Output;
 
 /**
  * This plugin delete all control of the output object if user is not connected.
@@ -56,11 +56,11 @@ class Modification_Reserved_Connected implements Registerable
 	{
 		$aop = $register->aop;
 		$aop->afterMethod(
-			[Output_Controller::class, 'getGeneralButtons'],
+			[Output\Controller::class, 'getGeneralButtons'],
 			[__CLASS__, 'afterOutputControllerGetGeneralButtons']
 		);
 		$aop->afterMethod(
-			[Edit_Controller::class, 'getViewParameters'],
+			[Edit\Controller::class, 'getViewParameters'],
 			[__CLASS__, 'afterDefaultEditControllerGetViewParameters']
 		);
 	}

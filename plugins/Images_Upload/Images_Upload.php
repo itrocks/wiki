@@ -3,8 +3,8 @@ namespace ITRocks\Wiki\Plugins;
 
 use ITRocks\Framework\Plugin\Register;
 use ITRocks\Framework\Plugin\Registerable;
-use ITRocks\Framework\View\Html\Dom\Button;
-use ITRocks\Framework\Widget\Edit\Edit_Controller;
+use ITRocks\Framework\Widget\Button;
+use ITRocks\Framework\Widget\Edit;
 
 /**
  * This plugin need that :
@@ -35,7 +35,7 @@ class Images_Upload implements Registerable
 	public function register(Register $register)
 	{
 		$register->aop->afterMethod(
-			[Edit_Controller::class, 'getGeneralButtons'],
+			[Edit\Controller::class, 'getGeneralButtons'],
 			[__CLASS__, 'afterDefaultEditControllerGetGeneralButtons']
 		);
 	}

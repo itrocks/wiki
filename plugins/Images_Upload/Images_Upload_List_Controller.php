@@ -3,13 +3,13 @@ namespace ITRocks\Wiki\Plugins\Images_Upload;
 
 use ITRocks\Framework\Controller\Parameters;
 use ITRocks\Framework\View;
-use ITRocks\Framework\Widget\Data_List\Data_List_Controller;
+use ITRocks\Framework\Widget\List_;
 use ITRocks\Wiki\Plugins\Images_Upload;
 
 /**
  * Images upload list controller
  */
-class Images_Upload_List_Controller extends Data_List_Controller
+class Images_Upload_List_Controller extends List_\Controller
 {
 
 	//----------------------------------------------------------------------------- getViewParameters

@@ -4,12 +4,12 @@ namespace ITRocks\Wiki\Plugins;
 use ITRocks\Framework\Dao;
 use ITRocks\Framework\Plugin\Register;
 use ITRocks\Framework\Plugin\Registerable;
-use ITRocks\Framework\Printer\Model\Page;
 use ITRocks\Framework\Session;
 use ITRocks\Framework\Tools\String_Class;
 use ITRocks\Framework\User\Authenticate\Authentication;
 use ITRocks\Framework\View;
 use ITRocks\Framework\Widget\Input;
+use ITRocks\Wiki\Article;
 use ITRocks\Wiki\Plugins\Anti_Bot\Anti_Bot_Word;
 
 /**
@@ -29,12 +29,6 @@ class Anti_Bot implements Registerable
 	 * @var integer
 	 */
 	private $number_cases = 12;
-
-	//---------------------------------------------------------------------------------- $table_pages
-	/**
-	 * @var string
-	 */
-	private $table_pages = Page::class;
 
 	//------------------------------------------ afterUserAuthenticationControlRegisterFormParameters
 	/**
@@ -61,7 +55,7 @@ class Anti_Bot implements Registerable
 	 */
 	public function afterUserAuthenticationGetRegisterInputs(array &$result)
 	{
-		$text         = $this->choosePage($this->table_pages, $this->content_name);
+		$text         = $this->choosePage(Article::class, $this->content_name);
 		$tab          = $this->generateTab($text);
 		$word         = $this->chooseWord($tab);
 		$text         = $this->generateTextSelected($tab);

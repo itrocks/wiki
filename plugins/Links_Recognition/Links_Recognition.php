@@ -4,9 +4,9 @@ namespace ITRocks\Wiki\Plugins;
 use ITRocks\Framework\Dao;
 use ITRocks\Framework\Plugin\Register;
 use ITRocks\Framework\Plugin\Registerable;
-use ITRocks\Framework\Printer\Model\Page;
 use ITRocks\Framework\Tools\Default_List_Data;
 use ITRocks\Framework\Tools\Wiki;
+use ITRocks\Wiki\Article;
 
 /**
  * Links recognition
@@ -21,7 +21,7 @@ class Links_Recognition implements Registerable
 	public static function beforeWikiTextile(&$result)
 	{
 		/** @var $pages Default_List_Data */
-		$pages = Dao::select(Page::class, ['name']);
+		$pages = Dao::select(Article::class, ['name']);
 		for($i = 0 ; $i < $pages->length() ; $i++){
 			$title_page   = $pages->getRow($i)->getValue('name');
 			$link_replace = '<a href="' . str_replace(' ', '_', $title_page) . '">' . $title_page . '</a>';
