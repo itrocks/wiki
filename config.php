@@ -8,7 +8,6 @@ use ITRocks\Framework\Plugin\Priority;
 use ITRocks\Framework\Tools\Wiki;
 use ITRocks\Framework\User\Write_Access_Control;
 use ITRocks\Framework\Widget\Menu;
-use ITRocks\Wiki\Article;
 
 global $loc;
 require __DIR__ . '/../../loc.php';
