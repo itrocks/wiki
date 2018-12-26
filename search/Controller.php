@@ -43,6 +43,7 @@ class Controller implements Class_Controller
 	/**
 	 * Search in databases if an object have this exact text as title
 	 *
+	 * @noinspection PhpDocMissingThrowsInspection
 	 * @param $search_text string The exact searched text
 	 * @return array
 	 */
@@ -50,6 +51,7 @@ class Controller implements Class_Controller
 	{
 		/** @var $article Article */
 		$article = Dao::searchOne(['title' => $search_text], Article::class);
+		/** @noinspection PhpUnhandledExceptionInspection constant */
 		return $article ? [Builder::create(Result::class, [$article, 0])] : [];
 	}
 
@@ -117,6 +119,7 @@ class Controller implements Class_Controller
 	/**
 	 * Search different words into the articles database
 	 *
+	 * @noinspection PhpDocMissingThrowsInspection
 	 * @param $property_name string The property name 'title' or 'text' of the article where to
 	 *                              search into
 	 * @param $search_text   string A list of words, separated by spaces
@@ -135,6 +138,7 @@ class Controller implements Class_Controller
 		$search_results = [];
 		foreach ($articles as $article) {
 			$occurrences = $this->countOccurrences($article->$property_name, $search_text);
+			/** @noinspection PhpUnhandledExceptionInspection constant */
 			$search_results[] = Builder::create(Result::class, [$article, $occurrences]);
 		}
 		return $search_results;
