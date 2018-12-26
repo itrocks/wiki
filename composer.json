@@ -3,7 +3,7 @@
 	"description":  "Wiki",
 	"license":      "MIT",
 	"name":         "itrocks/wiki",
-	"repositories": [{ "type": "composer", "url": "https://packages.bappli.com" }],
+	"repositories": [{ "type": "composer", "url": "https://hub.itrocks.org" }],
 	"require":      {
 		"gorhill/php-finediff": "^1.0",
 		"itrocks/framework":    "master"
