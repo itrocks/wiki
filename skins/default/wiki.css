@@ -10,93 +10,93 @@
     height: 32px;
     width: 32px; }
 
-.article.window {
+article.article {
   min-width: 300px;
   max-width: 1024px; }
-  .article.window .wiki.text {
+  article.article .wiki.text {
     color: #222;
     counter-reset: h2 h3 h4 h5 h6;
     font-size: 130%;
     line-height: 125%;
     text-align: justify; }
-    .article.window .wiki.text h2 {
+    article.article .wiki.text h2 {
       counter-reset: h3; }
-      .article.window .wiki.text h2:before {
+      article.article .wiki.text h2:before {
         content: counter(h2,decimal) ". ";
         counter-increment: h2; }
-    .article.window .wiki.text h3 {
+    article.article .wiki.text h3 {
       counter-reset: h4; }
-      .article.window .wiki.text h3:before {
+      article.article .wiki.text h3:before {
         content: counter(h2,decimal) "." counter(h3,decimal) ". ";
         counter-increment: h3; }
-    .article.window .wiki.text h4 {
+    article.article .wiki.text h4 {
       counter-reset: h5; }
-      .article.window .wiki.text h4:before {
+      article.article .wiki.text h4:before {
         content: counter(h2,decimal) "." counter(h3,decimal) "." counter(h4,decimal) ". ";
         counter-increment: h4; }
-    .article.window .wiki.text h5 {
+    article.article .wiki.text h5 {
       counter-reset: h6; }
-      .article.window .wiki.text h5:before {
+      article.article .wiki.text h5:before {
         content: counter(h2,decimal) "." counter(h3,decimal) "." counter(h4,decimal) "." counter(h5,decimal) ". ";
         counter-increment: h5; }
-    .article.window .wiki.text h6:before {
+    article.article .wiki.text h6:before {
       content: counter(h2,decimal) "." counter(h3,decimal) "." counter(h4,decimal) "." counter(h5,decimal) "." counter(h6,decimal) ". ";
       counter-increment: h6; }
-    .article.window .wiki.text table:not(.nostyle) {
+    article.article .wiki.text table:not(.nostyle) {
       width: 100%;
       border: solid 1px black; }
-      .article.window .wiki.text table:not(.nostyle) tr th {
+      article.article .wiki.text table:not(.nostyle) tr th {
         padding: 5px 5px 5px 5px;
         border: solid 1px black;
         vertical-align: middle;
         background-color: #93c437;
         color: white; }
-      .article.window .wiki.text table:not(.nostyle) tr td {
+      article.article .wiki.text table:not(.nostyle) tr td {
         padding: 5px 5px 5px 5px;
         border: solid 1px black;
         vertical-align: middle; }
-    .article.window .wiki.text code, .article.window .wiki.text pre[class] {
+    article.article .wiki.text code, article.article .wiki.text pre[class] {
       background: #eee; }
-    .article.window .wiki.text h1 {
+    article.article .wiki.text h1 {
       clear: both;
       margin: 1em 0 .8em; }
-    .article.window .wiki.text h2 {
+    article.article .wiki.text h2 {
       clear: both;
       margin: .8em 0 .6em; }
-    .article.window .wiki.text h3 {
+    article.article .wiki.text h3 {
       margin: .6em 0 .4em; }
-    .article.window .wiki.text img {
+    article.article .wiki.text img {
       border: 1px solid darkgrey;
       border-radius: 3px;
       box-shadow: 0 0 1px darkgrey;
       margin: .25em;
       vertical-align: middle; }
-      .article.window .wiki.text img.align-center {
+      article.article .wiki.text img.align-center {
         display: block;
         margin-left: auto;
         margin-right: auto; }
-      .article.window .wiki.text img.align-left {
+      article.article .wiki.text img.align-left {
         float: left; }
-      .article.window .wiki.text img.align-right {
+      article.article .wiki.text img.align-right {
         float: right; }
-  .article.window.history {
+  article.article.history {
     min-width: 0; }
-    .article.window.history h2 {
+    article.article.history h2 {
       background: #93c437 url("img/history.png") left no-repeat;
       background-size: 20px;
       padding-left: 24px; }
-    .article.window.history p {
+    article.article.history p {
       display: none;
       margin-bottom: 1em;
       white-space: pre-line; }
-      .article.window.history p del {
+      article.article.history p del {
         text-decoration: none;
         background-color: #ff7d7f; }
-      .article.window.history p ins {
+      article.article.history p ins {
         text-decoration: none;
         background-color: #a2ff9d; }
-    .article.window.history > ul > li {
+    article.article.history > ul > li {
       list-style: none;
       margin: 0; }
-      .article.window.history > ul > li > ul.actions > li > ul {
+      article.article.history > ul > li > ul.actions > li > ul {
         margin-left: 3em; }

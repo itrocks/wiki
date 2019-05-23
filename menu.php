@@ -1,7 +1,7 @@
 <?php
 namespace ITRocks\Wiki;
 
-use ITRocks\Framework\Widget\Menu;
+use ITRocks\Framework\Component\Menu;
 
 return [
 	Menu::TITLE => [SP, 'Home', '#main'],

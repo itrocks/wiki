@@ -3,9 +3,9 @@ namespace ITRocks\Wiki\Article;
 
 use ITRocks\Framework\Controller\Feature;
 use ITRocks\Framework\Setting;
-use ITRocks\Framework\Widget\Button;
-use ITRocks\Framework\Widget\Output;
-use ITRocks\Framework\Widget\Output_Setting;
+use ITRocks\Framework\Component\Button;
+use ITRocks\Framework\Feature\Output;
+use ITRocks\Framework\Feature\Output_Setting;
 use ITRocks\Wiki\Article;
 
 /**

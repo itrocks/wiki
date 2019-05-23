@@ -3,9 +3,9 @@ namespace ITRocks\Wiki\Article;
 
 use ITRocks\Framework\Controller\Feature;
 use ITRocks\Framework\Setting;
-use ITRocks\Framework\Widget\Button;
-use ITRocks\Framework\Widget\List_;
-use ITRocks\Framework\Widget\List_Setting;
+use ITRocks\Framework\Component\Button;
+use ITRocks\Framework\Feature\List_;
+use ITRocks\Framework\Feature\List_Setting;
 
 /**
  * Wiki article data-list controller

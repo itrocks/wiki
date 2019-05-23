@@ -1,48 +1,7 @@
-$('document').ready(function()
+$(document).ready(function()
 {
-	window.zindex_counter = 0;
 
-	$('body').build(function()
-	{
-
-		this.xtarget({
-			url_append:      'as_widget',
-			draggable_blank: '.window>h2',
-			popup_element:   'section',
-			show:            true,
-			success:         function() { $(this).autofocus(); },
-			history: {
-				condition: '.window>h2',
-				title:     '.window>h2'
-			}
-		});
-
-		// can enter tab characters into textarea
-		this.inside('textarea').presstab();
-
-		// messages is draggable and closable
-		this.inside('#messages').draggable().click(function(event)
-		{
-			if (event.offsetX > this.clientWidth - 10 && event.offsetY < 10) {
-				$(this).empty();
-			}
-		});
-
-		// tab controls
-		this.inside('.tabber').tabber();
-
-		// draggable objects brought to front on mousedown
-		this.inside('.ui-draggable').mousedown(function()
-		{
-			$(this).css('z-index', ++window.zindex_counter);
-		});
-
-		// minimize menu
-		this.inside('.menu.output').minimize();
-
-	});
-
-	// focus first form element
-	$(this).autofocus();
+	// can enter tab characters into textarea
+	$('body').build('textarea', 'always', presstab);
 
 });

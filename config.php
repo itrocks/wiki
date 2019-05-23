@@ -25,7 +25,7 @@ $config['ITRocks/Wiki'] = [
 
 	//----------------------------------------------------------------------- NORMAL priority plugins
 	Priority::NORMAL => [
-		Framework\User\Write_Access_Control::class,
+		Framework\Component\Menu::class => include(__DIR__ . SL . 'menu.php'),
 		Framework\Locale::class => [
 			Locale::DATE     => 'd/m/Y',
 			Locale::LANGUAGE => 'fr',
@@ -37,7 +37,7 @@ $config['ITRocks/Wiki'] = [
 			]
 		],
 		Framework\Tools\Wiki::class,
-		Framework\Widget\Menu::class => include(__DIR__ . SL . 'menu.php'),
+		Framework\User\Write_Access_Control::class,
 
 		Wiki\Article\Redirect::class,
 		Wiki\Markup\Images::class,
