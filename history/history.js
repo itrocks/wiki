@@ -1,30 +1,17 @@
-$('document').ready(function()
+$(document).ready(function()
 {
-	$('body').build(function()
+
+	/**
+	 * Click a 'differences' button : hide detail if loaded
+	 */
+	$('body').build('click', 'article.history .actions > li > a', function(event)
 	{
-
-		/**
-		 * Click the 'show history' button : display the history into a window
-		 */
-		this.inside('.article.history > a').click(function()
-		{
-			$(this).closest('.article.history').addClass('window');
-		});
-
-		/**
-		 * Click a 'differences' button : hide detail if loaded
- 		 */
-		if (this.parent().is('.article.history.window')) {
-			this.inside('.actions > li > a').click(function (event)
-			{
-				var $p = $(this).closest('li[id]').find('>p');
-				if ($p.is(':visible')) {
-					event.preventDefault();
-					event.stopImmediatePropagation();
-					$p.hide().empty();
-				}
-			});
+		var $p = $(this).closest('li[id]').find('>p');
+		if ($p.html().trim()) {
+			event.preventDefault();
+			event.stopImmediatePropagation();
+			$p.empty();
 		}
-
 	});
+
 });

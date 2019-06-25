@@ -1,8 +1,8 @@
-.article.history {
+article.history {
   display: inline-block;
   margin-top: 3em;
   vertical-align: top; }
-  .article.history > a {
+  article.history > a {
     background: url("img/history.png") center no-repeat;
     color: transparent;
     display: inline-block;
@@ -11,6 +11,7 @@
     width: 32px; }
 
 article.article {
+  display: inline-block;
   min-width: 300px;
   max-width: 1024px; }
   article.article .wiki.text {
@@ -85,14 +86,13 @@ article.article {
       background: #93c437 url("img/history.png") left no-repeat;
       background-size: 20px;
       padding-left: 24px; }
-    article.article.history p {
-      display: none;
+    article.article.history p:not(:empty) {
       margin-bottom: 1em;
       white-space: pre-line; }
-      article.article.history p del {
+      article.article.history p:not(:empty) del {
         text-decoration: none;
         background-color: #ff7d7f; }
-      article.article.history p ins {
+      article.article.history p:not(:empty) ins {
         text-decoration: none;
         background-color: #a2ff9d; }
     article.article.history > ul > li {
