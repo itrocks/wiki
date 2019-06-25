@@ -29,7 +29,7 @@ class Article implements Has_History
 	/**
 	 * Main title for the article
 	 *
-	 * @setter setTitle
+	 * @setter
 	 * @var string
 	 */
 	public $title;
@@ -90,14 +90,13 @@ class Article implements Has_History
 	}
 
 	//-------------------------------------------------------------------------------------- setTitle
-	/** @noinspection PhpUnusedPrivateMethodInspection @setter */
 	/**
 	 * @param $title string
 	 */
-	private function setTitle($title)
+	protected function setTitle($title)
 	{
 		$this->title = $title;
-		$this->uri = Links::strUri($title);
+		$this->uri   = Links::strUri($title);
 	}
 
 }
