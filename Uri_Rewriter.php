@@ -1,6 +1,7 @@
 <?php
 namespace ITRocks\Wiki;
 
+use ITRocks\Framework\AOP\Joinpoint\Before_Method;
 use ITRocks\Framework\Controller\Feature;
 use ITRocks\Framework\Controller\Main;
 use ITRocks\Framework\Dao;
@@ -8,6 +9,7 @@ use ITRocks\Framework\Dao\Func;
 use ITRocks\Framework\Locale\Loc;
 use ITRocks\Framework\Plugin\Register;
 use ITRocks\Framework\Plugin\Registerable;
+use ITRocks\Framework\User\Write_Access_Control;
 use ITRocks\Framework\View;
 use ITRocks\Wiki\markup\Links;
 
@@ -56,6 +58,17 @@ class Uri_Rewriter implements Registerable
 			if ($object instanceof Article) {
 				$result = SL . $object->uri;
 			}
+		}
+	}
+
+	//----------------------------------------------------------------------- beforeCheckAccessToLink
+	/**
+	 * @param $joinpoint Before_Method
+	 */
+	public function beforeCheckAccessToLink(Before_Method $joinpoint)
+	{
+		if (ctype_lower(substr(str_replace(SL, '', $joinpoint->parameters['result']), 0, 1))) {
+			$joinpoint->stop = true;
 		}
 	}
 
@@ -114,12 +127,12 @@ class Uri_Rewriter implements Registerable
 	 */
 	public function register(Register $register)
 	{
-		$register->aop->afterMethod(
-			[View::class, 'link'], [$this, 'afterViewLink']
+		$aop = $register->aop;
+		$aop->afterMethod([View::class, 'link'], [$this, 'afterViewLink']);
+		$aop->beforeMethod(
+			[Write_Access_Control::class, 'checkAccessToLink'], [$this, 'beforeCheckAccessToLink']
 		);
-		$register->aop->beforeMethod(
-			[Main::class, 'runController'], [$this, 'beforeMainRunController']
-		);
+		$aop->beforeMethod([Main::class, 'runController'], [$this, 'beforeMainRunController']);
 	}
 
 }
