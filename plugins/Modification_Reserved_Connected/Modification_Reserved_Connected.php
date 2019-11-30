@@ -1,12 +1,12 @@
 <?php
 namespace ITRocks\Wiki\Plugins;
 
+use ITRocks\Framework\Component\Button;
+use ITRocks\Framework\Feature\Edit;
+use ITRocks\Framework\Feature\Output;
 use ITRocks\Framework\Plugin\Register;
 use ITRocks\Framework\Plugin\Registerable;
 use ITRocks\Framework\User;
-use ITRocks\Framework\Widget\Button;
-use ITRocks\Framework\Widget\Edit;
-use ITRocks\Framework\Widget\Output;
 
 /**
  * This plugin delete all control of the output object if user is not connected.

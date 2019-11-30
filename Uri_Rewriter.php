@@ -40,7 +40,7 @@ class Uri_Rewriter implements Registerable
 	 * @var string[]
 	 */
 	public static $features_list = [
-		Feature::F_ADD, Feature::F_DELETE, Feature::F_EDIT, Feature::F_OUTPUT, Feature::F_WRITE
+		Feature::F_ADD, Feature::F_DELETE, Feature::F_EDIT, Feature::F_OUTPUT, Feature::F_SAVE
 	];
 
 	//--------------------------------------------------------------------------------- afterViewLink

@@ -3,10 +3,10 @@ namespace ITRocks\Wiki\Plugins;
 
 use ITRocks\Framework\Controller\Parameters;
 use ITRocks\Framework\Dao;
+use ITRocks\Framework\Feature\Save;
 use ITRocks\Framework\Mapper\Search_Object;
 use ITRocks\Framework\Plugin\Register;
 use ITRocks\Framework\Plugin\Registerable;
-use ITRocks\Framework\Widget\Write;
 use ITRocks\Wiki\Article;
 
 /**
@@ -93,7 +93,7 @@ class Change_Name_Page_Refactor implements Registerable
 	{
 		$aop = $register->aop;
 		$aop->beforeMethod(
-			[Write\Controller::class, 'run'],
+			[Save\Controller::class, 'run'],
 			[$this, 'beforeDefaultWriteControllerRun']
 		);
 	}

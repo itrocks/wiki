@@ -51,7 +51,7 @@ class Fix_Link_Url implements Registerable
 		$callback = function($matches) {
 			return $this->formatUrl($matches);
 		};
-		$text = preg_replace_callback('%href\="(.+)"%', $callback, $text);
+		$text = preg_replace_callback('%href="(.+)"%', $callback, $text);
 		return $text;
 	}
 

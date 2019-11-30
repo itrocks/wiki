@@ -1,11 +1,11 @@
 <?php
 namespace ITRocks\Wiki\Plugins\Wiki_Users;
 
+use ITRocks\Framework\Component\Input;
 use ITRocks\Framework\Plugin\Register;
 use ITRocks\Framework\Plugin\Registerable;
 use ITRocks\Framework\User;
 use ITRocks\Framework\User\Authenticate\Authentication;
-use ITRocks\Framework\Widget\Input;
 
 /**
  * Register email

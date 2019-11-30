@@ -1,10 +1,10 @@
 <?php
 namespace ITRocks\Wiki\Plugins;
 
+use ITRocks\Framework\Component\Button;
+use ITRocks\Framework\Feature\Edit;
 use ITRocks\Framework\Plugin\Register;
 use ITRocks\Framework\Plugin\Registerable;
-use ITRocks\Framework\Widget\Button;
-use ITRocks\Framework\Widget\Edit;
 
 /**
  * This plugin need that :

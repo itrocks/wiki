@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 	<title>|Image selection|</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<script type="text/javascript" src="/images_upload.js"></script>
+	<script type="text/javascript" src="./images_upload.js"></script>
 </head>
 <body>
 <!--BEGIN-->
@@ -12,13 +12,13 @@
 		<div class="window images_upload">
 			<button name="close" class="close right">X</button>
 			<p>{message}</p>
-			<form id="images_upload_form" enctype='multipart/form-data' method="POST" action="/Images_Upload/upload">
+			<form id="images_upload_form" enctype='multipart/form-data' method="POST" action="app://Images_Upload/upload">
 				<input type="file" name="image" multiple>
-				<a class="button submit" href="/Images_Upload/upload" target="#popup">|Upload|</a>
+				<a class="button submit" href="app://Images_Upload/upload" target="#popup">|Upload|</a>
 			</form>
 			<h3>|{title}|</h3>
 			<!--images-->
-				<img class="image_uploaded" src="{link}" alt="{name}">
+				<img class="image_uploaded" src="app://(link)" alt="{name}">
 			<!--end-->
 		</div>
 	</div>

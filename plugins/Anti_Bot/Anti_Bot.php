@@ -1,6 +1,7 @@
 <?php
 namespace ITRocks\Wiki\Plugins;
 
+use ITRocks\Framework\Component\Input;
 use ITRocks\Framework\Dao;
 use ITRocks\Framework\Plugin\Register;
 use ITRocks\Framework\Plugin\Registerable;
@@ -8,7 +9,6 @@ use ITRocks\Framework\Session;
 use ITRocks\Framework\Tools\String_Class;
 use ITRocks\Framework\User\Authenticate\Authentication;
 use ITRocks\Framework\View;
-use ITRocks\Framework\Widget\Input;
 use ITRocks\Wiki\Article;
 use ITRocks\Wiki\Plugins\Anti_Bot\Anti_Bot_Word;
 

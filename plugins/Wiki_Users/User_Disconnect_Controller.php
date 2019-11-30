@@ -24,7 +24,7 @@ class User_Disconnect_Controller implements Feature_Controller
 	{
 		$current = User::current();
 		if ($current) {
-			Authentication::disconnect($current);
+			Authentication::disconnect();
 		}
 		return (new Default_Controller())->run($parameters, $form, $files, User::class, 'disconnect');
 	}

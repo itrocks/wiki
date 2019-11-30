@@ -43,16 +43,16 @@ article.article {
     article.article .wiki.text h6:before {
       content: counter(h2,decimal) "." counter(h3,decimal) "." counter(h4,decimal) "." counter(h5,decimal) "." counter(h6,decimal) ". ";
       counter-increment: h6; }
-    article.article .wiki.text table:not(.nostyle) {
+    article.article .wiki.text table:not(.no-style) {
       width: 100%;
       border: solid 1px black; }
-      article.article .wiki.text table:not(.nostyle) tr th {
+      article.article .wiki.text table:not(.no-style) tr th {
         padding: 5px 5px 5px 5px;
         border: solid 1px black;
         vertical-align: middle;
         background-color: #93c437;
         color: white; }
-      article.article .wiki.text table:not(.nostyle) tr td {
+      article.article .wiki.text table:not(.no-style) tr td {
         padding: 5px 5px 5px 5px;
         border: solid 1px black;
         vertical-align: middle; }

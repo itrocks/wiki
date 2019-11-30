@@ -22,8 +22,7 @@ abstract class Html_Differences
 	public static function diff($old_value, $new_value)
 	{
 		$opcodes = FineDiff::getDiffOpcodes($old_value, $new_value);
-		$diff    = FineDiff::renderDiffToHTMLFromOpcodes($old_value, $opcodes);
-		return $diff;
+		return FineDiff::renderDiffToHTMLFromOpcodes($old_value, $opcodes);
 	}
 
 }

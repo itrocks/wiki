@@ -2,8 +2,8 @@
 namespace ITRocks\Wiki\Plugins\Images_Upload;
 
 use ITRocks\Framework\Controller\Parameters;
+use ITRocks\Framework\Feature\List_;
 use ITRocks\Framework\View;
-use ITRocks\Framework\Widget\List_;
 use ITRocks\Wiki\Plugins\Images_Upload;
 
 /**
@@ -60,7 +60,7 @@ class Images_Upload_List_Controller extends List_\Controller
 	 */
 	public function run(Parameters $parameters, array $form, array $files, $class_name)
 	{
-		return $this->runView($parameters, $form, $files, $class_name);
+		return $this->runView($parameters, [], $form, $files, $class_name);
 	}
 
 	//--------------------------------------------------------------------------------------- runView

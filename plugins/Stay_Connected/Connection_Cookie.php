@@ -1,6 +1,8 @@
 <?php
 namespace ITRocks\Wiki\Plugins\Stay_Connected;
 
+use ITRocks\Framework\User;
+
 /**
  * Connection cookie
  */
@@ -22,7 +24,7 @@ class Connection_Cookie
 	//----------------------------------------------------------------------------------------- $user
 	/**
 	 * @link Object
-	 * @var \ITRocks\Framework\User
+	 * @var User
 	 */
 	public $user;
 

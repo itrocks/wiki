@@ -1,6 +1,7 @@
 <?php
 namespace ITRocks\Wiki\Plugins;
 
+use ITRocks\Framework\Component\Input;
 use ITRocks\Framework\Controller;
 use ITRocks\Framework\Dao;
 use ITRocks\Framework\Mapper\Search_Object;
@@ -8,9 +9,8 @@ use ITRocks\Framework\Plugin\Register;
 use ITRocks\Framework\Plugin\Registerable;
 use ITRocks\Framework\Session;
 use ITRocks\Framework\User;
-use ITRocks\Framework\User\Authenticate\Authenticate_Controller;
+use ITRocks\Framework\User\Authenticate;
 use ITRocks\Framework\User\Authenticate\Authentication;
-use ITRocks\Framework\Widget\Input;
 use ITRocks\Wiki\Application;
 use ITRocks\Wiki\Plugins\Stay_Connected\Connection_Cookie;
 
@@ -204,7 +204,7 @@ class Stay_Connected implements Registerable
 			[__CLASS__, 'beforeMainControllerRun']
 		);
 		$aop->afterMethod(
-			[Authenticate_Controller::class, 'run'],
+			[Authenticate\Controller::class, 'run'],
 			[__CLASS__, 'afterUserAuthenticateControllerRun']
 		);
 		$aop->afterMethod(
@@ -219,7 +219,7 @@ class Stay_Connected implements Registerable
 
 	//----------------------------------------------------------------------------- registerHashInDao
 	/**
-	 * Add a generate hash in databases with dao's object
+	 * Add a generate hash in databases with Dao object
 	 *
 	 * @param $user        User
 	 * @param $content_key string

@@ -103,10 +103,9 @@ class Email_Confirmation_Register implements Registerable
 	 */
 	private function generateActivationLink($key)
 	{
-		$link = $_SERVER['HTTP_HOST']
+		return $_SERVER['HTTP_HOST']
 			. explode('User', $_SERVER['REQUEST_URI'])[0]
 			. 'User/confirmEmail?action=' . $key;
-		return $link;
 	}
 
 	//----------------------------------------------------------------------------------- generateKey
@@ -117,8 +116,7 @@ class Email_Confirmation_Register implements Registerable
 	 */
 	private function generateKey()
 	{
-		$key = md5(uniqid(rand(), true));
-		return $key;
+		return md5(uniqid(rand(), true));
 	}
 
 	//---------------------------------------------------------------------------------- getEmailFrom
