@@ -10,102 +10,125 @@ article.history {
     height: 32px;
     width: 32px; }
 
-article.article > ul.data {
+article.article.edit > form > header {
+  display: none; }
+article.article.edit > form > ul.data {
+  display: grid;
+  grid-template-areas: "title" "text";
+  grid-template-rows: auto 1fr;
+  overflow: hidden; }
+  article.article.edit > form > ul.data > .title {
+    grid-area: title; }
+    article.article.edit > form > ul.data > .title > input {
+      width: calc(100% - 22px); }
+  article.article.edit > form > ul.data > .text {
+    grid-area: text; }
+    article.article.edit > form > ul.data > .text > textarea {
+      border: none;
+      height: calc(100% - 20px);
+      margin: 0;
+      resize: none;
+      width: calc(100% - 22px); }
+  article.article.edit > form > ul.data > li {
+    position: relative; }
+    article.article.edit > form > ul.data > li > label {
+      display: none; }
+
+article.article.output > ul.data {
   padding: 10px; }
-article.article .wiki.text {
+article.article.output .wiki.text {
   color: #222;
   counter-reset: h2 h3 h4 h5 h6;
   font-size: 130%;
   line-height: 125%;
   text-align: justify; }
-  article.article .wiki.text a {
+  article.article.output .wiki.text a {
     color: #00a;
-    text-decoration: underline;
-    text-decoration-style: dotted; }
-    article.article .wiki.text a:hover {
+    text-decoration: underline; }
+    article.article.output .wiki.text a:hover {
       background-color: #eff;
       color: #04f; }
-  article.article .wiki.text code, article.article .wiki.text pre[class] {
+  article.article.output .wiki.text code, article.article.output .wiki.text pre[class] {
     background: #eee; }
-  article.article .wiki.text h1 {
+  article.article.output .wiki.text h1 {
     clear: both;
     margin: 1em 0; }
-  article.article .wiki.text h2 {
+  article.article.output .wiki.text h2 {
     clear: both;
     counter-reset: h3;
     margin: 1em 0; }
-    article.article .wiki.text h2:before {
+    article.article.output .wiki.text h2:before {
       content: counter(h2,decimal) ". ";
       counter-increment: h2; }
-  article.article .wiki.text h3 {
+  article.article.output .wiki.text h3 {
     counter-reset: h4;
     margin: 1em 0; }
-    article.article .wiki.text h3:before {
+    article.article.output .wiki.text h3:before {
       content: counter(h2,decimal) "." counter(h3,decimal) ". ";
       counter-increment: h3; }
-  article.article .wiki.text h4 {
+  article.article.output .wiki.text h4 {
     counter-reset: h5; }
-    article.article .wiki.text h4:before {
+    article.article.output .wiki.text h4:before {
       content: counter(h2,decimal) "." counter(h3,decimal) "." counter(h4,decimal) ". ";
       counter-increment: h4; }
-  article.article .wiki.text h5 {
+  article.article.output .wiki.text h5 {
     counter-reset: h6; }
-    article.article .wiki.text h5:before {
+    article.article.output .wiki.text h5:before {
       content: counter(h2,decimal) "." counter(h3,decimal) "." counter(h4,decimal) "." counter(h5,decimal) ". ";
       counter-increment: h5; }
-  article.article .wiki.text h6:before {
+  article.article.output .wiki.text h6:before {
     content: counter(h2,decimal) "." counter(h3,decimal) "." counter(h4,decimal) "." counter(h5,decimal) "." counter(h6,decimal) ". ";
     counter-increment: h6; }
-  article.article .wiki.text p {
+  article.article.output .wiki.text p {
     margin: .5em 0; }
-  article.article .wiki.text table:not(.no-style) {
+  article.article.output .wiki.text table:not(.no-style) {
     width: 100%;
     border: solid 1px black; }
-    article.article .wiki.text table:not(.no-style) tr th {
+    article.article.output .wiki.text table:not(.no-style) tr th {
       padding: 5px 5px 5px 5px;
       border: solid 1px black;
       vertical-align: middle;
       background-color: #93c437;
       color: white; }
-    article.article .wiki.text table:not(.no-style) tr td {
+    article.article.output .wiki.text table:not(.no-style) tr td {
       padding: 5px 5px 5px 5px;
       border: solid 1px black;
       vertical-align: middle; }
-  article.article .wiki.text img {
+  article.article.output .wiki.text img {
     border: 1px solid darkgrey;
     border-radius: 3px;
     box-shadow: 0 0 1px darkgrey;
     margin: .25em;
     vertical-align: middle; }
-    article.article .wiki.text img.align-center {
+    article.article.output .wiki.text img.align-center {
       display: block;
       margin-left: auto;
       margin-right: auto; }
-    article.article .wiki.text img.align-left {
+    article.article.output .wiki.text img.align-left {
       float: left; }
-    article.article .wiki.text img.align-right {
+    article.article.output .wiki.text img.align-right {
       float: right; }
-  article.article .wiki.text ol, article.article .wiki.text ul {
+  article.article.output .wiki.text ol, article.article.output .wiki.text ul {
     margin-left: 16px; }
-    article.article .wiki.text ol li, article.article .wiki.text ul li {
+    article.article.output .wiki.text ol li, article.article.output .wiki.text ul li {
       margin: .5em 0; }
-article.article.history {
+article.article.output.history {
   min-width: 0; }
-  article.article.history h2 {
+  article.article.output.history h2 {
     background: #93c437 url("img/history.png") left no-repeat;
     background-size: 20px;
     padding-left: 24px; }
-  article.article.history p:not(:empty) {
+  article.article.output.history p:not(:empty) {
     margin-bottom: 1em;
     white-space: pre-line; }
-    article.article.history p:not(:empty) del {
+    article.article.output.history p:not(:empty) del {
       text-decoration: none;
       background-color: #ff7d7f; }
-    article.article.history p:not(:empty) ins {
+    article.article.output.history p:not(:empty) ins {
       text-decoration: none;
       background-color: #a2ff9d; }
-  article.article.history > ul > li {
+  article.article.output.history > ul > li {
     list-style: none;
     margin: 0; }
-    article.article.history > ul > li > ul.actions > li > ul {
+    article.article.output.history > ul > li > ul.actions > li > ul {
       margin-left: 3em; }

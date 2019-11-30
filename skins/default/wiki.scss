@@ -13,7 +13,53 @@ article.history {
 	}
 }
 
-article.article {
+article.article.edit {
+
+	> form > header {
+		display: none;
+	}
+
+	> form > ul.data {
+		display: grid;
+		grid-template-areas: "title" "text";
+		grid-template-rows: auto 1fr;
+		overflow: hidden;
+
+		> .title {
+			grid-area: title;
+
+			> input {
+				width: calc(100% - 22px);
+			}
+		}
+
+		> .text {
+			grid-area: text;
+
+			> textarea {
+				border: none;
+				height: calc(100% - 20px);
+				margin: 0;
+				resize: none;
+				width: calc(100% - 22px);
+			}
+		}
+
+		> li {
+			position: relative;
+
+			> label {
+				display: none;
+			}
+
+			> * {
+			}
+		}
+	}
+
+}
+
+article.article.output {
 
 	> ul.data {
 		padding: 10px;
@@ -29,7 +75,6 @@ article.article {
 		a {
 			color: #00a;
 			text-decoration: underline;
-			text-decoration-style: dotted;
 
 			&:hover {
 				background-color: #eff;
