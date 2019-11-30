@@ -37,6 +37,7 @@ $config['ITRocks/Wiki'] = [
 				Number_Format::THOUSAND_SEPARATOR    => SP
 			]
 		],
+		Framework\Locale\Translation\Hub_Client::class,
 		Framework\Tools\Wiki::class,
 		Framework\User\Write_Access_Control::class,
 
