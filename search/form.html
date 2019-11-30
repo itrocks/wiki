@@ -8,11 +8,15 @@
 <!--BEGIN-->
 
 	<article class="wiki search">
-		<h2>|Search|</h2>
-		<form action="app://(@class.path)/result" class="search window" method="POST" target="#main">
-			<label for="search">|Search|</label>
-			<input class="autowidth" id="search" name="search" value="{?text}">
-			<input type="submit" value="|found|">
+		<form action="app://(@class.path)/result" target="#main">
+			<header><h2>|Search|</h2></header>
+			<ul class="data search">
+				<li>
+					<label for="search">|Search|</label>
+					<input class="autowidth" id="search" name="search" value="{?text}">
+					<a class="submit" href="app://(@class.path)/result" target="#main">|found|</a>
+				</li>
+			</ul>
 		</form>
 	</article>
 

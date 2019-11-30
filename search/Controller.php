@@ -82,10 +82,10 @@ class Controller implements Class_Controller
 	{
 		/** @var $search Search */
 		$search = $parameters->getMainObject(Search::class);
-		$parameters = $parameters->getObjects();
-		if (isset($form['search'])) {
-			$search->text = $form['search'];
+		if ($parameters->getRawParameter('search')) {
+			$search->text = $parameters->getRawParameter('search');
 		}
+		$parameters = $parameters->getObjects();
 		return View::run($parameters, $form, $files, Search::class, self::F_FORM);
 	}
 
@@ -100,8 +100,8 @@ class Controller implements Class_Controller
 	 */
 	public function runResult(Parameters $parameters, array $form, array $files)
 	{
-		if (isset($form['search'])) {
-			$search_text = trim($form['search']);
+		if ($parameters->getRawParameter('search')) {
+			$search_text = trim($parameters->getRawParameter('search'));
 		}
 		/** @var $search Search */
 		$search = $parameters->getMainObject(Search::class);

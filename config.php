@@ -26,6 +26,7 @@ $config['ITRocks/Wiki'] = [
 	//----------------------------------------------------------------------- NORMAL priority plugins
 	Priority::NORMAL => [
 		Framework\Component\Menu::class => include(__DIR__ . SL . 'menu.php'),
+		Framework\Feature\List_\Search\Implicit_Jokers::class,
 		Framework\Locale::class => [
 			Locale::DATE     => 'd/m/Y',
 			Locale::LANGUAGE => 'fr',

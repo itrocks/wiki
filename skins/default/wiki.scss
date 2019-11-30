@@ -59,13 +59,14 @@ article.article.edit {
 
 }
 
-article.article.output {
+article.article.output,
+article.search {
 
-	> ul.data {
+	ul.data {
 		padding: 10px;
 	}
 
-	.wiki.text {
+	.wiki.text, ul.result {
 		color: #222;
 		counter-reset: h2 h3 h4 h5 h6;
 		font-size: 130%;
@@ -224,5 +225,12 @@ article.article.output {
 				margin-left: 3em;
 			}
 		}
+	}
+}
+
+article.search {
+
+	header {
+		display: none;
 	}
 }

@@ -8,22 +8,26 @@
 <!--BEGIN-->
 
 	<article class="search result">
-		<h2>|Wiki search result|</h2>
-		<!--results-->
-		<h3>|{@key}|</h3>
-		<ul>
-			<!--.-->
+		<header><h2>|Search result|</h2></header>
+		<ul class="data result">
+			<!--results-->
 			<li>
-				<span>{occurrences} |{occurrencesText}|</span>
-				<span>|into|</span>
-				<a href="app://(link)">{article.title}</a>
+				<h2>|{@key}|</h2>
+				<ul>
+					<!--.-->
+					<li>
+						<span>{occurrences} |{occurrencesText}|</span>
+						<span>|into|</span>
+						<a href="app://(link)">{article.title}</a>
+					</li>
+					<!--end-->
+					<!--!.?-->
+					<li>|No result|</li>
+					<!--end-->
+				</ul>
 			</li>
 			<!--end-->
-			<!--!.?-->
-			<li>|No result|</li>
-			<!--end-->
 		</ul>
-		<!--end-->
 	</article>
 
 <!--END-->
