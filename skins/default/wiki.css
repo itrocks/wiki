@@ -20,7 +20,7 @@ article.article.edit > form > ul.data {
   article.article.edit > form > ul.data > .title {
     grid-area: title; }
     article.article.edit > form > ul.data > .title > input {
-      width: calc(100% - 22px); }
+      width: calc(100% - 24px) !important; }
   article.article.edit > form > ul.data > .text {
     grid-area: text; }
     article.article.edit > form > ul.data > .text > textarea {

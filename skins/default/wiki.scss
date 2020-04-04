@@ -29,7 +29,7 @@ article.article.edit {
 			grid-area: title;
 
 			> input {
-				width: calc(100% - 22px);
+				width: calc(100% - 24px) !important;
 			}
 		}
 

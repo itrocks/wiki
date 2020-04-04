@@ -23,6 +23,10 @@ $config['ITRocks/Wiki'] = [
 		Framework\Builder::class => include(__DIR__ . SL . 'builder.php'),
 	],
 
+	Priority::LOWEST => [
+		Framework\User\Write_Access_Control::class
+	],
+
 	//----------------------------------------------------------------------- NORMAL priority plugins
 	Priority::NORMAL => [
 		Framework\Component\Menu::class => include(__DIR__ . SL . 'menu.php'),
@@ -39,7 +43,6 @@ $config['ITRocks/Wiki'] = [
 		],
 		Framework\Locale\Translation\Hub_Client::class,
 		Framework\Tools\Wiki::class,
-		Framework\User\Write_Access_Control::class,
 
 		Wiki\Article\Redirect::class,
 		Wiki\Markup\Images::class,
