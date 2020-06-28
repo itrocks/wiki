@@ -1,9 +1,11 @@
 <?php
 namespace ITRocks\Wiki;
 
+use ITRocks\Framework\User\Password\Reset\Email_Flag;
 use ITRocks\Wiki;
 use ITRocks\Framework;
 use ITRocks\Framework\Configuration;
+use ITRocks\Framework\Dao\File;
 use ITRocks\Framework\Locale;
 use ITRocks\Framework\Locale\Number_Format;
 use ITRocks\Framework\Plugin\Priority;
@@ -30,6 +32,12 @@ $config['ITRocks/Wiki'] = [
 	//----------------------------------------------------------------------- NORMAL priority plugins
 	Priority::NORMAL => [
 		Framework\Component\Menu::class => include(__DIR__ . SL . 'menu.php'),
+		Framework\Dao::class => [
+			Framework\Dao::LINKS_LIST => ['files' => $loc[File\Link::class]],
+		],
+		Framework\Email\Sender\File::class => [
+			'path' => $loc[File\Link::class]['path'] . '/emails.send'
+		],
 		Framework\Feature\List_\Search\Implicit_Jokers::class,
 		Framework\Locale::class => [
 			Locale::DATE     => 'd/m/Y',
@@ -43,6 +51,7 @@ $config['ITRocks/Wiki'] = [
 		],
 		Framework\Locale\Translation\Hub_Client::class,
 		Framework\Tools\Wiki::class,
+		Framework\User\Password\Reset\Email_Flag::class => $loc[Email_Flag::class],
 
 		Wiki\Article\Redirect::class,
 		Wiki\Markup\Images::class,
