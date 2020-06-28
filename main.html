@@ -57,9 +57,11 @@
 		<ul data-empty="|No general information|" id="responses"><li>|Welcome into the it.rocks framework wiki|.</li></ul>
 		<section class="mini user">
 			<h3>|Connected user|</h3>
-			<a class="user" href="app://ITRocks/Framework/User/disconnect">
-				{ITRocks\Framework\User.current}
-			</a>
+			<!--ITRocks\Framework\User.current-->
+			<a class="user" href="app://ITRocks/Framework/User/disconnect">{.}</a>
+			<!--else-->
+			<a class="user" href="app://ITRocks/Framework/User/login" target="#main">|Connect user|</a>
+			<!--end-->
 		</section>
 	</section>
 
