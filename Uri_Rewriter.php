@@ -9,7 +9,6 @@ use ITRocks\Framework\Dao\Func;
 use ITRocks\Framework\Locale\Loc;
 use ITRocks\Framework\Plugin\Register;
 use ITRocks\Framework\Plugin\Registerable;
-use ITRocks\Framework\User\Write_Access_Control;
 use ITRocks\Framework\View;
 use ITRocks\Wiki\markup\Links;
 
@@ -130,7 +129,7 @@ class Uri_Rewriter implements Registerable
 		$aop = $register->aop;
 		$aop->afterMethod([View::class, 'link'], [$this, 'afterViewLink']);
 		$aop->beforeMethod(
-			[Write_Access_Control::class, 'checkAccessToLink'], [$this, 'beforeCheckAccessToLink']
+			[Access_Control::class, 'checkAccessToLink'], [$this, 'beforeCheckAccessToLink']
 		);
 		$aop->beforeMethod([Main::class, 'runController'], [$this, 'beforeMainRunController']);
 	}

@@ -24,7 +24,7 @@ $config['ITRocks/Wiki'] = [
 	],
 
 	Priority::LOWEST => [
-		Framework\User\Write_Access_Control::class
+		Wiki\Access_Control::class
 	],
 
 	//----------------------------------------------------------------------- NORMAL priority plugins
