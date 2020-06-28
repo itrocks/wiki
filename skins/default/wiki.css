@@ -37,6 +37,12 @@ article.article.edit > form > ul.data {
 article.article.output ul.data,
 article.search ul.data {
   padding: 10px; }
+article.article.output ul.data.result .occurrences,
+article.search ul.data.result .occurrences {
+  font-style: italic; }
+  article.article.output ul.data.result .occurrences[data-count='1'],
+  article.search ul.data.result .occurrences[data-count='1'] {
+    display: none; }
 article.article.output .wiki.text, article.article.output ul.result,
 article.search .wiki.text,
 article.search ul.result {

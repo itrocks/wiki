@@ -66,6 +66,14 @@ article.search {
 		padding: 10px;
 	}
 
+	ul.data.result .occurrences {
+		font-style: italic;
+
+		&[data-count='1'] {
+			display: none;
+		}
+	}
+
 	.wiki.text, ul.result {
 		color: #222;
 		counter-reset: h2 h3 h4 h5 h6;

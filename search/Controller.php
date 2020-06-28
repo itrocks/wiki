@@ -17,17 +17,19 @@ use ITRocks\Wiki\Search;
 class Controller implements Class_Controller
 {
 
-	//-------------------------------------------------------------------- Search controller features
+	//---------------------------------------------------------------------------------------- F_FORM
 	const F_FORM   = 'form';
+
 	//-------------------------------------------------------------------------------------- F_RESULT
 	const F_RESULT = 'result';
 
 	//------------------------------------------------------------------------------ countOccurrences
 	/**
 	 * Count the number of occurrences of search word in a text.
+	 *
 	 * @param $text        string The text where search.
 	 * @param $search_text string The search string, the different search/word are separate by space.
-	 * @return int Return the times number where a search word appears.
+	 * @return integer Return the times number where a search word appears.
 	 */
 	private function countOccurrences($text, $search_text)
 	{
@@ -52,7 +54,7 @@ class Controller implements Class_Controller
 		/** @var $article Article */
 		$article = Dao::searchOne(['title' => $search_text], Article::class);
 		/** @noinspection PhpUnhandledExceptionInspection constant */
-		return $article ? [Builder::create(Result::class, [$article, 0])] : [];
+		return $article ? [Builder::create(Result::class, [$article, 1])] : [];
 	}
 
 	//------------------------------------------------------------------------------------------- run
@@ -141,6 +143,10 @@ class Controller implements Class_Controller
 			/** @noinspection PhpUnhandledExceptionInspection constant */
 			$search_results[] = Builder::create(Result::class, [$article, $occurrences]);
 		}
+		usort($search_results, function(Result $result1, Result $result2) {
+			return cmp($result2->occurrences, $result1->occurrences)
+				?: strcmp($result1->article->title, $result2->article->title);
+		});
 		return $search_results;
 	}
 

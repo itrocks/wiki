@@ -17,6 +17,13 @@ class Result
 	 */
 	public $article;
 
+	//------------------------------------------------------------------------------------- $multiple
+	/**
+	 * @getter
+	 * @var boolean
+	 */
+	public $multiple;
+
 	//---------------------------------------------------------------------------------- $occurrences
 	/**
 	 * @var integer
@@ -41,6 +48,16 @@ class Result
 	public function __toString()
 	{
 		return $this->article->title . ' : ' . $this->occurrences . SP . $this->occurrencesText();
+	}
+
+	//----------------------------------------------------------------------------------- getMultiple
+	/**
+	 * @noinspection PhpUnused @getter
+	 * @return boolean
+	 */
+	protected function getMultiple()
+	{
+		return $this->occurrences > 1;
 	}
 
 	//------------------------------------------------------------------------------------------ link
