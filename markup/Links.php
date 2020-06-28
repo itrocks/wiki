@@ -62,8 +62,8 @@ class Links implements Registerable
 				// parse link : replace [A link] with "A link":/a-link
 				elseif (($string[$i] !== ']') && ($j = strpos($string, ']', $i)) !== false) {
 					$uri = substr($string, $i, $j - $i);
-					if (strpos($uri, '>') !== false) {
-						list($text, $uri) = explode('>', $uri, 2);
+					if (strpos($uri, '&gt;') !== false) {
+						list($text, $uri) = explode('&gt;', $uri, 2);
 					}
 					else {
 						$text = $uri;
