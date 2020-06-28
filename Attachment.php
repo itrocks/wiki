@@ -7,6 +7,7 @@ use ITRocks\Framework\Dao\File;
  * Wiki attached file class
  *
  * @business
+ * @list name, file.name
  * @representative name
  */
 class Attachment

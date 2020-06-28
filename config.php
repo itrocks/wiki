@@ -48,5 +48,10 @@ $config['ITRocks/Wiki'] = [
 		Wiki\Markup\Images::class,
 		Wiki\Markup\Links::class,
 		Wiki\Uri_Rewriter::class
+	],
+
+	Priority::HIGHER => [
+		Framework\Dao\Cache::class
 	]
+
 ];
