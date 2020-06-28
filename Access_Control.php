@@ -11,6 +11,6 @@ class Access_Control extends Write_Access_Control
 {
 
 	//--------------------------------------------------------------------------------- READ_FEATURES
-	const READ_FEATURES = Feature::READ + [-1 => 'form', -2 => 'result'];
+	const READ_FEATURES = Feature::READ + [-1 => 'form', -2 => 'result', -3 => 'image'];
 
 }
