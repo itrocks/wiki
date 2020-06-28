@@ -10,7 +10,25 @@ use ITRocks\Framework\User\Write_Access_Control;
 class Access_Control extends Write_Access_Control
 {
 
-	//--------------------------------------------------------------------------------- READ_FEATURES
-	const READ_FEATURES = Feature::READ + [-1 => 'form', -2 => 'result', -3 => 'image'];
+	//------------------------------------------------------------------------- WIKI_DISABLE_FEATURES
+	const WIKI_DISABLE_FEATURES = [Feature::F_PRINT];
+
+	//---------------------------------------------------------------------------- WIKI_READ_FEATURES
+	const WIKI_READ_FEATURES = ['form', 'result', 'image'];
+
+	//---------------------------------------------------------------------------------- readFeatures
+	/**
+	 * @return string[]
+	 */
+	public function readFeatures()
+	{
+		$read_features = array_merge(parent::readFeatures(), static::WIKI_READ_FEATURES);
+		foreach (static::WIKI_DISABLE_FEATURES as $disable) {
+			if ($disable = array_search($disable, $read_features)) {
+				unset($read_features[$disable]);
+			}
+		}
+		return $read_features;
+	}
 
 }
