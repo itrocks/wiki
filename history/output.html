@@ -5,34 +5,37 @@
 	<title>Title</title>
 </head>
 <body>
-<section class="article output history window" id="history">
 <!--BEGIN-->
 
-	<h2>|History|</h2>
-	<ul>
-		<!--article.getTextHistory-->
-		<li id="history-{id}">
-			<ul class="actions">
-				<li>
-					<a href="app://ITRocks/Wiki/History/changes/(id)" target="#history-{id}>p">
-						{date.@loc} - {user.login}
-					</a>
-					<ul>
-						<li><a href="app://ITRocks/Wiki/History/changes/(id)" target="#history-{id}>p">
-							|Changes made at this date|
-						</a></li>
-						<li><a href="app://ITRocks/Wiki/History/changes/(id)/current" target="#history-{id}>p">
-							|Differences with the actual version|
-						</a></li>
-					</ul>
-				</li>
-			</ul>
-			<p></p>
-		</li>
-		<!--end-->
-	</ul>
+	<article class="article history output">
+		<header><h2>|History|</h2></header>
+		<ul class="data">
+			<!--article.getTextHistory-->
+			<!--object-->
+			<li id="article-{id}"><a href="app://(@link)">{title*}</a></li>
+			<!--end-->
+			<li id="history-{id}">
+				<ul class="actions">
+					<li>
+						<a href="app://ITRocks/Wiki/History/changes/(id)" target="#history-{id}>p">
+							{date.@loc} - {user.login}
+						</a>
+						<ul>
+							<li><a href="app://ITRocks/Wiki/History/changes/(id)" target="#history-{id}>p">
+								|Changes made at this date|
+							</a></li>
+							<li><a href="app://ITRocks/Wiki/History/changes/(id)/current" target="#history-{id}>p">
+								|Differences with the actual version|
+							</a></li>
+						</ul>
+					</li>
+				</ul>
+				<p></p>
+			</li>
+			<!--end-->
+		</ul>
+	</article>
 
 <!--END-->
-</section>
 </body>
 </html>

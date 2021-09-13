@@ -1,10 +1,12 @@
 <?php
 namespace ITRocks\Wiki\History;
 
+use ITRocks\Framework\Builder;
 use ITRocks\Framework\Controller\Class_Controller;
 use ITRocks\Framework\Controller\Feature;
 use ITRocks\Framework\Controller\Parameters;
 use ITRocks\Framework\Dao;
+use ITRocks\Framework\Tools\Date_Time;
 use ITRocks\Framework\View;
 use ITRocks\Wiki\Article;
 use ITRocks\Wiki\History;
@@ -52,6 +54,7 @@ class Controller implements Class_Controller
 	/**
 	 * Output the history for a given article
 	 *
+	 * @noinspection PhpDocMissingThrowsInspection
 	 * @param $parameters Parameters
 	 * @param $form       array
 	 * @param $files      array[]
@@ -59,7 +62,16 @@ class Controller implements Class_Controller
 	 */
 	public function runOutput(Parameters $parameters, array $form, array $files)
 	{
-		$parameters->set('article', $parameters->getObject(Article::class));
+		$article = $parameters->getObject(Article::class);
+		if (!$article) {
+			/** @noinspection PhpUnhandledExceptionInspection class */
+			$article = Builder::create(Article::class);
+			$article->history = Dao::search(
+				['date' => Dao\Func::greaterOrEqual(Date_Time::today()->toBeginOf(Date_Time::YEAR))],
+				History::class
+			);
+		}
+		$parameters->set('article', $article);
 		return View::run($parameters->getObjects(), $form, $files, History::class, Feature::F_OUTPUT);
 	}
 
