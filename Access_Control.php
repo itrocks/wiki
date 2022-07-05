@@ -20,7 +20,7 @@ class Access_Control extends Write_Access_Control
 	/**
 	 * @return string[]
 	 */
-	public function readFeatures()
+	public function readFeatures() : array
 	{
 		$read_features = array_merge(parent::readFeatures(), static::WIKI_READ_FEATURES);
 		foreach (static::WIKI_DISABLE_FEATURES as $disable) {
