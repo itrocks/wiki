@@ -5,7 +5,7 @@
 <!--use ITRocks\Framework\Locale\Loc-->
 <!--use ITRocks\Framework\Tools\Paths-->
 <!--use ITRocks\Framework\User\Access_Control-->
-<html lang="en">
+<html lang="{Loc.language}">
 
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -22,11 +22,15 @@
 			'{PHPSESSID}', '{Paths.uri_root}', '{Paths.script_name}', '{Paths.project_uri}',
 			'{Loc.language}', '{Loc.date.format}', '{Html_Session.useCookies}'
 		);
+		window.app.editorConfig = {
+			customConfig:         window.app.project_uri + SL + 'bappli/studio/js/studio_config.js',
+			filebrowserUploadUrl: window.app.browserUrl
+		};
 	</script>
 	<title>|{@application.ucwords}| - |¦{@class.ucfirst}¦ {@feature.display}|</title>
 </head>
 
-<body>
+<body data-begin="{~inside?}" data-inside="true" data-end>
 
 	<!--!~hide_page_frame?-->
 	<!--!~inside-->
@@ -34,13 +38,13 @@
 		<a href="/" target="#main">|Go home|</a>
 	</div>
 	<h1>|{@application.ucwords}| - |¦{@class.ucfirst}¦ {@feature.display}|</h1>
-	<!--Menu.get-->{/ITRocks/Framework/Component/Menu/output.html}<!--end-->
+	<!--Menu.get-->{/ITRocks/Framework/Component/Menu/output}<!--end-->
 	<!--Quick_Menu.get.items?-->
 	<nav id="quick-menu">
 		<ul>
 			<!--Quick_Menu.get.items-->
 			<li data-class="{linkClass}">
-				<a class="{?class}" data-confirm-cancel="{?cancel_label}" data-confirm-message="{?confirm_message}" data-confirm-ok="{?confirm_label}" href="app://(link)" target="#main">
+				<a class="{?class}" data-confirm-cancel="{?cancel_label}" data-confirm-message="{?confirm_message}" data-confirm-ok="{?confirm_label}" href="dyn://(link)" target="{?link_target}">
 					|{caption}|
 				</a>
 			</li>
@@ -57,11 +61,9 @@
 		<ul data-empty="|No general information|" id="responses"><li>|Welcome into the it.rocks framework wiki|.</li></ul>
 		<section class="mini user">
 			<h3>|Connected user|</h3>
-			<!--ITRocks\Framework\User.current-->
-			<a class="user" href="app://ITRocks/Framework/User/disconnect">{.}</a>
-			<!--else-->
-			<a class="user" href="app://ITRocks/Framework/User/login" target="#main">|Connect user|</a>
-			<!--end-->
+			<a class="user" href="app://ITRocks/Framework/User/disconnect">
+				{ITRocks\Framework\User.current}
+			</a>
 		</section>
 	</section>
 
@@ -76,7 +78,7 @@
 
 	<aside>
 		<header>
-			{/ITRocks/Framework/User/miniDisplay.html}
+			{/ITRocks/Framework/User/miniDisplay}
 			<button class="minimize" data-level="2" data-side="right">|minimize|</button>
 		</header>
 		<nav>
@@ -105,13 +107,6 @@
 			<h3>|documentation|</h3>
 		</section>
 	</aside>
-
-	<!--!~hide_page_frame?-->
-	<section class="trashcan">
-		<h2>|Trashcan|</h2>
-		<a href="app://ITRocks/Framework/Component/Trashcan" target="#trashcan>div">|bin|</a>
-	</section>
-	<!--end-->
 
 	<div id="modal"></div>
 
